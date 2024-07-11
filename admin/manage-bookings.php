@@ -165,7 +165,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 							<div class="privacy print" style="margin: 20px 0;">
 								<div class="container" style="width: 500px; border: 1px dashed #000; padding: 10px; ">
 									<div class="text-center">
-										<h4 style="color: black !important; margin-bottom: 0px !important;">Santa Fe Port TSM</h4>
+										<h4 style="color: black !important; margin-bottom: 0px !important;">Santa Fe Port TMS</h4>
 										<p style="margin-bottom: 0px !important; color: #000 !important;">Date: <?= date('Y-m-d') ?></p>
 										<p style="margin-bottom: 0px !important; color: #000 !important;">Refer. #: <?= $row['reference_num'] ?></p>
 									</div>
@@ -195,8 +195,9 @@ if (strlen($_SESSION['alogin']) == 0) {
 									</table>
 									<p style="color: #000 !important; margin-bottom: 0px !important; text-align: right;">Ship: <?= number_format($total_ship) ?></p>
 									<p style="color: #000 !important; margin: 0px !important; text-align: right;">Package: <?= number_format($row['PackagePrice']) ?></p>
+									<h5 style="color: #000 !important; text-align: right; margin: 10px 0 !important;">Cash: &#8369 <?= number_format($row['payment']) ?></h5>
 									<h3 style="color: #000 !important; text-align: right; margin: 10px 0 !important;">Total: &#8369 <?= number_format($total_ship + $row['PackagePrice']) ?></h3>
-									<h3 style="color: #000 !important; text-align: right; margin: 10px 0 !important;">Cash: &#8369 <?= number_format($row['payment']) ?></h3>
+									
 									<?php 
 										if ($row['status'] == 'paid') {
 											?>

@@ -107,7 +107,7 @@ if (isset($_POST['submit2'])) {
 			if ($query->rowCount() > 0) {
 				foreach ($results as $result) { ?>
 
-					<form name="book" method="post">
+					
 						<div class="selectroom_top">
 							<div class="col-md-4 selectroom_left wow fadeInLeft animated" data-wow-delay=".5s">
 								<img src="admin/pacakgeimages/<?php echo htmlentities($result->PackageImage); ?>"
@@ -119,7 +119,7 @@ if (isset($_POST['submit2'])) {
 								<p><b> Type :</b> <?php echo htmlentities($result->PackageType); ?></p>
 								<p><b> Location :</b> <?php echo htmlentities($result->PackageLocation); ?></p>
 								<p><b>Features</b> <?php echo htmlentities($result->PackageFetures); ?></p>
-								<div class="ban-bottom">
+								<!-- <div class="ban-bottom">
 									<div class="bnr-right">
 										<label class="inputLabel">From</label>
 										<input class="date" id="datepicker" type="text" placeholder="dd-mm-yyyy" name="fromdate"
@@ -130,7 +130,7 @@ if (isset($_POST['submit2'])) {
 										<input class="date" id="datepicker1" type="text" placeholder="dd-mm-yyyy" name="todate"
 											required="">
 									</div>
-								</div>
+								</div> -->
 								<div class="clearfix"></div>
 								<div class="grand">
 									<p>Grand Total</p>
@@ -139,9 +139,11 @@ if (isset($_POST['submit2'])) {
 							</div>
 							<h3>Package Details</h3>
 							<p style="padding-top: 1%"><?php echo htmlentities($result->PackageDetails); ?> </p>
+							<a href="ticket.php" class="btn-primary btn" style="color: #fff !important; float: right;">
+												Book Now</a>
 							<div class="clearfix"></div>
 						</div>
-						<div class="selectroom_top">
+						<!-- <div class="selectroom_top">
 							<h2>Travels</h2>
 							<div class="selectroom-info animated wow fadeInUp animated" data-wow-duration="1200ms"
 								data-wow-delay="500ms"
@@ -152,22 +154,18 @@ if (isset($_POST['submit2'])) {
 										<label class="inputLabel">Comment</label>
 										<input class="special" type="text" name="comment" required="">
 									</li>
-									<?php if ($_SESSION['login']) { ?>
-										<li class="spe" align="center">
-											<button type="submit" name="submit2" class="btn-primary btn">Book</button>
+								
+										<li class="sigi" align="center" style="margin-top: 1% width: 100%;">
+											<a href="ticket.php" data-toggle="modal" data-target="#myModal4" class="btn-primary btn" style="color: #fff !important; float: right;">
+												Book Now</a>
 										</li>
-									<?php } else { ?>
-										<li class="sigi" align="center" style="margin-top: 1%">
-											<a href="#" data-toggle="modal" data-target="#myModal4" class="btn-primary btn">
-												Book</a>
-										</li>
-									<?php } ?>
+								
 									<div class="clearfix"></div>
 								</ul>
 							</div>
 
-						</div>
-					</form>
+						</div> -->
+					
 				<?php }
 			} ?>
 

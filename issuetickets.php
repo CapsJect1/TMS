@@ -19,7 +19,7 @@ if (strlen($_SESSION['login']) == 0) {
 			$stmt->execute([':status' => $status, ':cash' => $cash, ':image' => $image, ':user_id' => $user_id, ':id' => $id]);
 
 			if ($stmt) {
-				header("location: issuetickets.php?show=$id");
+				header("location: issuetickets.php");
 			}
 		} else {
 			header("location: issuetickets.php?pay=$id&error=Cash must be equal to total");
@@ -114,12 +114,20 @@ if (strlen($_SESSION['login']) == 0) {
 				$student = $row['student'] * 240;
 				$senior_pwd = $row['senior_pwd'] * 214;
 				$total_ship = $regular + $student + $senior_pwd;
-
+				
+				if ($row['status'] === 'paid') {
+					?>
+					<script>
+						alert("Please for the confirmation");
+						window.location.href = "issuetickets.php"
+					</script>
+					<?php
+				}
 			?>
 				<div class="privacy print">
 					<div class="container" style="width: 500px; border: 1px dashed #000; padding: 10px; ">
 						<div class="text-center">
-							<h4 style="color: black !important; margin-bottom: 0px !important;">Santa Fe Port TSM</h4>
+							<h4 style="color: black !important; margin-bottom: 0px !important;">Santa Fe Port TMS</h4>
 							<p style="margin-bottom: 0px !important; color: #000 !important;">Date: <?= date('Y-m-d') ?></p>
 							<p style="margin-bottom: 0px !important; color: #000 !important;">Refer. #: <?= $row['reference_num'] ?></p>
 						</div>
@@ -183,7 +191,7 @@ if (strlen($_SESSION['login']) == 0) {
 
 						<div class="container" style="width: 500px; border: 1px dashed #000; padding: 10px; ">
 							<div class="text-center">
-								<h4 style="color: black !important; margin-bottom: 0px !important;">Santa Fe Port TSM</h4>
+								<h4 style="color: black !important; margin-bottom: 0px !important;">Santa Fe Port TMS</h4>
 								<p style="margin-bottom: 0px !important; color: #000 !important;">Date: <?= date('Y-m-d') ?></p>
 								<p style="margin-bottom: 0px !important; color: #000 !important;">Refer. #: <?= $row['reference_num'] ?></p>
 							</div>
@@ -214,8 +222,8 @@ if (strlen($_SESSION['login']) == 0) {
 							<p style="color: #000 !important; margin-bottom: 0px !important; text-align: right;">Ship: <?= number_format($total_ship) ?></p>
 							<p style="color: #000 !important; margin: 0px !important; text-align: right;">Package: <?= number_format($row['PackagePrice']) ?></p>
 							<h3 style="color: #000 !important; text-align: right; margin: 10px 0 !important;">Total: &#8369 <?= number_format($total_ship + $row['PackagePrice']) ?></h3>
-							<h4 style="color: #000 !important; margin: 10px 0 !important;">Cash: <input type="text" class="form-control" name="cash"></h4>
-							<h4 style="color: #000 !important; margin: 10px 0 !important;">Proof of Payment: <input type="file" class="form-control" name="proof"></h4>
+							<h4 style="color: #000 !important; margin: 10px 0 !important;">Cash: <input type="text" class="form-control" name="cash" placeholder="Full payment" required></h4>
+							<h4 style="color: #000 !important; margin: 10px 0 !important;">Proof of Payment: <input type="file" class="form-control" name="proof" required></h4>
 							<p class="text-danger" style="color: red !important;"><?= isset($_GET['error']) ? $_GET['error'] : '' ?></p>
 							<div class="dont-print" style="display: flex; justify-content: space-between; margin-top: 20px;">
 								<a href="issuetickets.php" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back</a>
@@ -278,7 +286,7 @@ if (strlen($_SESSION['login']) == 0) {
 											<td><?php echo $result->status; ?></td>
 											<td width="100%" style="display: flex; gap: 10px;">
 												<?php if($result->status == 'payment'): ?>
-													<a href="issuetickets.php?pay=<?= $result->id ?>" onclick="alert('Please wait for the admin to accept your request')" class="btn " style="background: #ddd; color: dark !important;"><i class="fa fa-file"></i> Pay</a>
+													<a href="issuetickets.php?pay=<?= $result->id ?>" class="btn " style="background: #ddd; color: dark !important;"><i class="fa fa-file"></i> Pay</a>
 												<?php endif; ?>
 												<a href="issuetickets.php?show=<?= $result->id ?>" class="btn btn-primary" style="color: white !important;"><i class="fa fa-file"></i> View</a>
 											</td>

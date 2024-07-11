@@ -121,7 +121,7 @@ if (isset($_POST['submit'])) {
 
                 $mail->send();
 
-            header('refresh: 3; url=ticket.php');
+            header('refresh: 3; url=issuetickets.php');
         }
 
     }
