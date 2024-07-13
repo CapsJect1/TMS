@@ -45,6 +45,7 @@ $error="Email id or Mobile no is invalid";
 <link href="css/font-awesome.css" rel="stylesheet">
 <!-- Custom Theme files -->
 <script src="js/jquery-1.12.0.min.js"></script>
+<script src="js/sweet_alert.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <!--animate-->
 <link href="css/animate.css" rel="stylesheet" type="text/css" media="all">

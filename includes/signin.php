@@ -6,7 +6,7 @@ if (isset($_POST['signin'])) {
 	$password = md5($_POST['password']); // Note: MD5 hashing is used here for simplicity; consider using more secure hashing methods
 
 	// SQL query to fetch user details based on email and password
-	$sql = "SELECT id, FullName, EmailId FROM tblusers WHERE EmailId=:email AND Password=:password";
+	$sql = "SELECT id, FullName, EmailId, fname, lname FROM tblusers WHERE EmailId=:email AND Password=:password";
 	$query = $dbh->prepare($sql);
 	$query->bindParam(':email', $email, PDO::PARAM_STR);
 	$query->bindParam(':password', $password, PDO::PARAM_STR);
@@ -18,6 +18,9 @@ if (isset($_POST['signin'])) {
 		$_SESSION['user_id'] = $user['id'];
 		$_SESSION['user_name'] = $user['FullName'];
 		$_SESSION['login'] = $user['EmailId'];
+		$_SESSION['fname'] = $user['fname'];
+		$_SESSION['lname'] = $user['lname'];
+
 
 		// Redirect to a dashboard or home page after successful login
 		// header("Location: package-list.php");\
@@ -45,11 +48,14 @@ if (isset($_POST['signin'])) {
 				<div class="login-grids">
 					<div class="login">
 						<div class="login-right">
-							<form method="post">
+							<form method="post" name="login">
 								<h3>Sign in with your account</h3>
 								<input type="text" name="email" id="email" placeholder="Enter your Email" required="">
+								<div style="position: relative;">
 								<input type="password" name="password" id="password" placeholder="Password" value=""
 									required="">
+									<i class="fa fa-eye" id="show-pass" style="position: absolute; top: 0; right: 0; margin: 35px 10px 0 0;"></i>
+								</div>
 								<h4><a href="forgot-password.php">Forgot password</a></h4>
 								<input type="submit" name="signin" value="SIGN IN">
 							</form>
@@ -63,3 +69,18 @@ if (isset($_POST['signin'])) {
 		</div>
 	</div>
 </div>
+
+<script>
+	let showPass = document.getElementById('show-pass');
+    showPass.onclick = () => {
+        let passwordInp = document.forms['login']['password'];
+        if (passwordInp.getAttribute('type') == 'password') {
+            showPass.classList.replace('fa-eye', 'fa-eye-slash')
+            
+            passwordInp.setAttribute('type', 'text')
+        }else{
+            showPass.classList.replace('fa-eye-slash', 'fa-eye')
+            passwordInp.setAttribute('type', 'password')
+        }
+    }
+</script>

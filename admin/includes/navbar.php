@@ -1,6 +1,6 @@
 <?php 
-  $get_books = $dbh->query("SELECT * FROM booking WHERE status = 'pending'");
-	$result_books = $get_books->fetchAll(PDO::FETCH_ASSOC);
+  $get_books = $dbh->query("SELECT * FROM `booking` WHERE status = 'payment' OR status = 'pending' OR status ='paid'");
+	// $result_books = $get_books->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <style>
@@ -36,7 +36,7 @@
   <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
 
   <div class="topnav" id="myTopnav">
-    <a href="dashboard.php">Tourist Management System</a>
+    <a href="dashboard.php">Santa Fe Port Tourist Biological Fee Staycation Management System</a>
 
     <div style="display: flex; align-items:center; gap: 20px;">
       <h6><i class="fa fa-bell"></i> <?= $get_books->rowCount() ?></h6>

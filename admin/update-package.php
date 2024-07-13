@@ -7,28 +7,6 @@ if(strlen($_SESSION['alogin'])==0)
 header('location:index.php');
 }
 else{
-$pid=intval($_GET['pid']);	
-if(isset($_POST['submit']))
-{
-$pname=$_POST['packagename'];
-$ptype=$_POST['packagetype'];	
-$plocation=$_POST['packagelocation'];
-$pprice=$_POST['packageprice'];	
-$pfeatures=$_POST['packagefeatures'];
-$pdetails=$_POST['packagedetails'];	
-$pimage=$_FILES["packageimage"]["name"];
-$sql="update TblTourPackages set PackageName=:pname,PackageType=:ptype,PackageLocation=:plocation,PackagePrice=:pprice,PackageFetures=:pfeatures,PackageDetails=:pdetails where PackageId=:pid";
-$query = $dbh->prepare($sql);
-$query->bindParam(':pname',$pname,PDO::PARAM_STR);
-$query->bindParam(':ptype',$ptype,PDO::PARAM_STR);
-$query->bindParam(':plocation',$plocation,PDO::PARAM_STR);
-$query->bindParam(':pprice',$pprice,PDO::PARAM_STR);
-$query->bindParam(':pfeatures',$pfeatures,PDO::PARAM_STR);
-$query->bindParam(':pdetails',$pdetails,PDO::PARAM_STR);
-$query->bindParam(':pid',$pid,PDO::PARAM_STR);
-$query->execute();
-$msg="Package Updated Successfully";
-}
 
 	?>
 <!DOCTYPE HTML>
@@ -45,6 +23,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <link rel="stylesheet" href="css/morris.css" type="text/css"/>
 <link href="css/font-awesome.css" rel="stylesheet"> 
 <script src="js/jquery-2.1.4.min.js"></script>
+<script src="js/sweet_alert.js"></script>
 <link href='//fonts.googleapis.com/css?family=Roboto:700,500,300,100italic,100,400' rel='stylesheet' type='text/css'/>
 <link href='//fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="css/icon-font.min.css" type='text/css' />
@@ -215,6 +194,45 @@ foreach($results as $result)
 <!--COPY rights end here-->
 </div>
 </div>
+
+<?php 
+	$pid=intval($_GET['pid']);	
+	if(isset($_POST['submit']))
+	{
+	$pname=$_POST['packagename'];
+	$ptype=$_POST['packagetype'];	
+	$plocation=$_POST['packagelocation'];
+	$pprice=$_POST['packageprice'];	
+	$pfeatures=$_POST['packagefeatures'];
+	$pdetails=$_POST['packagedetails'];	
+	$pimage=$_FILES["packageimage"]["name"];
+	$sql="update TblTourPackages set PackageName=:pname,PackageType=:ptype,PackageLocation=:plocation,PackagePrice=:pprice,PackageFetures=:pfeatures,PackageDetails=:pdetails where PackageId=:pid";
+	$query = $dbh->prepare($sql);
+	$query->bindParam(':pname',$pname,PDO::PARAM_STR);
+	$query->bindParam(':ptype',$ptype,PDO::PARAM_STR);
+	$query->bindParam(':plocation',$plocation,PDO::PARAM_STR);
+	$query->bindParam(':pprice',$pprice,PDO::PARAM_STR);
+	$query->bindParam(':pfeatures',$pfeatures,PDO::PARAM_STR);
+	$query->bindParam(':pdetails',$pdetails,PDO::PARAM_STR);
+	$query->bindParam(':pid',$pid,PDO::PARAM_STR);
+	$query->execute();
+	// $msg="Package Updated Successfully";
+	?>
+	<script>
+	   Swal.fire({
+		   position: 'top-end',
+		   icon: 'success',
+		   title: "Package updated succesfully",
+		   showConfirmButton: false,
+		   timer: 1500
+	   }).then(() => {
+		   window.location.href = "update-package.php?pid=<?= $pid ?>"
+	   })
+	</script>
+	<?php 
+	}
+	
+?>
   <!--//content-inner-->
 		<!--/sidebar-menu-->
 					<?php include('includes/sidebarmenu.php');?>

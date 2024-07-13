@@ -5,34 +5,7 @@ include ('includes/config.php');
 if (strlen($_SESSION['alogin']) == 0) {
 	header('location:index.php');
 } else {
-	if (isset($_POST['submit'])) {
-		$pname = $_POST['packagename'];
-		$ptype = $_POST['packagetype'];
-		$plocation = $_POST['packagelocation'];
-		$pprice = $_POST['packageprice'];
-		$pfeatures = $_POST['packagefeatures'];
-		$pdetails = $_POST['packagedetails'];
-		$pimage = $_FILES["packageimage"]["name"];
-		move_uploaded_file($_FILES["packageimage"]["tmp_name"], "pacakgeimages/" . $_FILES["packageimage"]["name"]);
-		$sql = "INSERT INTO tbltourpackages(PackageName,PackageType,PackageLocation,PackagePrice,PackageFetures,PackageDetails,PackageImage) VALUES(:pname,:ptype,:plocation,:pprice,:pfeatures,:pdetails,:pimage)";
-		$query = $dbh->prepare($sql);
-		$query->bindParam(':pname', $pname, PDO::PARAM_STR);
-		$query->bindParam(':ptype', $ptype, PDO::PARAM_STR);
-		$query->bindParam(':plocation', $plocation, PDO::PARAM_STR);
-		$query->bindParam(':pprice', $pprice, PDO::PARAM_STR);
-		$query->bindParam(':pfeatures', $pfeatures, PDO::PARAM_STR);
-		$query->bindParam(':pdetails', $pdetails, PDO::PARAM_STR);
-		$query->bindParam(':pimage', $pimage, PDO::PARAM_STR);
-		$query->execute();
-		$lastInsertId = $dbh->lastInsertId();
-		if ($lastInsertId) {
-			$msg = "Package Created Successfully";
-		} else {
-			$error = "Something went wrong. Please try again";
-		}
-
-	}
-
+	
 	?>
 	<!DOCTYPE HTML>
 	<html>
@@ -47,6 +20,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 		<link rel="stylesheet" href="css/morris.css" type="text/css" />
 		<link href="css/font-awesome.css" rel="stylesheet">
 		<script src="js/jquery-2.1.4.min.js"></script>
+		<script src="js/sweet_alert.js"></script>
 		<link href='//fonts.googleapis.com/css?family=Roboto:700,500,300,100italic,100,400' rel='stylesheet'
 			type='text/css' />
 		<link href='//fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
@@ -100,10 +74,10 @@ if (strlen($_SESSION['alogin']) == 0) {
 							<h3 class="alert alert-primary">Create Package</h3>
 
 						</div>
-						<?php if ($error) { ?>
-							<div class="errorWrap"><strong>ERROR</strong>:<?php echo htmlentities($error); ?> </div>
-						<?php } else if ($msg) { ?>
-								<div class="succWrap"><strong>SUCCESS</strong>:<?php echo htmlentities($msg); ?> </div><?php } ?>
+						<?php #if ($error) { ?>
+							<!-- <div class="errorWrap"><strong>ERROR</strong>:<?php # echo htmlentities($error); ?> </div> -->
+						<?php #} else if ($msg) { ?>
+								<!-- <div class="succWrap"><strong>SUCCESS</strong>:<?php #echo htmlentities($msg); ?> </div><?php #} ?> -->
 						<div class="tab-content">
 							<div class="tab-pane active" id="horizontal-form">
 								<form class="form-horizontal" name="package" method="post" enctype="multipart/form-data">
@@ -222,6 +196,61 @@ if (strlen($_SESSION['alogin']) == 0) {
 			<?php include ('includes/sidebarmenu.php'); ?>
 			<div class="clearfix"></div>
 		</div>
+		<?php 
+			if (isset($_POST['submit'])) {
+				$pname = $_POST['packagename'];
+				$ptype = $_POST['packagetype'];
+				$plocation = $_POST['packagelocation'];
+				$pprice = $_POST['packageprice'];
+				$pfeatures = $_POST['packagefeatures'];
+				$pdetails = $_POST['packagedetails'];
+				$pimage = $_FILES["packageimage"]["name"];
+				move_uploaded_file($_FILES["packageimage"]["tmp_name"], "pacakgeimages/" . $_FILES["packageimage"]["name"]);
+				$sql = "INSERT INTO tbltourpackages(PackageName,PackageType,PackageLocation,PackagePrice,PackageFetures,PackageDetails,PackageImage) VALUES(:pname,:ptype,:plocation,:pprice,:pfeatures,:pdetails,:pimage)";
+				$query = $dbh->prepare($sql);
+				$query->bindParam(':pname', $pname, PDO::PARAM_STR);
+				$query->bindParam(':ptype', $ptype, PDO::PARAM_STR);
+				$query->bindParam(':plocation', $plocation, PDO::PARAM_STR);
+				$query->bindParam(':pprice', $pprice, PDO::PARAM_STR);
+				$query->bindParam(':pfeatures', $pfeatures, PDO::PARAM_STR);
+				$query->bindParam(':pdetails', $pdetails, PDO::PARAM_STR);
+				$query->bindParam(':pimage', $pimage, PDO::PARAM_STR);
+				$query->execute();
+				$lastInsertId = $dbh->lastInsertId();
+				if ($lastInsertId) {
+					// $msg = "Package Created Successfully";
+					?>
+					 <script>
+						Swal.fire({
+							position: 'top-end',
+							icon: 'success',
+							title: "Package added succesfully",
+							showConfirmButton: false,
+							timer: 1500
+						}).then(() => {
+							window.location.href = "create-package.php"
+						})
+					</script>
+					<?php 
+				} else {
+					// $error = "Something went wrong. Please try again";?>
+					 <script>
+						Swal.fire({
+							position: 'top-end',
+							icon: 'error',
+							title: "Something went wrong. Please try again",
+							showConfirmButton: false,
+							timer: 1500
+						}).then(() => {
+							window.location.href = "create-package.php"
+						})
+					</script>
+					<?php 
+				}
+		
+			}
+		
+		?>
 		<script>
 			var toggle = true;
 

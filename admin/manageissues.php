@@ -6,17 +6,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 	header('location:index.php');
 } else {
 	// Code for deletion
-	if ($_GET['action'] == 'delete') {
-		$id = intval($_GET['id']);
-		//$query=mysqli_query($con,"delete from tbltourpackages where PackageId =:id");
-		$sql = "delete from tblissues where id =:id";
-		$query = $dbh->prepare($sql);
-		$query->bindParam(':id', $id, PDO::PARAM_STR);
-		$query->execute();
-		echo "<script>alert('Record deleted.');</script>";
-		echo "<script>window.location.href='manageissues.php'</script>";
-
-	}
+	
 
 
 
@@ -38,6 +28,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 			integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 		<link href="css/font-awesome.css" rel="stylesheet">
 		<script src="js/jquery-2.1.4.min.js"></script>
+		<script src="js/sweet_alert.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/table-style.css" />
 		<link rel="stylesheet" type="text/css" href="css/basictable.css" />
 		<script type="text/javascript" src="js/jquery.basictable.min.js"></script>
@@ -130,6 +121,10 @@ if (strlen($_SESSION['alogin']) == 0) {
 
 						</div>
 						<div class="card-body">
+						<form method="post" class="d-flex align-items-center gap-2">
+								<input type="search" name="search" class="form-control my-3" placeholder="Search..." >
+								<button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+							</form>
 							<table class="table table-bordered">
 								<thead>
 									<tr>
@@ -145,7 +140,19 @@ if (strlen($_SESSION['alogin']) == 0) {
 									</tr>
 								</thead>
 								<tbody>
-									<?php $sql = "SELECT tblissues.id as id,tblusers.FullName as fname,tblusers.MobileNumber as mnumber,tblusers.EmailId as email,tblissues.Issue as issue,tblissues.Description as Description,tblissues.PostingDate as PostingDate from tblissues left join tblusers on tblusers.EmailId=tblissues.UserEmail";
+									<?php 
+										if (isset($_POST['search'])) {
+											$search = $_POST['search'];
+											if ($search !== '') {
+												$sql = "SELECT tblissues.id as id,tblusers.FullName as fname,tblusers.MobileNumber as mnumber,tblusers.EmailId as email,tblissues.Issue as issue,tblissues.Description as Description,tblissues.PostingDate as PostingDate from tblissues left join tblusers on tblusers.EmailId=tblissues.UserEmail WHERE FullName LIKE '%$search%'";
+											}else{
+												$sql = "SELECT tblissues.id as id,tblusers.FullName as fname,tblusers.MobileNumber as mnumber,tblusers.EmailId as email,tblissues.Issue as issue,tblissues.Description as Description,tblissues.PostingDate as PostingDate from tblissues left join tblusers on tblusers.EmailId=tblissues.UserEmail";
+											}
+										}else{
+											$sql = "SELECT tblissues.id as id,tblusers.FullName as fname,tblusers.MobileNumber as mnumber,tblusers.EmailId as email,tblissues.Issue as issue,tblissues.Description as Description,tblissues.PostingDate as PostingDate from tblissues left join tblusers on tblusers.EmailId=tblissues.UserEmail";
+										}
+									
+									
 									$query = $dbh->prepare($sql);
 									$query->execute();
 									$results = $query->fetchAll(PDO::FETCH_OBJ);
@@ -168,8 +175,9 @@ if (strlen($_SESSION['alogin']) == 0) {
 														onClick="popUpWindow('updateissue.php?iid=<?php echo ($result->id); ?>');"
 														class="btn btn-primary btn-block">View </a>
 
-													<a href="manageissues.php?action=delete&&id=<?php echo $result->id; ?>"
-														onclick="return confirm('Do you really want to delete?')"
+													<a href="#"
+														onclick="showMessage('manageissues.php?action=delete&&id=<?php echo $result->id; ?>', 'Do you really want to delete?')
+														"
 														class="btn btn-danger btn-block">Delete</a>
 												</td>
 
@@ -214,6 +222,48 @@ if (strlen($_SESSION['alogin']) == 0) {
 			<?php include ('includes/sidebarmenu.php'); ?>
 			<div class="clearfix"></div>
 		</div>
+		<?php 
+			if ($_GET['action'] == 'delete') {
+				$id = intval($_GET['id']);
+				//$query=mysqli_query($con,"delete from tbltourpackages where PackageId =:id");
+				$sql = "delete from tblissues where id =:id";
+				$query = $dbh->prepare($sql);
+				$query->bindParam(':id', $id, PDO::PARAM_STR);
+				$query->execute();
+				// echo "<script>alert('Record deleted.');</script>";
+				// echo "<script>window.location.href='manageissues.php'</script>";
+				?>
+				<script>
+				   Swal.fire({
+					   position: 'top-end',
+					   icon: 'success',
+					   title: "Issue deleted succesfully",
+					   showConfirmButton: false,
+					   timer: 1500
+				   }).then(() => {
+					   window.location.href = "manageissues.php"
+				   })
+			   </script>
+			   <?php 
+		
+			}
+		?>
+		<script>
+			function showMessage(x, y) {
+				Swal.fire({
+					title: y,
+					showDenyButton: true,
+					confirmButtonText: "Yes",
+					confirmButtonColor: '#5386df',
+					denyButtonText: `No`
+				}).then((result) => {
+					/* Read more about isConfirmed, isDenied below */
+					if (result.isConfirmed) {
+						window.location.href = x
+					}
+				});
+			}
+		</script>
 		<script>
 			var toggle = true;
 

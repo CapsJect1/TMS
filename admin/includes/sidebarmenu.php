@@ -19,35 +19,6 @@
 				</ul>
 			</li>
 
-
-
-
-<!-- 
-			<li id="menu-academico"><a href="#"><i class="bi bi-ticket-perforated" aria-hidden="true"></i><span> Ticket
-					</span> <span class="fa fa-angle-right" style="float: right"></span>
-					<div class="clearfix"></div>
-				</a>
-				<ul id="menu-academico-sub">
-					<li id="menu-academico-avaliacoes"><a href="create_Tickets.php">Create</a></li>
-					<li id="menu-academico-avaliacoes"><a href="mange_ticket.php">Manage</a></li>
-				</ul>
-			</li> -->
-
-
-			<li id="menu-academico"><a href="#"><i class="bi bi-ticket-perforated" aria-hidden="true"></i><span> Ticket
-						Category
-					</span> <span class="fa fa-angle-right" style="float: right"></span>
-					<div class="clearfix"></div>
-				</a>
-				<ul id="menu-academico-sub">
-					<li id="menu-academico-avaliacoes"><a href="create_category.php">Create</a></li>
-					<li id="menu-academico-avaliacoes"><a href="mange_ticket_category.php">Manage</a></li>
-				</ul>
-			</li>
-
-
-
-
 			<li id="menu-academico"><a href="manage-users.php"><i class="fa fa-users"
 						aria-hidden="true"></i><span>Manage Tourist</span>
 					<div class="clearfix"></div>
@@ -56,6 +27,8 @@
 			<li><a href="manage-bookings.php"><i class="fa fa-list" aria-hidden="true"></i> <span>Manage Booking</span>
 					<div class="clearfix"></div>
 				</a></li>
+		
+
 			<li><a href="manageissues.php"><i class="fa fa-table"></i> <span>Manage Issues</span>
 					<div class="clearfix"></div>
 				</a></li>

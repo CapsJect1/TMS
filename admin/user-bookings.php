@@ -109,9 +109,10 @@ $msg="Booking Confirm successfully";
    <div class="page-container">
    <!--/content-inner-->
 <div class="left-content">
-	   <div class="mother-grid-inner">
+<?php include('includes/navbar.php'); ?>
+				<div class="mother-grid-inner" style="margin-top: 70px;">
             <!--header start here-->
-				<?php include('includes/header.php');?>
+				<?php # include('includes/header.php');?>
 				     <div class="clearfix"> </div>	
 				</div>
 <!--heder end here-->

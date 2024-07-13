@@ -1,23 +1,13 @@
 <?php session_start();
 error_reporting(0);
-include ('includes/config.php');
+include('includes/config.php');
 if (strlen($_SESSION['alogin']) == 0) {
 	header('location:index.php');
 } else {
 	// Code for deletion
-	if ($_GET['action'] == 'delete') {
-		$id = intval($_GET['id']);
-		//$query=mysqli_query($con,"delete from tbltourpackages where PackageId =:id");
-		$sql = "delete from tbltourpackages where PackageId =:id";
-		$query = $dbh->prepare($sql);
-		$query->bindParam(':id', $id, PDO::PARAM_STR);
-		$query->execute();
-		echo "<script>alert('Package deleted.');</script>";
-		echo "<script>window.location.href='manage-packages.php'</script>";
 
-	}
 
-	?>
+?>
 	<!DOCTYPE HTML>
 	<html>
 
@@ -25,8 +15,15 @@ if (strlen($_SESSION['alogin']) == 0) {
 		<title>TMS | admin manage packages</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<script
-			type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+		<script type="application/x-javascript">
+			addEventListener("load", function() {
+				setTimeout(hideURLbar, 0);
+			}, false);
+
+			function hideURLbar() {
+				window.scrollTo(0, 1);
+			}
+		</script>
 		<!-- Bootstrap Core CSS -->
 		<link href="css/bootstrap.min.css" rel='stylesheet' type='text/css' />
 		<!-- Custom CSS -->
@@ -36,15 +33,15 @@ if (strlen($_SESSION['alogin']) == 0) {
 		<link href="css/font-awesome.css" rel="stylesheet">
 		<!-- jQuery -->
 		<script src="js/jquery-2.1.4.min.js"></script>
+		<script src="js/sweet_alert.js"></script>
 		<!-- //jQuery -->
 		<!-- tables -->
 		<link rel="stylesheet" type="text/css" href="css/table-style.css" />
 		<link rel="stylesheet" type="text/css" href="css/basictable.css" />
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-			integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 		<script type="text/javascript" src="js/jquery.basictable.min.js"></script>
 		<script type="text/javascript">
-			$(document).ready(function () {
+			$(document).ready(function() {
 				$('#table').basictable();
 
 				$('#table-breakpoint').basictable({
@@ -71,8 +68,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 			});
 		</script>
 		<!-- //tables -->
-		<link href='//fonts.googleapis.com/css?family=Roboto:700,500,300,100italic,100,400' rel='stylesheet'
-			type='text/css' />
+		<link href='//fonts.googleapis.com/css?family=Roboto:700,500,300,100italic,100,400' rel='stylesheet' type='text/css' />
 		<link href='//fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
 		<!-- lined-icons -->
 		<link rel="stylesheet" href="css/icon-font.min.css" type='text/css' />
@@ -83,10 +79,11 @@ if (strlen($_SESSION['alogin']) == 0) {
 		<div class="page-container">
 			<!--/content-inner-->
 			<div class="left-content">
-			<?php include ('includes/navbar.php'); ?>
+				<?php include('includes/navbar.php'); ?>
 				<div class="mother-grid-inner" style="margin-top: 70px;">
 					<!--header start here-->
-					<?php #include ('includes/header.php'); ?>
+					<?php #include ('includes/header.php'); 
+					?>
 					<div class="clearfix"> </div>
 				</div>
 				<!--heder end here-->
@@ -103,6 +100,10 @@ if (strlen($_SESSION['alogin']) == 0) {
 
 						</div>
 						<div class="card-body">
+							<form method="post" class="d-flex align-items-center gap-2">
+								<input type="search" name="search" class="form-control my-3" placeholder="Search...">
+								<button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+							</form>
 							<table class="table table-bordered">
 								<thead>
 									<tr>
@@ -116,7 +117,17 @@ if (strlen($_SESSION['alogin']) == 0) {
 									</tr>
 								</thead>
 								<tbody>
-									<?php $sql = "SELECT * from tblTourPackages";
+									<?php
+									if (isset($_POST['search'])) {
+										$search = $_POST['search'];
+										if ($search !== '') {
+											$sql = "SELECT * from tblTourPackages WHERE PackageName LIKE '%$search%'";
+										} else {
+											$sql = "SELECT * from tblTourPackages";
+										}
+									} else {
+										$sql = "SELECT * from tblTourPackages";
+									}
 									$query = $dbh->prepare($sql);
 									//$query -> bindParam(':city', $city, PDO::PARAM_STR);
 									$query->execute();
@@ -131,16 +142,12 @@ if (strlen($_SESSION['alogin']) == 0) {
 												<td><?php echo htmlentities($result->PackageLocation); ?></td>
 												<td><?php echo htmlentities($result->PackagePrice); ?></td>
 												<td><?php echo htmlentities($result->Creationdate); ?></td>
-												<td><a
-														href="update-package.php?pid=<?php echo htmlentities($result->PackageId); ?>"><button
-															type="button" class="btn btn-primary btn-block">View
+												<td><a href="update-package.php?pid=<?php echo htmlentities($result->PackageId); ?>"><button type="button" class="btn btn-primary btn-block">View
 															Details</button></a><br />
-													<a href="manage-packages.php?action=delete&&id=<?php echo $result->PackageId; ?>"
-														onclick="return confirm('Do you really want to delete?')"
-														class="btn btn-danger btn-block">Delete</a>
+													<a href="#" onclick="showDelete(<?= $result->PackageId ?>)" class="btn btn-danger btn-block">Delete</a>
 												</td>
 											</tr>
-											<?php $cnt = $cnt + 1;
+									<?php $cnt = $cnt + 1;
 										}
 									} ?>
 								</tbody>
@@ -152,9 +159,9 @@ if (strlen($_SESSION['alogin']) == 0) {
 					</div>
 					<!-- script-for sticky-nav -->
 					<script>
-						$(document).ready(function () {
+						$(document).ready(function() {
 							var navoffeset = $(".header-main").offset().top;
-							$(window).scroll(function () {
+							$(window).scroll(function() {
 								var scrollpos = $(window).scrollTop();
 								if (scrollpos >= navoffeset) {
 									$(".header-main").addClass("fixed");
@@ -172,27 +179,71 @@ if (strlen($_SESSION['alogin']) == 0) {
 					</div>
 					<!--inner block end here-->
 					<!--copy rights start here-->
-					<?php include ('includes/footer.php'); ?>
+					<?php include('includes/footer.php'); ?>
 					<!--COPY rights end here-->
 				</div>
 			</div>
 			<!--//content-inner-->
 			<!--/sidebar-menu-->
-			<?php include ('includes/sidebarmenu.php'); ?>
+			<?php include('includes/sidebarmenu.php'); ?>
 			<div class="clearfix"></div>
 		</div>
+		<?php
+		if ($_GET['action'] == 'delete') {
+			$id = intval($_GET['id']);
+			//$query=mysqli_query($con,"delete from tbltourpackages where PackageId =:id");
+			$sql = "delete from tbltourpackages where PackageId =:id";
+			$query = $dbh->prepare($sql);
+			$query->bindParam(':id', $id, PDO::PARAM_STR);
+			$query->execute();
+			// echo "<script>alert('Package deleted.');</script>";
+			// echo "<script>window.location.href='manage-packages.php'</script>";
+			?>
+					 <script>
+						Swal.fire({
+							position: 'top-end',
+							icon: 'success',
+							title: "Package deleted succesfully",
+							showConfirmButton: false,
+							timer: 1500
+						}).then(() => {
+							window.location.href = "manage-packages.php"
+						})
+					</script>
+					<?php 
+		}
+		?>
+		<script>
+			function showDelete(x) {
+				Swal.fire({
+					title: "Do you want to delete this to package?",
+					showDenyButton: true,
+					confirmButtonText: "Yes",
+					confirmButtonColor: '#5386df',
+					denyButtonText: `No`
+				}).then((result) => {
+					/* Read more about isConfirmed, isDenied below */
+					if (result.isConfirmed) {
+						window.location.href = "manage-packages.php?action=delete&&id=" + x
+					}
+				});
+			}
+		</script>
 		<script>
 			var toggle = true;
 
-			$(".sidebar-icon").click(function () {
+			$(".sidebar-icon").click(function() {
 				if (toggle) {
 					$(".page-container").addClass("sidebar-collapsed").removeClass("sidebar-collapsed-back");
-					$("#menu span").css({ "position": "absolute" });
-				}
-				else {
+					$("#menu span").css({
+						"position": "absolute"
+					});
+				} else {
 					$(".page-container").removeClass("sidebar-collapsed").addClass("sidebar-collapsed-back");
-					setTimeout(function () {
-						$("#menu span").css({ "position": "relative" });
+					setTimeout(function() {
+						$("#menu span").css({
+							"position": "relative"
+						});
 					}, 400);
 				}
 

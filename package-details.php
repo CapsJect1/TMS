@@ -44,6 +44,7 @@ if (isset($_POST['submit2'])) {
 	<link href="css/font-awesome.css" rel="stylesheet">
 	<!-- Custom Theme files -->
 	<script src="js/jquery-1.12.0.min.js"></script>
+	<script src="js/sweet_alert.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<!--animate-->
 	<link href="css/animate.css" rel="stylesheet" type="text/css" media="all">
@@ -85,7 +86,7 @@ if (isset($_POST['submit2'])) {
 	<div class="banner-3">
 		<div class="container">
 			<h1 class="wow zoomIn animated animated" data-wow-delay=".5s"
-				style="visibility: visible; animation-delay: 0.5s; animation-name: zoomIn;"> TMS -Package Details</h1>
+				style="visibility: visible; animation-delay: 0.5s; animation-name: zoomIn;"> SFP -Package Details</h1>
 		</div>
 	</div>
 	<!--- /banner ---->

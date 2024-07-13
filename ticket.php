@@ -176,19 +176,19 @@ if (isset($_POST['submit'])) {
             <div class="row" style="margin-bottom: 10px;">
                 <div class="col-lg-6">
                     <label for="">First Name <span class="text-danger">*</span> </label>
-                    <input type="text" name="fname" class="form-control" style="margin: 10px 0;" required>
+                    <input type="text" name="fname" class="form-control" style="margin: 10px 0;" value="<?= $_SESSION['fname'] ?>" readonly required>
                     <p class="text-danger"><?= $error_fname ?? '' ?></p>
                 </div>
 
                 <div class="col-lg-6">
                     <label for="">Last Name <span class="text-danger">*</span></label>
-                    <input type="text" name="lname" class="form-control" style="margin: 10px 0;" required>
+                    <input type="text" name="lname" class="form-control" style="margin: 10px 0;" value="<?= $_SESSION['lname'] ?>" readonly required>
                    <p class="text-danger"> <?= $error_lname ?? '' ?></p>
                 </div>
 
                 <div class="col-lg-12">
                     <label for="">Email <span class="text-danger">*</span></label>
-                    <input type="email" name="email" class="form-control" style="margin: 10px 0;" required>
+                    <input type="email" name="email" class="form-control" style="margin: 10px 0;" value="<?= $_SESSION['login'] ?>" readonly required>
                     <p class="text-danger"><?= $error_email ?? '' ?></p>
                 </div>
 
@@ -237,7 +237,7 @@ if (isset($_POST['submit'])) {
                     <select name="package_id" id="" class="form-control" style="margin: 10px 0;">
                         <option selected disabled value="">Select Package</option>
                         <?php foreach ($result_package as $package) : ?>
-                            <option value="<?php echo $package->PackageId; ?>"><?php echo htmlentities($package->PackageName); ?> - &#8369 <?= number_format($package->PackagePrice, 2) ?>
+                            <option value="<?php echo $package->PackageId; ?>"><?php echo htmlentities($package->PackageName); ?> - &#8369 <?= number_format($package->PackagePrice, 2) ?> : <?= $package->PackageFetures ?>
                             </option>
                         <?php endforeach; ?>
                     </select>

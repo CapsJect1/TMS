@@ -19,7 +19,7 @@
 	
 		<div class="col-6">
 			<div class="alert alert-info">
-				<h1><a href="dashboard.php">Tourism Management System</a></h1>
+				<h1><a href="dashboard.php">Santa fe Port Tourist Biological Fee Staycation Management System</a></h1>
 
 			</div>
 		</div>

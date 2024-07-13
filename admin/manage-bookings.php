@@ -6,42 +6,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 	header('location:index.php');
 } else {
 	// code for cancel
-	if (isset($_REQUEST['decline'])) {
-		$bid = intval($_GET['decline']);
-		$status = "declined";
-		$sql = "UPDATE booking SET status=:status WHERE  id=:bid";
-		$query = $dbh->prepare($sql);
-		$query->bindParam(':status', $status, PDO::PARAM_STR);
-		$query->bindParam(':bid', $bid, PDO::PARAM_STR);
-		$query->execute();
 
-		$msg = "Booking Declined successfully";
-	}
-
-
-	if (isset($_REQUEST['accept'])) {
-		$bcid = intval($_GET['accept']);
-		$status = 'payment';
-		$cancelby = 'a';
-		$sql = "UPDATE booking SET status=:status WHERE id=:bcid";
-		$query = $dbh->prepare($sql);
-		$query->bindParam(':status', $status, PDO::PARAM_STR);
-		$query->bindParam(':bcid', $bcid, PDO::PARAM_STR);
-		$query->execute();
-		$msg = "Booking Accepted successfully";
-	}
-
-	if (isset($_REQUEST['confirm'])) {
-		$bcid = intval($_GET['confirm']);
-		$status = 'booked';
-		$cancelby = 'a';
-		$sql = "UPDATE booking SET status=:status WHERE id=:bcid";
-		$query = $dbh->prepare($sql);
-		$query->bindParam(':status', $status, PDO::PARAM_STR);
-		$query->bindParam(':bcid', $bcid, PDO::PARAM_STR);
-		$query->execute();
-		$msg = "Booking Confirmed successfully";
-	}
 
 
 ?>
@@ -66,6 +31,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 		<link rel="stylesheet" href="css/morris.css" type="text/css" />
 		<link href="css/font-awesome.css" rel="stylesheet">
 		<script src="js/jquery-2.1.4.min.js"></script>
+		<script src="js/sweet_alert.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/table-style.css" />
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 		<link rel="stylesheet" type="text/css" href="css/basictable.css" />
@@ -119,8 +85,8 @@ if (strlen($_SESSION['alogin']) == 0) {
 				box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1);
 			}
 
-			@media print{
-				.dont-print{
+			@media print {
+				.dont-print {
 					display: none !important;
 				}
 			}
@@ -139,7 +105,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 				</div>
 				<!--heder end here-->
 				<ol class="breadcrumb dont-print">
-					<li class="breadcrumb-item"><a href="index.html">Home</a><i class="fa fa-angle-right"></i>Manage
+					<li class="breadcrumb-item"><a href="index.html"></a><i class="fa fa-angle-right"></i>Manage
 						Bookings</li>
 				</ol>
 				<div class="agile-grids">
@@ -197,13 +163,13 @@ if (strlen($_SESSION['alogin']) == 0) {
 									<p style="color: #000 !important; margin: 0px !important; text-align: right;">Package: <?= number_format($row['PackagePrice']) ?></p>
 									<h5 style="color: #000 !important; text-align: right; margin: 10px 0 !important;">Cash: &#8369 <?= number_format($row['payment']) ?></h5>
 									<h3 style="color: #000 !important; text-align: right; margin: 10px 0 !important;">Total: &#8369 <?= number_format($total_ship + $row['PackagePrice']) ?></h3>
-									
-									<?php 
-										if ($row['status'] == 'paid') {
-											?>
-											<img src="data:img/jpeg;base64,<?= base64_encode($row['proof']) ?>" alt="image" style="width: 100%;">
-											<?php
-										}
+
+									<?php
+									if ($row['status'] == 'paid') {
+									?>
+										<img src="data:img/jpeg;base64,<?= base64_encode($row['proof']) ?>" alt="image" style="width: 100%;">
+									<?php
+									}
 									?>
 									<div class="dont-print">
 										<a href="manage-bookings.php" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back</a>
@@ -213,10 +179,14 @@ if (strlen($_SESSION['alogin']) == 0) {
 							</div>
 						<?php else : ?>
 							<div class="card-header text-center bg-primary dont-print">
-							<h2>Manage Bookings</h2>
+								<h2>Manage Bookings</h2>
 
-						</div>
+							</div>
 							<div class="card-body">
+								<form method="post" class="d-flex align-items-center gap-2">
+									<input type="search" name="search" class="form-control my-3" placeholder="Search...">
+									<button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+								</form>
 								<table class="table table-bordered">
 									<thead>
 										<tr>
@@ -230,7 +200,26 @@ if (strlen($_SESSION['alogin']) == 0) {
 										</tr>
 									</thead>
 									<tbody>
-										<?php $sql = "SELECT 
+										<?php
+										if (isset($_POST['search'])) {
+											$search = $_POST['search'];
+											if ($search !== '') {
+												$sql = "SELECT 
+										booking.id as bookid,
+										tblusers.FullName as fname,
+										tblusers.MobileNumber as mnumber,
+										tblusers.EmailId as email,
+										tbltourpackages.PackageName as pckname,
+										booking.package_id as pid,
+										booking.status as status
+									from  booking
+									left join 
+										tblusers on booking.user_id=tblusers.id 
+									left join 
+										tbltourpackages on tbltourpackages.PackageId=booking.package_id WHERE FullName LIKE '%$search%' 
+									";
+											} else {
+												$sql = "SELECT 
 										booking.id as bookid,
 										tblusers.FullName as fname,
 										tblusers.MobileNumber as mnumber,
@@ -244,6 +233,25 @@ if (strlen($_SESSION['alogin']) == 0) {
 									left join 
 										tbltourpackages on tbltourpackages.PackageId=booking.package_id
 									";
+											}
+										} else {
+											$sql = "SELECT 
+										booking.id as bookid,
+										tblusers.FullName as fname,
+										tblusers.MobileNumber as mnumber,
+										tblusers.EmailId as email,
+										tbltourpackages.PackageName as pckname,
+										booking.package_id as pid,
+										booking.status as status
+									from  booking
+									left join 
+										tblusers on booking.user_id=tblusers.id 
+									left join 
+										tbltourpackages on tbltourpackages.PackageId=booking.package_id
+									";
+										}
+
+
 										$query = $dbh->prepare($sql);
 										$query->execute();
 										$results = $query->fetchAll(PDO::FETCH_OBJ);
@@ -266,21 +274,26 @@ if (strlen($_SESSION['alogin']) == 0) {
 													?>
 														<td>Payment</td>
 													<?php } elseif ($result->status == 'booked') {
-													?>	
+													?>
 														<td>
-														<a href="manage-bookings.php?show=<?php echo htmlentities($result->bookid); ?>" class="text-dark">View</a>
-														</td>
-													<?php } elseif ($result->status == 'declined') {
-													?>	
-														<td>Declined</td>
-													<?php } else if($result->status == 'pending') { ?>
-														<td class="d-flex gap-2"> <a href="manage-bookings.php?decline=<?php echo htmlentities($result->bookid); ?>" onclick="return confirm('Do you really want to decline booking')" class="text-danger">Decline</a>
-															/ <a href="manage-bookings.php?accept=<?php echo htmlentities($result->bookid); ?>" onclick="return confirm('Do you really want to accept this request?')">Accept</a> /
 															<a href="manage-bookings.php?show=<?php echo htmlentities($result->bookid); ?>" class="text-dark">View</a>
 														</td>
-													<?php } else if($result->status == 'paid') { ?>
-														<td class="d-flex gap-2"> <a href="manage-bookings.php?decline=<?php echo htmlentities($result->bookid); ?>" onclick="return confirm('Do you really want to this decline request?')" class="text-danger">Decline</a>
-															/ <a href="manage-bookings.php?confirm=<?php echo htmlentities($result->bookid); ?>" onclick="return confirm('Do you really want to confirm this request?')">Confirm</a> /
+													<?php } elseif ($result->status == 'declined') {
+													?>
+														<td>Declined</td>
+													<?php } else if ($result->status == 'pending') { ?>
+														<td class="d-flex gap-2"> 
+															<a href="#" onclick="showMessage('manage-bookings.php?decline=<?php echo htmlentities($result->bookid); ?>', 'Do you really want to decline this request?')
+															" class="text-danger">Decline</a>
+															/ <a href="#" onclick="showMessage('manage-bookings.php?accept=<?php echo htmlentities($result->bookid); ?>', 'Do you really want to accept this request?')
+															">Accept</a> /
+															<a href="manage-bookings.php?show=<?php echo htmlentities($result->bookid); ?>" class="text-dark">View</a>
+														</td>
+													<?php } else if ($result->status == 'paid') { ?>
+														<td class="d-flex gap-2"> <a href="#"  onclick="showMessage('manage-bookings.php?decline=<?php echo htmlentities($result->bookid); ?>', 'Do you really want to decline this request?')
+															" class="text-danger">Decline</a>
+															/ <a href="#" onclick="showMessage('manage-bookings.php?confirm=<?php echo htmlentities($result->bookid); ?>', 'Do you really want to confirm this request?')
+															">Confirm</a> /
 															<a href="manage-bookings.php?show=<?php echo htmlentities($result->bookid); ?>" class="text-dark">View</a>
 														</td>
 													<?php } ?>
@@ -325,6 +338,99 @@ if (strlen($_SESSION['alogin']) == 0) {
 			<?php include('includes/sidebarmenu.php'); ?>
 			<div class="clearfix"></div>
 		</div>
+
+		<?php
+		if (isset($_REQUEST['decline'])) {
+			$bid = intval($_GET['decline']);
+			$status = "declined";
+			$sql = "UPDATE booking SET status=:status WHERE  id=:bid";
+			$query = $dbh->prepare($sql);
+			$query->bindParam(':status', $status, PDO::PARAM_STR);
+			$query->bindParam(':bid', $bid, PDO::PARAM_STR);
+			$query->execute();
+
+			?>
+					 <script>
+						Swal.fire({
+							position: 'top-end',
+							icon: 'success',
+							title: "Booking declined succesfully",
+							showConfirmButton: false,
+							timer: 1500
+						}).then(() => {
+							window.location.href = "manage-bookings.php"
+						})
+					</script>
+					<?php 
+		}
+
+
+		if (isset($_REQUEST['accept'])) {
+			$bcid = intval($_GET['accept']);
+			$status = 'payment';
+			$cancelby = 'a';
+			$sql = "UPDATE booking SET status=:status WHERE id=:bcid";
+			$query = $dbh->prepare($sql);
+			$query->bindParam(':status', $status, PDO::PARAM_STR);
+			$query->bindParam(':bcid', $bcid, PDO::PARAM_STR);
+			$query->execute();
+			// $msg = "Booking Accepted successfully";
+			?>
+					 <script>
+						Swal.fire({
+							position: 'top-end',
+							icon: 'success',
+							title: "Booking accepted succesfully",
+							showConfirmButton: false,
+							timer: 1500
+						}).then(() => {
+							window.location.href = "manage-bookings.php"
+						})
+					</script>
+					<?php
+		}
+
+		if (isset($_REQUEST['confirm'])) {
+			$bcid = intval($_GET['confirm']);
+			$status = 'booked';
+			$cancelby = 'a';
+			$sql = "UPDATE booking SET status=:status WHERE id=:bcid";
+			$query = $dbh->prepare($sql);
+			$query->bindParam(':status', $status, PDO::PARAM_STR);
+			$query->bindParam(':bcid', $bcid, PDO::PARAM_STR);
+			$query->execute();
+			// $msg = "Booking Confirmed successfully";
+			?>
+			<script>
+			   Swal.fire({
+				   position: 'top-end',
+				   icon: 'success',
+				   title: "Booking confirmed succesfully",
+				   showConfirmButton: false,
+				   timer: 1500
+			   }).then(() => {
+				   window.location.href = "manage-bookings.php"
+			   })
+		   </script>
+		   <?php
+		}
+		?>
+		<script>
+			function showMessage(x, y) {
+				Swal.fire({
+					title: y,
+					showDenyButton: true,
+					confirmButtonText: "Yes",
+					confirmButtonColor: '#5386df',
+					denyButtonText: `No`
+				}).then((result) => {
+					/* Read more about isConfirmed, isDenied below */
+					if (result.isConfirmed) {
+						window.location.href = x
+					}
+				});
+			}
+		</script>
 		<script>
 			var toggle = true;
 

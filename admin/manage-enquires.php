@@ -5,34 +5,7 @@ include ('includes/config.php');
 if (strlen($_SESSION['alogin']) == 0) {
 	header('location:index.php');
 } else {
-	// code for cancel
-	if (isset($_REQUEST['eid'])) {
-		$eid = intval($_GET['eid']);
-		$status = 1;
-
-		$sql = "UPDATE tblenquiry SET Status=:status WHERE  id=:eid";
-		$query = $dbh->prepare($sql);
-		$query->bindParam(':status', $status, PDO::PARAM_STR);
-		$query->bindParam(':eid', $eid, PDO::PARAM_STR);
-		$query->execute();
-
-		$msg = "Enquiry  successfully read";
-	}
-
-
-	// Code for deletion
-	if ($_GET['action'] == 'delete') {
-		$id = intval($_GET['id']);
-		//$query=mysqli_query($con,"delete from tbltourpackages where PackageId =:id");
-		$sql = "delete from tblenquiry where id =:id";
-		$query = $dbh->prepare($sql);
-		$query->bindParam(':id', $id, PDO::PARAM_STR);
-		$query->execute();
-		echo "<script>alert('Eqnuiry deleted.');</script>";
-		echo "<script>window.location.href='manage-enquires.php'</script>";
-
-	}
-
+	
 
 
 	?>
@@ -52,6 +25,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 		<link rel="stylesheet" href="css/morris.css" type="text/css" />
 		<link href="css/font-awesome.css" rel="stylesheet">
 		<script src="js/jquery-2.1.4.min.js"></script>
+		<script src="js/sweet_alert.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/table-style.css" />
 		<link rel="stylesheet" type="text/css" href="css/basictable.css" />
 		<script type="text/javascript" src="js/jquery.basictable.min.js"></script>
@@ -134,6 +108,10 @@ if (strlen($_SESSION['alogin']) == 0) {
 
 						</div>
 						<div class="card-body">
+							<form method="post" class="d-flex align-items-center gap-2">
+								<input type="search" name="search" class="form-control my-3" placeholder="Search..." >
+								<button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+							</form>
 							<table class="table table-bordered">
 								<thead>
 									<tr>
@@ -149,7 +127,19 @@ if (strlen($_SESSION['alogin']) == 0) {
 									</tr>
 								</thead>
 								<tbody>
-									<?php $sql = "SELECT * from tblenquiry";
+									<?php 
+									if (isset($_POST['search'])) {
+										$search = $_POST['search'];
+										if ($search !== '') {
+											$sql = "SELECT * from tblenquiry WHERE FullName LIKE '%$search%'";
+										}else{
+											$sql = "SELECT * from tblenquiry";
+										}
+									}else{
+										$sql = "SELECT * from tblenquiry";
+									}
+									
+									
 									$query = $dbh->prepare($sql);
 									$query->execute();
 									$results = $query->fetchAll(PDO::FETCH_OBJ);
@@ -170,17 +160,20 @@ if (strlen($_SESSION['alogin']) == 0) {
 												<?php if ($result->Status == 1) {
 													?>
 													<td>Read | <a class="btn btn-danger btn-block"
-															href="manage-enquires.php?action=delete&&id=<?php echo $result->id; ?>"
-															onclick="return confirm('Do you really want to delete?')">Delete</a></td>
+															href="#"
+															onclick="showMessage('manage-enquires.php?action=delete&&id=<?php echo $result->id; ?>', 'Do you really want to delete?')
+															">Delete</a></td>
 												<?php } else { ?>
 
 													<td><a class="btn btn-primary m-1 btn-block"
-															href="manage-enquires.php?eid=<?php echo htmlentities($result->id); ?>"
-															onclick="return confirm('Do you really want to read')">Pending</a> |
+															href="#"
+															onclick="showMessage('manage-enquires.php?eid=<?php echo htmlentities($result->id); ?>', 'Do you really want to read')
+															">Pending</a> |
 
 														<a class="btn btn-danger btn-block"
-															href="manage-enquires.php?action=delete&&id=<?php echo $result->id; ?>"
-															onclick="return confirm('Do you really want to delete?')">Delete</a>
+														href="#"
+															onclick="showMessage('manage-enquires.php?action=delete&&id=<?php echo $result->id; ?>', 'Do you really want to delete?')
+															">Delete</a>
 													</td>
 												<?php } ?>
 											</tr>
@@ -222,6 +215,78 @@ if (strlen($_SESSION['alogin']) == 0) {
 			<?php include ('includes/sidebarmenu.php'); ?>
 			<div class="clearfix"></div>
 		</div>
+		<?php 
+			// code for cancel
+			if (isset($_REQUEST['eid'])) {
+				$eid = intval($_GET['eid']);
+				$status = 1;
+
+				$sql = "UPDATE tblenquiry SET Status=:status WHERE  id=:eid";
+				$query = $dbh->prepare($sql);
+				$query->bindParam(':status', $status, PDO::PARAM_STR);
+				$query->bindParam(':eid', $eid, PDO::PARAM_STR);
+				$query->execute();
+
+				// $msg = "Enquiry  successfully read";
+				?>
+				<script>
+				   Swal.fire({
+					   position: 'top-end',
+					   icon: 'success',
+					   title: "Enquiry succesfully read",
+					   showConfirmButton: false,
+					   timer: 1500
+				   }).then(() => {
+					   window.location.href = "manage-enquires.php"
+				   })
+			   </script>
+			   <?php 
+			}
+
+
+			// Code for deletion
+			if ($_GET['action'] == 'delete') {
+				$id = intval($_GET['id']);
+				//$query=mysqli_query($con,"delete from tbltourpackages where PackageId =:id");
+				$sql = "delete from tblenquiry where id =:id";
+				$query = $dbh->prepare($sql);
+				$query->bindParam(':id', $id, PDO::PARAM_STR);
+				$query->execute();
+				// echo "<script>alert('Eqnuiry deleted.');</script>";
+				// echo "<script>window.location.href='manage-enquires.php'</script>";
+				?>
+				<script>
+				   Swal.fire({
+					   position: 'top-end',
+					   icon: 'success',
+					   title: "Enquiry deleted succesfully",
+					   showConfirmButton: false,
+					   timer: 1500
+				   }).then(() => {
+					   window.location.href = "manage-enquires.php"
+				   })
+			   </script>
+			   <?php 
+
+			}
+
+		?>
+		<script>
+			function showMessage(x, y) {
+				Swal.fire({
+					title: y,
+					showDenyButton: true,
+					confirmButtonText: "Yes",
+					confirmButtonColor: '#5386df',
+					denyButtonText: `No`
+				}).then((result) => {
+					/* Read more about isConfirmed, isDenied below */
+					if (result.isConfirmed) {
+						window.location.href = x
+					}
+				});
+			}
+		</script>
 		<script>
 			var toggle = true;
 

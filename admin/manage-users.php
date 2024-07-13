@@ -79,7 +79,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 				</div>
 				<!--heder end here-->
 				<ol class="breadcrumb">
-					<li class="breadcrumb-item"><a href="index.html">Home</a><i class="fa fa-angle-right"></i>Manage Users
+					<li class="breadcrumb-item"><a href="index.html"></a><i class="fa fa-angle-right"></i>Manage Users
 					</li>
 				</ol>
 
@@ -92,6 +92,10 @@ if (strlen($_SESSION['alogin']) == 0) {
 						<h2>Manage Tourist</h2>
 					</div>
 					<div class="card-body">
+					<form method="post" class="d-flex align-items-center gap-2">
+								<input type="search" name="search" class="form-control my-3" placeholder="Search..." >
+								<button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+							</form>
 						<table class="table">
 							<thead>
 								<tr>
@@ -105,7 +109,18 @@ if (strlen($_SESSION['alogin']) == 0) {
 								</tr>
 							</thead>
 							<tbody>
-								<?php $sql = "SELECT * from tblusers";
+								<?php 
+								// $sql = "SELECT * from tblusers";
+								if (isset($_POST['search'])) {
+									$search = $_POST['search'];
+									if ($search !== '') {
+										$sql = "SELECT * from tblusers WHERE FullName LIKE '%$search%'";
+									}else{
+										$sql = "SELECT * from tblusers";
+									}
+								}else{
+									$sql = "SELECT * from tblusers";
+								}
 								$query = $dbh->prepare($sql);
 								$query->execute();
 								$results = $query->fetchAll(PDO::FETCH_OBJ);

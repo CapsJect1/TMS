@@ -239,6 +239,8 @@ INSERT INTO `tbltourpackages` (`PackageId`, `PackageName`, `PackageType`, `Packa
 CREATE TABLE `tblusers` (
   `id` int(11) NOT NULL,
   `FullName` varchar(100) DEFAULT NULL,
+  `fname` text NULL,
+  `lname` text NULL,
   `MobileNumber` char(10) DEFAULT NULL,
   `EmailId` varchar(70) DEFAULT NULL,
   `Password` varchar(100) DEFAULT NULL,
@@ -258,8 +260,7 @@ INSERT INTO `tblusers` (`id`, `FullName`, `MobileNumber`, `EmailId`, `Password`,
 (4, 'Abir', '4789756456', 'abir@gmail.com', '202cb962ac59075b964b07152d234b70', '2024-01-16 06:33:20', '2024-01-31 02:00:48', 'customer'),
 (5, 'Test', '1987894654', 'test@gmail.com', 'f925916e2754e5e03f75dd58a5733251', '2024-01-16 06:33:20', '2024-01-31 02:00:48', 'customer'),
 (9, 'Test Sample', '4654654564', 'testsample@gmail.com', '202cb962ac59075b964b07152d234b70', '2024-01-31 06:32:51', NULL, 'customer'),
-(10, 'Garima Singh', '1425362540', 'garima12@gmail.com', 'f925916e2754e5e03f75dd58a5733251', '2024-02-03 13:03:43', '2024-02-03 13:04:02', 'customer'),
-(12, 'rogine', '0909451120', 'bawigarogine02@gmail.com', '62331883bba3d7ecfb410881a62ecb10', '2024-07-10 06:14:30', NULL, 'customer');
+(10, 'Garima Singh', '1425362540', 'garima12@gmail.com', 'f925916e2754e5e03f75dd58a5733251', '2024-02-03 13:03:43', '2024-02-03 13:04:02', 'customer')
 
 -- --------------------------------------------------------
 
