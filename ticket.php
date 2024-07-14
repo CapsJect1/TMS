@@ -237,7 +237,14 @@ if (isset($_POST['submit'])) {
                     <select name="package_id" id="" class="form-control" style="margin: 10px 0;">
                         <option selected disabled value="">Select Package</option>
                         <?php foreach ($result_package as $package) : ?>
-                            <option value="<?php echo $package->PackageId; ?>"><?php echo htmlentities($package->PackageName); ?> - &#8369 <?= number_format($package->PackagePrice, 2) ?> : <?= $package->PackageFetures ?>
+                            <option
+                            <?php 
+                                $check_pack = $dbh->query("SELECT * FROM booking WHERE package_id = '$package->PackageId' AND status = 'booked' ");
+                                if ($check_pack->rowCount() > 0) {
+                                    echo "disabled";
+                                }
+                            ?>
+                            value="<?php echo $package->PackageId; ?>"><?php echo htmlentities($package->PackageName); ?> - &#8369 <?= number_format($package->PackagePrice, 2) ?> : <?= $package->PackageFetures ?>
                             </option>
                         <?php endforeach; ?>
                     </select>

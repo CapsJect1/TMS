@@ -34,9 +34,25 @@ include ('includes/config.php');
 
 <body>
 	<?php include ('includes/header.php'); ?>
-	<div class="banner">
+	<div class="banner" style="position: relative;">
+		<div style="width: 100%; position: absolute; top: 2%; left:0; padding: 0 40px;">
+		<img src="./images/IMG_20240714_153433.jpg" style="height: 100px; width: 100%;">
+		</div>
+		
 		<div class="container">
-			<!-- <h1 class="wow zoomIn animated animated" data-wow-delay=".5s" style="visibility: visible; animation-delay: 0.5s; animation-name: zoomIn;" style="color:#000 !important">  - Santa fe Port Tourist Biological fee Collection And Staycation  Management System</h1> -->
+			<div class="row">
+				
+				<div class="col-md-12 text-center">
+					<img src="./images/Santa_Fe_Cebu.png" alt="hero-img-logo">
+					<h1 style="color: #ffff;">Welcome to Santa Fe</h1>
+					<p style="color: #fff;">Book your package of choice. Book na Bhaii!!</p>
+					<a href="package-list.php" class="btn btn-primary" style="color: #fff !important; margin-top: 15px;">Book Now</a>
+				</div>
+				<!-- <div class="col-md-6" >
+				<img src="./images/IMG20240630141301.jpg" alt="hero-img-1">
+				</div> -->
+				
+			</div>
 		</div>
 	</div>
 

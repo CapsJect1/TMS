@@ -4,14 +4,17 @@ include ('includes/config.php');
 if (isset($_POST['login'])) {
 	$uname = $_POST['username'];
 	$password = md5($_POST['password']);
-	$sql = "SELECT UserName,Password FROM admin WHERE UserName=:uname and Password=:password";
+	$sql = "SELECT UserName,Password,Name,EmailId FROM admin WHERE UserName=:uname and Password=:password";
 	$query = $dbh->prepare($sql);
 	$query->bindParam(':uname', $uname, PDO::PARAM_STR);
 	$query->bindParam(':password', $password, PDO::PARAM_STR);
 	$query->execute();
-	$results = $query->fetchAll(PDO::FETCH_OBJ);
+	$results = $query->fetch(PDO::FETCH_OBJ);
 	if ($query->rowCount() > 0) {
 		$_SESSION['alogin'] = $_POST['username'];
+		$_SESSION['name'] = $results->Name;
+		$_SESSION['email'] = $results->EmailId;
+		
 		echo "<script type='text/javascript'> document.location = 'dashboard.php'; </script>";
 	} else {
 

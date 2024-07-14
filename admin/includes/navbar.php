@@ -42,10 +42,10 @@
       <h6><i class="fa fa-bell"></i> <?= $get_books->rowCount() ?></h6>
       <h6>|</h6>
       <div class="dropdown">
-        <h6 class="dropdown-toggle" data-toggle="dropdown" style="cursor: pointer;"><i class="fa fa-user"></i> Admin</h6>
+        <h6 class="dropdown-toggle" data-toggle="dropdown" style="cursor: pointer;"><i class="fa fa-user"></i> <?= $_SESSION['email'] ?></h6>
         <ul class="dropdown-menu dropdown-menu-right">
-          <li> <a href="profile.php"><i class="fa fa-lock"></i> Profile</a> </li>
-          <li> <a href="change-password.php"><i class="fa fa-lock"></i> Setting</a> </li>
+          <li> <a href="profile.php"><i class="fa fa-user"></i> Profile</a> </li>
+          <li> <a href="change-password.php"><i class="fa fa-gear"></i> Setting</a> </li>
           <li> <a href="logout.php"><i class="fa fa-sign-out"></i> Logout</a> </li>
         </ul>
       </div>

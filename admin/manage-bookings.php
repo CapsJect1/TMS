@@ -195,6 +195,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 											<th>Mobile No.</th>
 											<th>Email Id</th>
 											<th>Package</th>
+											<th>Date / Time</th>
 											<th>Status </th>
 											<th>Action </th>
 										</tr>
@@ -211,7 +212,8 @@ if (strlen($_SESSION['alogin']) == 0) {
 										tblusers.EmailId as email,
 										tbltourpackages.PackageName as pckname,
 										booking.package_id as pid,
-										booking.status as status
+										booking.status as status,
+										booking.date_created
 									from  booking
 									left join 
 										tblusers on booking.user_id=tblusers.id 
@@ -226,7 +228,8 @@ if (strlen($_SESSION['alogin']) == 0) {
 										tblusers.EmailId as email,
 										tbltourpackages.PackageName as pckname,
 										booking.package_id as pid,
-										booking.status as status
+										booking.status as status,
+										booking.date_created
 									from  booking
 									left join 
 										tblusers on booking.user_id=tblusers.id 
@@ -242,7 +245,8 @@ if (strlen($_SESSION['alogin']) == 0) {
 										tblusers.EmailId as email,
 										tbltourpackages.PackageName as pckname,
 										booking.package_id as pid,
-										booking.status as status
+										booking.status as status,
+										booking.date_created
 									from  booking
 									left join 
 										tblusers on booking.user_id=tblusers.id 
@@ -264,6 +268,9 @@ if (strlen($_SESSION['alogin']) == 0) {
 													<td><?php echo htmlentities($result->mnumber); ?></td>
 													<td><?php echo htmlentities($result->email); ?></td>
 													<td><a href="update-package.php?pid=<?php echo htmlentities($result->pid); ?>"><?php echo htmlentities($result->pckname); ?></a>
+													</td>
+													<td>
+														<?= date('m-d-Y : h:i:s A', strtotime($result->date_created)) ?>
 													</td>
 
 													<td>

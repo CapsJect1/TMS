@@ -16,7 +16,7 @@
 				<li class="hm"><a href="index.html"><i class="fa fa-home"></i></a></li>
 				<li class="prnt"><a href="profile.php">My Profile</a></li>
 				<li class="prnt"><a href="change-password.php">Change Password</a></li>
-				<li class="prnt"><a href="tour-history.php">My Tour History</a></li>
+				<!-- <li class="prnt"><a href="tour-history.php">My Tour History</a></li> -->
 				<li class="prnt"><a href="issuetickets.php">Raised Tickets</a></li>
 			</ul>
 			<ul class="tp-hd-rgt wow fadeInRight animated" data-wow-delay=".5s">

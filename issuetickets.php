@@ -223,6 +223,11 @@ if (strlen($_SESSION['login']) == 0) {
 							<p style="color: #000 !important; margin-bottom: 0px !important; text-align: right;">Ship: <?= number_format($total_ship) ?></p>
 							<p style="color: #000 !important; margin: 0px !important; text-align: right;">Package: <?= number_format($row['PackagePrice']) ?></p>
 							<h3 style="color: #000 !important; text-align: right; margin: 10px 0 !important;">Total: &#8369 <?= number_format($total_ship + $row['PackagePrice']) ?></h3>
+
+							<div>
+								<img src="./images/gcash.jpg" alt="gcash" style="width: 100%;">
+							</div>
+
 							<h4 style="color: #000 !important; margin: 10px 0 !important;">Cash: <input type="text" class="form-control" name="cash" placeholder="Full payment" required></h4>
 							<h4 style="color: #000 !important; margin: 10px 0 !important;">Proof of Payment: <input type="file" class="form-control" name="proof" required></h4>
 							<p class="text-danger" style="color: red !important;"><?= isset($_GET['error']) ? $_GET['error'] : '' ?></p>
