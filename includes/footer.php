@@ -20,7 +20,7 @@
 						</ul>
 					</div>
 					<p class="wow zoomIn animated animated" data-wow-delay=".5s"
-						style="visibility: visible; animation-delay: 0.5s; animation-name: zoomIn;"> &copy; Santa Fe Port 2024, All rights reserved. </p>
+						style="visibility: visible; animation-delay: 0.5s; animation-name: zoomIn;"> &copy; SFP - Develop by : Johnrey R . Alo And Percedie B. Buhayan, Contact us : 09368233590/09693457783</p>
 				</div>
 			</div>
 		</div>
