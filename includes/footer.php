@@ -20,8 +20,7 @@
 						</ul>
 					</div>
 					<p class="wow zoomIn animated animated" data-wow-delay=".5s"
-						style="visibility: visible; animation-delay: 0.5s; animation-name: zoomIn;"> &copy; Santa Fe Port, All rights reserved.
-						Reserved </p>
+						style="visibility: visible; animation-delay: 0.5s; animation-name: zoomIn;"> &copy; Santa Fe Port 2024, All rights reserved. </p>
 				</div>
 			</div>
 		</div>
