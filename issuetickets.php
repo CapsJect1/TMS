@@ -95,7 +95,7 @@ if (strlen($_SESSION['login']) == 0) {
 
 	<body>
 		<!-- top-header -->
-		<div class="top-header">
+		<div class="top-header container-fluid">
 			<?php include('includes/header.php'); ?>
 			<div class="banner-1 dont-print">
 				<div class="container">
@@ -127,10 +127,12 @@ if (strlen($_SESSION['login']) == 0) {
 			?>
 				<div class="privacy print">
 					<div class="container" style="width: 500px; border: 1px dashed #000; padding: 10px; ">
-						<div class="text-center">
+						<div class="text-center" style="position: relative;">
+						<img src="images/Santa_Fe_Cebu.png" alt="logo" style="width: 50px; position: absolute; top: 0px; left: 20px;">
 							<h4 style="color: black !important; margin-bottom: 0px !important;">Santa Fe Port TMS</h4>
 							<p style="margin-bottom: 0px !important; color: #000 !important;">Date: <?= date('Y-m-d') ?></p>
 							<p style="margin-bottom: 0px !important; color: #000 !important;">Refer. #: <?= $row['reference_num'] ?></p>
+
 						</div>
 						<hr style="color: #000 !important;">
 
@@ -191,11 +193,13 @@ if (strlen($_SESSION['login']) == 0) {
 						<input type="hidden" name="total" value="<?= $total_ship + $row['PackagePrice'] ?>">
 
 						<div class="container" style="width: 500px; border: 1px dashed #000; padding: 10px; ">
-							<div class="text-center">
-								<h4 style="color: black !important; margin-bottom: 0px !important;">Santa Fe Port TMS</h4>
-								<p style="margin-bottom: 0px !important; color: #000 !important;">Date: <?= date('Y-m-d') ?></p>
-								<p style="margin-bottom: 0px !important; color: #000 !important;">Refer. #: <?= $row['reference_num'] ?></p>
-							</div>
+						<div class="text-center" style="position: relative;">
+						<img src="images/Santa_Fe_Cebu.png" alt="logo" style="width: 50px; position: absolute; top: 0px; left: 20px;">
+							<h4 style="color: black !important; margin-bottom: 0px !important;">Santa Fe Port TMS</h4>
+							<p style="margin-bottom: 0px !important; color: #000 !important;">Date: <?= date('Y-m-d') ?></p>
+							<p style="margin-bottom: 0px !important; color: #000 !important;">Refer. #: <?= $row['reference_num'] ?></p>
+
+						</div>
 							<hr style="color: #000 !important;">
 
 							<p style="color: #000 !important;">Name: <?= ucfirst($row['fname']) . ' ' . ucfirst($row['lname']) ?></p>
