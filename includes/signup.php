@@ -1,5 +1,5 @@
 <?php
-error_reporting(0);
+// error_reporting(0);
 if (isset($_POST['submit'])) {
 	$fname = $_POST['fname'];
 	$lname = $_POST['lname'];
