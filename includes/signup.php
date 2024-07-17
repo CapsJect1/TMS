@@ -20,10 +20,20 @@ if (isset($_POST['submit'])) {
 	if (strlen($_POST['password']) >= 8) {
 		if ($lastInsertId) {
 			$_SESSION['msg'] = "You are Scuccessfully registered. Now you can login ";
-			header('location:thankyou.php');
+			// header('location:thankyou.php');
+			?>
+			<script>
+				window.location.href = "thankyou.php"
+			</script>
+			<?php 
 		} else {
 			$_SESSION['msg'] = "Something went wrong. Please try again.";
-			header('location:thankyou.php');
+			// header('location:thankyou.php');
+			?>
+			<script>
+				window.location.href = "thankyou.php"
+			</script>
+			<?php 
 		}
 	}else{
 		
