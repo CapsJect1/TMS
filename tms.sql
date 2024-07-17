@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 10, 2024 at 07:51 PM
+-- Generation Time: Jul 17, 2024 at 09:44 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -42,7 +42,7 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`id`, `UserName`, `Name`, `EmailId`, `MobileNumber`, `Password`, `updationDate`) VALUES
-(1, 'admin', 'Administrator', 'test@gmail.com', 7894561239, 'f925916e2754e5e03f75dd58a5733251', '2024-01-10 11:18:49');
+(1, 'admin', 'Administrator', 'admin@gmail.com', 7894561239, 'f925916e2754e5e03f75dd58a5733251', '2024-01-10 11:18:49');
 
 -- --------------------------------------------------------
 
@@ -53,19 +53,19 @@ INSERT INTO `admin` (`id`, `UserName`, `Name`, `EmailId`, `MobileNumber`, `Passw
 CREATE TABLE `booking` (
   `id` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
-  `reference_num` varchar(100) NULL,
-  `fname` text NULL,
-  `lname` text NULL,
-  `email` varchar(255) NULL,
-  `ship` varchar(100) NULL,
-  `regular` int(11) NULL,
-  `student` int(11) NULL,
-  `senior_pwd` int(11) NULL,
-  `package_id` int(11) NULL,
-  `arriv_date` text NULL,
-  `arriv_time` text NULL,
-  `dept_date` text NULL,
-  `dept_time` text NULL,
+  `reference_num` varchar(100) NOT NULL,
+  `fname` text NOT NULL,
+  `lname` text NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `ship` varchar(100) NOT NULL,
+  `regular` int(11) NOT NULL,
+  `student` int(11) NOT NULL,
+  `senior_pwd` int(11) NOT NULL,
+  `package_id` int(11) NOT NULL,
+  `arriv_date` text NOT NULL,
+  `arriv_time` text NOT NULL,
+  `dept_date` text NOT NULL,
+  `dept_time` text NOT NULL,
   `status` varchar(10) NOT NULL DEFAULT 'pending',
   `payment` float DEFAULT NULL,
   `proof` longblob DEFAULT NULL,
@@ -80,9 +80,9 @@ CREATE TABLE `booking` (
 
 CREATE TABLE `saved_tickets` (
   `id` int(11) NOT NULL,
-  `user_id` int(11) NULL,
-  `ticket_id` int(11) NULL,
-  `travel_date` date NULL
+  `user_id` int(11) NOT NULL,
+  `ticket_id` int(11) NOT NULL,
+  `travel_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -103,19 +103,6 @@ CREATE TABLE `tblbooking` (
   `CancelledBy` varchar(5) DEFAULT NULL,
   `UpdationDate` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-
---
--- Dumping data for table `tblbooking`
---
-
-INSERT INTO `tblbooking` (`BookingId`, `PackageId`, `UserEmail`, `FromDate`, `ToDate`, `Comment`, `RegDate`, `status`, `CancelledBy`, `UpdationDate`) VALUES
-(1, 1, 'test@gmail.com', '2020-07-11', '2020-07-18', 'I want this package.', '2024-01-16 06:38:36', 2, 'u', '2024-01-30 05:18:29'),
-(2, 2, 'test@gmail.com', '2020-07-10', '2020-07-13', 'There is some discount', '2024-01-17 06:43:25', 1, NULL, '2024-01-31 01:21:17'),
-(3, 4, 'abir@gmail.com', '2020-07-11', '2020-07-15', 'When I get conformation', '2024-01-17 06:44:39', 2, 'a', '2024-01-30 05:18:52'),
-(4, 2, 'test@gmail.com', '2024-02-02', '2024-02-08', 'NA', '2024-01-31 02:03:27', 1, NULL, '2024-01-31 06:35:08'),
-(5, 3, 'test@gmail.com', '2024-01-31', '2024-02-05', 'please offer some discount', '2024-01-31 05:21:52', 2, 'a', '2024-07-10 12:10:00'),
-(6, 2, 'garima12@gmail.com', '2024-03-01', '2024-03-05', 'NA', '2024-02-03 13:04:33', 1, NULL, '2024-02-03 13:05:29'),
-(7, 2, 'test@gmail.com', '2024-07-05', '2024-07-06', 'SDSDS', '2024-07-05 12:23:04', 1, NULL, '2024-07-10 12:10:04');
 
 -- --------------------------------------------------------
 
@@ -139,9 +126,8 @@ CREATE TABLE `tblenquiry` (
 --
 
 INSERT INTO `tblenquiry` (`id`, `FullName`, `EmailId`, `MobileNumber`, `Subject`, `Description`, `PostingDate`, `Status`) VALUES
-(2, 'Kishan Twaerea', 'kishan@gmail.com', '6797947987', 'Enquiry', 'Any Offer for North Trip', '2024-01-18 06:31:38', NULL),
-(3, 'Jacaob', 'Jai@gmail.com', '1646689721', 'Any offer for North', 'Any Offer for north', '2024-01-19 06:32:41', 1),
-(5, 'hohn Doe', 'John12@gmail.com', '142536254', 'Test Subject', 'this is for testing', '2024-02-03 13:07:50', 1);
+(2, 'Kishan Twaerea', 'kishan@gmail.com', '6797947987', 'Enquiry', 'Any Offer for North Trip', '2024-01-18 06:31:38', 1),
+(3, 'Jacaob', 'Jai@gmail.com', '1646689721', 'Any offer for North', 'Any Offer for north', '2024-01-19 06:32:41', 1);
 
 -- --------------------------------------------------------
 
@@ -167,7 +153,9 @@ INSERT INTO `tblissues` (`id`, `UserEmail`, `Issue`, `Description`, `PostingDate
 (7, 'test@gmail.com', 'Refund', 'I want my refund', '2024-01-25 06:56:29', NULL, '2024-01-30 05:20:14'),
 (10, 'test@gmail.com', 'Other', 'Test Sample', '2024-01-31 05:24:40', NULL, NULL),
 (13, 'garima12@gmail.com', 'Booking Issues', 'I want some information ragrding booking', '2024-02-03 13:06:00', 'Infromation provided', '2024-02-03 13:06:26'),
-(14, NULL, NULL, NULL, '2024-07-10 06:14:30', NULL, NULL);
+(15, NULL, NULL, NULL, '2024-07-13 08:20:56', NULL, NULL),
+(16, NULL, NULL, NULL, '2024-07-13 08:33:38', NULL, NULL),
+(17, NULL, NULL, NULL, '2024-07-17 07:40:40', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -215,7 +203,6 @@ CREATE TABLE `tbltourpackages` (
 --
 
 INSERT INTO `tbltourpackages` (`PackageId`, `PackageName`, `PackageType`, `PackageLocation`, `PackagePrice`, `PackageFetures`, `PackageDetails`, `PackageImage`, `Creationdate`, `UpdationDate`) VALUES
-(1, 'Swiss Paris Delight Premium 2020 (Group Package)', 'Group Package', 'Paris and Switzerland', 6000, ' Round trip Economy class airfare valid for the duration of the holiday - Airport taxes - Accommodation for 3 nights in Paris and 3 nights in scenic Switzerland - Enjoy continental breakfasts every morning - Enjoy 5 Indian dinners in Mainland Europe - Exp', 'Pick this holiday for a relaxing vacation in Paris and Switzerland. Your tour embarks from Paris. Enjoy an excursion to popular attractions like the iconic Eiffel Tower. After experiencing the beautiful city, you will drive past mustard fields through Burgundy to reach Switzerland. While there, you can opt for a tour to Interlaken and then to the Trummelbach Falls. Photostop at Zurich Lake and a cable car ride to Mt. Titlis are the main highlights of the holiday.', '1581490262_2_1.jpg', '2024-07-15 05:21:58', '2024-01-30 05:20:49'),
 (2, 'Bhutan Holidays - Thimphu and Paro Special', 'Family Package', 'Bhutan', 3000, 'Free Wi-fi, Free Breakfast, Free Pickup and drop facility ', 'Visit to Tiger\'s Nest Monastery | Complimentary services of a Professional Guide', 'BHUTAN-THIMPU-PARO-PUNAKHA-TOUR-6N-7D.jpeg', '2024-07-15 05:21:58', '2024-01-30 05:20:56'),
 (3, 'Soulmate Special Bali - 7 Nights', 'Couple Package', 'Indonesia(Bali)', 5000, 'Free Pickup and drop facility, Free Wi-fi , Free professional guide', 'Airport transfers by private car | Popular Sightseeing included | Suitable for Couple and budget travelers', '1583140977_5_11.jpg', '2024-07-15 05:21:58', '2024-01-30 05:20:56'),
 (4, 'Kerala - A Lovers Paradise - Value Added', 'Family Package', 'Kerala', 1000, 'Free Wi-fi, Free pick up and drop facility,', 'Visit Matupetty Dam, tea plantation and a spice garden | View sunset in Kanyakumari | AC Car at disposal for 2hrs extra (once per city)', 'images (2).jpg', '2024-07-15 05:21:58', '2024-01-30 05:20:56'),
@@ -223,13 +210,22 @@ INSERT INTO `tbltourpackages` (`PackageId`, `PackageName`, `PackageType`, `Packa
 (6, 'Sikkim Delight with Darjeeling (customizable)', 'Group', 'Sikkim', 3500, 'Free Breakfast, Free Pick up drop facility', 'Changu Lake and New Baba Mandir excursion | View the sunrise from Tiger Hill | Get Blessed at the famous Rumtek Monastery', 'download (2).jpg', '2024-07-15 05:21:58', '2024-01-30 05:20:56'),
 (7, '6 Days in Guwahati and Shillong With Cherrapunji Excursion', 'Family Package', 'Guwahati(Sikkim)', 4500, 'Breakfast,  Accommodation » Pick-up » Drop » Sightseeing', 'After arrival at Guwahati airport meet our representative & proceed for Shillong. Shillong is the capital and hill station of Meghalaya, also known as Abode of Cloud, one of the smallest states in India. En route visit Barapani lake. By afternoon reach at Shillong. Check in to the hotel. Evening is leisure. Spent time as you want. Visit Police bazar. Overnight stay at Shillong.', '95995.jpg', '2024-07-15 05:21:58', '2024-01-30 05:20:56'),
 (8, 'Grand Week in North East - Lachung, Lachen and Gangtok', 'Domestic Packages', 'Sikkim', 4500, 'Free Breakfast, Free Wi-fi', 'Changu Lakeand New Baba Mandir excursion | Yumthang Valley tour | Gurudongmar Lake excursion | Night stay in Lachen', 'download (3).jpg', '2024-07-15 05:21:58', '2024-01-30 05:20:56'),
-(9, 'Gangtok & Darjeeling Holiday (Without Flights)', 'Family Package', 'Sikkim', 1000, 'Free Wi-fi, Free pickup and drop facility', 'Ideal tour for Family | Sightseeing in Gangtok and Darjeeling | Full day excursion to idyllic Changu Lake | Visit to Ghoom Monastery', '1540382781_shutterstock_661867435.jpg.jpg', '2024-07-15 05:21:58', '2024-01-30 05:20:56'));
+(9, 'Gangtok & Darjeeling Holiday (Without Flights)', 'Family Package', 'Sikkim', 1000, 'Free Wi-fi, Free pickup and drop facility', 'Ideal tour for Family | Sightseeing in Gangtok and Darjeeling | Full day excursion to idyllic Changu Lake | Visit to Ghoom Monastery', '1540382781_shutterstock_661867435.jpg.jpg', '2024-07-15 05:21:58', '2024-01-30 05:20:56'),
+(11, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-07-06 02:13:03', NULL),
+(13, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-07-06 02:15:54', NULL),
+(15, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-07-06 02:35:03', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tblusers`
+--
 
 CREATE TABLE `tblusers` (
   `id` int(11) NOT NULL,
   `FullName` varchar(100) DEFAULT NULL,
-  `fname` text NULL,
-  `lname` text NULL,
+  `fname` text NOT NULL,
+  `lname` text NOT NULL,
   `MobileNumber` char(10) DEFAULT NULL,
   `EmailId` varchar(70) DEFAULT NULL,
   `Password` varchar(100) DEFAULT NULL,
@@ -238,15 +234,24 @@ CREATE TABLE `tblusers` (
   `UserType` varchar(50) DEFAULT 'customer'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
+--
+-- Dumping data for table `tblusers`
+--
 
-INSERT INTO `tblusers` (`id`, `FullName`, `MobileNumber`, `EmailId`, `Password`, `RegDate`, `UpdationDate`, `UserType`) VALUES
-(1, 'Manju Srivatav', '4456464654', 'manju@gmail.com', '202cb962ac59075b964b07152d234b70', '2024-01-16 06:33:20', '2024-01-31 02:00:40', 'customer'),
-(2, 'Kishan', '9871987979', 'kishan@gmail.com', '202cb962ac59075b964b07152d234b70', '2024-01-16 06:33:20', '2024-01-31 02:00:48', 'customer'),
-(3, 'Salvi Chandra', '1398756416', 'salvi@gmail.com', '202cb962ac59075b964b07152d234b70', '2024-01-16 06:33:20', '2024-01-31 02:00:48', 'customer'),
-(4, 'Abir', '4789756456', 'abir@gmail.com', '202cb962ac59075b964b07152d234b70', '2024-01-16 06:33:20', '2024-01-31 02:00:48', 'customer'),
-(5, 'Test', '1987894654', 'test@gmail.com', 'f925916e2754e5e03f75dd58a5733251', '2024-01-16 06:33:20', '2024-01-31 02:00:48', 'customer'),
-(9, 'Test Sample', '4654654564', 'testsample@gmail.com', '202cb962ac59075b964b07152d234b70', '2024-01-31 06:32:51', NULL, 'customer'),
-(10, 'Garima Singh', '1425362540', 'garima12@gmail.com', 'f925916e2754e5e03f75dd58a5733251', '2024-02-03 13:03:43', '2024-02-03 13:04:02', 'customer')
+INSERT INTO `tblusers` (`id`, `FullName`, `fname`, `lname`, `MobileNumber`, `EmailId`, `Password`, `RegDate`, `UpdationDate`, `UserType`) VALUES
+(1, 'Manju Srivatav', '', '', '4456464654', 'manju@gmail.com', '202cb962ac59075b964b07152d234b70', '2024-01-16 06:33:20', '2024-01-31 02:00:40', 'customer'),
+(2, 'Kishan', '', '', '9871987979', 'kishan@gmail.com', '202cb962ac59075b964b07152d234b70', '2024-01-16 06:33:20', '2024-01-31 02:00:48', 'customer'),
+(3, 'Salvi Chandra', '', '', '1398756416', 'salvi@gmail.com', '202cb962ac59075b964b07152d234b70', '2024-01-16 06:33:20', '2024-01-31 02:00:48', 'customer'),
+(4, 'Abir', '', '', '4789756456', 'abir@gmail.com', '202cb962ac59075b964b07152d234b70', '2024-01-16 06:33:20', '2024-01-31 02:00:48', 'customer'),
+(5, 'Test', '', '', '1987894654', 'test@gmail.com', 'f925916e2754e5e03f75dd58a5733251', '2024-01-16 06:33:20', '2024-01-31 02:00:48', 'customer'),
+(9, 'Test Sample', '', '', '4654654564', 'testsample@gmail.com', '202cb962ac59075b964b07152d234b70', '2024-01-31 06:32:51', NULL, 'customer'),
+(10, 'Garima Singh', '', '', '1425362540', 'garima12@gmail.com', 'f925916e2754e5e03f75dd58a5733251', '2024-02-03 13:03:43', '2024-02-03 13:04:02', 'customer');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ticker`
+--
 
 CREATE TABLE `ticker` (
   `id` int(11) NOT NULL,
@@ -257,6 +262,9 @@ CREATE TABLE `ticker` (
   `date` date DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `ticker`
+--
 
 INSERT INTO `ticker` (`id`, `name`, `status`, `number_of_passengers`, `ticket_category_id`, `date`) VALUES
 (11, 'Test', 'Booked', 1, 13, '2024-07-06'),
@@ -271,6 +279,11 @@ INSERT INTO `ticker` (`id`, `name`, `status`, `number_of_passengers`, `ticket_ca
 (20, 'Test', 'Booked', 1, 11, '2024-07-06'),
 (21, 'Test', 'Booked', 1, 10, '2024-07-06');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ticket_category`
+--
 
 CREATE TABLE `ticket_category` (
   `id` int(11) NOT NULL,
@@ -391,7 +404,7 @@ ALTER TABLE `saved_tickets`
 -- AUTO_INCREMENT for table `tblbooking`
 --
 ALTER TABLE `tblbooking`
-  MODIFY `BookingId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `BookingId` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tblenquiry`
@@ -403,7 +416,7 @@ ALTER TABLE `tblenquiry`
 -- AUTO_INCREMENT for table `tblissues`
 --
 ALTER TABLE `tblissues`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `tblpages`
@@ -415,13 +428,13 @@ ALTER TABLE `tblpages`
 -- AUTO_INCREMENT for table `tbltourpackages`
 --
 ALTER TABLE `tbltourpackages`
-  MODIFY `PackageId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `PackageId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `tblusers`
 --
 ALTER TABLE `tblusers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `ticker`
