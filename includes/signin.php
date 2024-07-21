@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 if (isset($_POST['signin'])) {
 	$email = $_POST['email'];
