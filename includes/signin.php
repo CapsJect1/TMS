@@ -1,10 +1,5 @@
 <?php
-<<<<<<< HEAD
-// session_start();
-
-=======
 session_start();
->>>>>>> 7caa2c25521e458ad30dd3f316055683d561f71b
 if (isset($_POST['signin'])) {
 	$email = $_POST['email'];
 	$password = md5($_POST['password']); // Note: MD5 hashing is used here for simplicity; consider using more secure hashing methods
