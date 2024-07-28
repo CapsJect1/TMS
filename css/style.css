@@ -977,8 +977,10 @@ i.fa.fa-gift {
 }
 
 .banner-3 {
-    background: url(../images/6.jpg)no-repeat;
-    background-size: cover;
+    background: url(../images/IMG20240718165615.jpg) !important;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+    background-position: center !important;
     -webkit-background-size: cover;
     -o-background-size: cover;
     -ms-background-size: cover;
