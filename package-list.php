@@ -56,9 +56,10 @@ include ('includes/config.php');
 				$cnt = 1;
 				if ($query->rowCount() > 0) {
 					foreach ($results as $result) { ?>
+					<?php echo $result->PackageImage ?? 'Hello world'; ?>
 						<div class="rom-btm">
 							<div class="col-md-3 room-left wow fadeInLeft animated" data-wow-delay=".5s">
-								<img src="https://santafeport.com/admin/pacakgeimages/<?php echo $result->PackageImage; ?>"
+								<img src="admin/pacakgeimages/<?php echo $result->PackageImage; ?>"
 									class="img-responsive" alt="">
 							</div>
 							<div class="col-md-6 room-midle wow fadeInUp animated" data-wow-delay=".5s">
