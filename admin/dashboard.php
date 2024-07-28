@@ -307,8 +307,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 						display: false
 					},
 					title: {
-						display: true,
-						text: "Reports"
+						display: false
 					}
 				}
 			});
