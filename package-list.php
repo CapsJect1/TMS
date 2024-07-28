@@ -58,7 +58,7 @@ include ('includes/config.php');
 					foreach ($results as $result) { ?>
 						<div class="rom-btm">
 							<div class="col-md-3 room-left wow fadeInLeft animated" data-wow-delay=".5s">
-								<img src="https://santafeport.com/admin/pacakgeimages/<?php echo htmlentities($result->PackageImage); ?>"
+								<img src="https://santafeport.com/admin/pacakgeimages/<?php echo $result->PackageImage; ?>"
 									class="img-responsive" alt="">
 							</div>
 							<div class="col-md-6 room-midle wow fadeInUp animated" data-wow-delay=".5s">
