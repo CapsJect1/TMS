@@ -184,7 +184,7 @@ i.fa.fa-lock {
 /*-- /header --*/
 /*-- banner --*/
 .banner {
-    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(../images/IMG20240718165615.jpeg);
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(../images/sta1.jpeg);
     background-repeat: no-repeat;
     background-size: cover;
     -webkit-background-size: cover;
@@ -580,7 +580,7 @@ i.fa.fa-ticket {
 /*-- /footer --*/
 /*-- bus --*/
 .banner-1 {
-    background: url(../images/3.jpg)no-repeat;
+    background: url(../images/IMG20240718165615.jpg)no-repeat;
     background-size: cover;
     -webkit-background-size: cover;
     -o-background-size: cover;
