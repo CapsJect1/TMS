@@ -1,5 +1,6 @@
 <?php
 session_start();
+error_reporting( E_ALL );
 include('includes/config.php');
 if (strlen($_SESSION['alogin']) == 0) {
 	header('location:index.php');
@@ -128,8 +129,8 @@ if (strlen($_SESSION['alogin']) == 0) {
 									} else {
 										$sql = "SELECT * from tblTourPackages";
 									}
+									$sql = "SELECT * from tbltourpackages";
 									$query = $dbh->prepare($sql);
-									//$query -> bindParam(':city', $city, PDO::PARAM_STR);
 									$query->execute();
 									$results = $query->fetchAll(PDO::FETCH_OBJ);
 									$cnt = 1;
@@ -198,19 +199,19 @@ if (strlen($_SESSION['alogin']) == 0) {
 			$query->execute();
 			// echo "<script>alert('Package deleted.');</script>";
 			// echo "<script>window.location.href='manage-packages.php'</script>";
-			?>
-					 <script>
-						Swal.fire({
-							position: 'top-end',
-							icon: 'success',
-							title: "Package deleted succesfully",
-							showConfirmButton: false,
-							timer: 1500
-						}).then(() => {
-							window.location.href = "manage-packages.php"
-						})
-					</script>
-					<?php 
+		?>
+			<script>
+				Swal.fire({
+					position: 'top-end',
+					icon: 'success',
+					title: "Package deleted succesfully",
+					showConfirmButton: false,
+					timer: 1500
+				}).then(() => {
+					window.location.href = "manage-packages.php"
+				})
+			</script>
+		<?php
 		}
 		?>
 		<script>
