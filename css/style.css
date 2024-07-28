@@ -581,9 +581,9 @@ i.fa.fa-ticket {
 /*-- bus --*/
 .banner-1 {
     background: url(../images/IMG20240718165615.jpg) !important;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+    background-position: center !important;
     -webkit-background-size: cover;
     -o-background-size: cover;
     -ms-background-size: cover;
