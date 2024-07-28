@@ -580,7 +580,7 @@ i.fa.fa-ticket {
 /*-- /footer --*/
 /*-- bus --*/
 .banner-1 {
-    background: url(../images/IMG20240718165615.jpg)no-repeat;
+    background: url(../images/IMG20240718165615.jpg) no-repeat !important;
     background-size: cover;
     -webkit-background-size: cover;
     -o-background-size: cover;
