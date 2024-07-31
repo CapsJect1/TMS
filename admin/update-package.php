@@ -81,17 +81,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							<div class="tab-pane active" id="horizontal-form">
 
 								<?php
-								$pid = $_GET['pid'];
-			echo $pid;
-
+								$pid = (int)$_GET['pid'];
 								$sql = "SELECT * from TblTourPackages where PackageId=:pid";
 								$query = $dbh->prepare($sql);
 								$query->bindParam(':pid', $pid);
 								$query->execute();
-								$result = $query->fetch(PDO::FETCH_OBJ);
+								$results = $query->fetchAll(PDO::FETCH_OBJ);
 								$cnt = 1;
 								if ($query->rowCount() > 0) {
-										?>
+									foreach ($results as $result) {	?>
 
 										<form class="form-horizontal" name="package" method="post" enctype="multipart/form-data">
 											<div class="form-group">
@@ -148,7 +146,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 													<?php echo htmlentities($result->UpdationDate); ?>
 												</div>
 											</div>
-									<?php 
+									<?php }
 								} ?>
 
 									<div class="row">
