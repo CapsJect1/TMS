@@ -40,6 +40,9 @@
 						Pages</span>
 					<div class="clearfix"></div>
 				</a></li>
+				<li><a href="book-report.php"><i class="fa fa-signal" aria-hidden="true"></i> <span>Book Report</span>
+					<div class="clearfix"></div>
+				</a></li>
 
 
 		</ul>

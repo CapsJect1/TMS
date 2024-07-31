@@ -11,6 +11,7 @@ define('DB_NAME','u510162695_tms');
 // define('DB_USER','root');
 // define('DB_PASS','');
 // define('DB_NAME','tms');
+
 // Establish database connection.
 try
 {
