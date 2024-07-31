@@ -91,61 +91,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								if ($query->rowCount() > 0) {
 									foreach ($results as $result) {	?>
 
-										<form class="form-horizontal" name="package" method="post" enctype="multipart/form-data">
-											<div class="form-group">
-												<label for="focusedinput" class="col-sm-2 control-label">Package Name</label>
-												<div class="col-sm-8">
-													<input type="text" class="form-control1" name="packagename" id="packagename" placeholder="Create Package" value="<?php echo htmlentities($result->PackageName); ?>" required>
-												</div>
-											</div>
-											<div class="form-group">
-												<label for="focusedinput" class="col-sm-2 control-label">Package Type</label>
-												<div class="col-sm-8">
-													<input type="text" class="form-control1" name="packagetype" id="packagetype" placeholder=" Package Type eg- Family Package / Couple Package" value="<?php echo htmlentities($result->PackageType); ?>" required>
-												</div>
-											</div>
-
-											<div class="form-group">
-												<label for="focusedinput" class="col-sm-2 control-label">Package Location</label>
-												<div class="col-sm-8">
-													<input type="text" class="form-control1" name="packagelocation" id="packagelocation" placeholder=" Package Location" value="<?php echo htmlentities($result->PackageLocation); ?>" required>
-												</div>
-											</div>
-
-											<div class="form-group">
-												<label for="focusedinput" class="col-sm-2 control-label">Package Price in USD</label>
-												<div class="col-sm-8">
-													<input type="text" class="form-control1" name="packageprice" id="packageprice" placeholder=" Package Price is USD" value="<?php echo htmlentities($result->PackagePrice); ?>" required>
-												</div>
-											</div>
-
-											<div class="form-group">
-												<label for="focusedinput" class="col-sm-2 control-label">Package Features</label>
-												<div class="col-sm-8">
-													<input type="text" class="form-control1" name="packagefeatures" id="packagefeatures" placeholder="Package Features Eg-free Pickup-drop facility" value="<?php echo htmlentities($result->PackageFetures); ?>" required>
-												</div>
-											</div>
-
-
-											<div class="form-group">
-												<label for="focusedinput" class="col-sm-2 control-label">Package Details</label>
-												<div class="col-sm-8">
-													<textarea class="form-control" rows="5" cols="50" name="packagedetails" id="packagedetails" placeholder="Package Details" required><?php echo htmlentities($result->PackageDetails); ?></textarea>
-												</div>
-											</div>
-											<div class="form-group">
-												<label for="focusedinput" class="col-sm-2 control-label">Package Image</label>
-												<div class="col-sm-8">
-													<img src="pacakgeimages/<?php echo htmlentities($result->PackageImage); ?>" width="200">&nbsp;&nbsp;&nbsp;<a href="change-image.php?imgid=<?php echo htmlentities($result->PackageId); ?>">Change Image</a>
-												</div>
-											</div>
-
-											<div class="form-group">
-												<label for="focusedinput" class="col-sm-2 control-label">Last Updation Date</label>
-												<div class="col-sm-8">
-													<?php echo htmlentities($result->UpdationDate); ?>
-												</div>
-											</div>
+										
 									<?php }
 								} ?>
 
