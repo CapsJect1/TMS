@@ -80,7 +80,17 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<div class="tab-content">
 							<div class="tab-pane active" id="horizontal-form">
 
-								hello world
+								<?php
+								$pid = $_GET['pid'];
+								$sql = "SELECT * from TblTourPackages where PackageId=:pid";
+								$query = $dbh->prepare($sql);
+								$query->bindParam(':pid', $pid, PDO::PARAM_STR);
+								$query->execute();
+								$results = $query->fetchAll(PDO::FETCH_OBJ);
+								$cnt = 1;
+								if ($query->rowCount() > 0) {
+									echo $query->rowCount();
+								} ?>
 
 									<div class="row">
 										<div class="col-sm-8 col-sm-offset-2">
