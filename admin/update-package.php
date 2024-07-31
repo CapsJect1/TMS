@@ -50,6 +50,53 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <body>
    <div class="page-container">
    <!--/content-inner-->
+<div class="left-content">
+	   <div class="mother-grid-inner">
+              <!--header start here-->
+<?php include('includes/header.php');?>
+							
+				     <div class="clearfix"> </div>	
+				</div>
+<!--heder end here-->
+	<ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a><i class="fa fa-angle-right"></i>Update Tour Package </li>
+            </ol>
+		<!--grid-->
+ 	<div class="grid-form">
+ 
+<!---->
+  <div class="grid-form1">
+  	       <h3>Update Package</h3>
+
+ 	</div>
+ 	<!--//grid-->
+
+<!-- script-for sticky-nav -->
+		<script>
+		$(document).ready(function() {
+			 var navoffeset=$(".header-main").offset().top;
+			 $(window).scroll(function(){
+				var scrollpos=$(window).scrollTop(); 
+				if(scrollpos >=navoffeset){
+					$(".header-main").addClass("fixed");
+				}else{
+					$(".header-main").removeClass("fixed");
+				}
+			 });
+			 
+		});
+		</script>
+		<!-- /script-for sticky-nav -->
+<!--inner block start here-->
+<div class="inner-block">
+
+</div>
+<!--inner block end here-->
+<!--copy rights start here-->
+<?php include('includes/footer.php');?>
+<!--COPY rights end here-->
+</div>
+</div>
 
 <?php 
 	$pid=intval($_GET['pid']);	
