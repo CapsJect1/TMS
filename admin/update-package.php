@@ -1,6 +1,6 @@
 <?php
 session_start();
-error_reporting(0);
+// error_reporting(0);
 include('includes/config.php');
 if(strlen($_SESSION['alogin'])==0)
 	{	
@@ -206,7 +206,7 @@ foreach($results as $result)
 	$pfeatures=$_POST['packagefeatures'];
 	$pdetails=$_POST['packagedetails'];	
 	$pimage=$_FILES["packageimage"]["name"];
-	$sql="update TblTourPackages set PackageName=:pname,PackageType=:ptype,PackageLocation=:plocation,PackagePrice=:pprice,PackageFetures=:pfeatures,PackageDetails=:pdetails where PackageId=:pid";
+	$sql="UPDATE TblTourPackages SET PackageName=:pname,PackageType=:ptype,PackageLocation=:plocation,PackagePrice=:pprice,PackageFetures=:pfeatures,PackageDetails=:pdetails where PackageId=:pid";
 	$query = $dbh->prepare($sql);
 	$query->bindParam(':pname',$pname,PDO::PARAM_STR);
 	$query->bindParam(':ptype',$ptype,PDO::PARAM_STR);
