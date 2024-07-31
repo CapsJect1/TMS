@@ -87,7 +87,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 								<?php
 								$pid = (int)$_GET['pid'];
-								$sql = "SELECT * from TblTourPackages where PackageId=:pid";
+								$sql = "SELECT * from tblTourPackages where PackageId=:pid";
 								$query = $dbh->prepare($sql);
 								$query->bindParam(':pid', $pid);
 								$query->execute();
