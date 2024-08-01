@@ -119,8 +119,7 @@ if (isset($_POST['submit1'])) {
 		<div class="privacy">
 			<div class="container">
 				<h3 class="wow fadeInDown animated animated text-dark" data-wow-delay=".5s"
-					style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInDown;">Enquiry Form
-					Password</h3>
+					style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInDown;">Enquiry Booking</h3>
 				<form name="enquiry" method="post">
 					<?php if ($error) { ?>
 						<div class="errorWrap"><strong>ERROR</strong>:<?php echo htmlentities($error); ?> </div>
@@ -138,7 +137,7 @@ if (isset($_POST['submit1'])) {
 
 					<p style="width: 350px;">
 						<b>Mobile No</b> <input type="text" name="mobileno" class="form-control" id="mobileno"
-							maxlength="10" placeholder="10 Digit mobile No" required="">
+							maxlength="11" minlength="11" placeholder="09000000000" required="">
 					</p>
 
 					<p style="width: 350px;">
