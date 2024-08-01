@@ -1,11 +1,14 @@
 <?php
-error_reporting(0);
-if(isset($_POST['submit']))
+// error_reporting(0);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+if(isset($_POST['submitIssue']))
 {
 $issue=$_POST['issue'];
 $description=$_POST['description'];
 $email=$_SESSION['login'];
-$sql="INSERT INTO  tblissues(UserEmail,Issue,Description) VALUES(:email,:issue,:description)";
+$sql="INSERT INTO tblissues(UserEmail,Issue,Description) VALUES(:email,:issue,:description)";
 $query = $dbh->prepare($sql);
 $query->bindParam(':issue',$issue,PDO::PARAM_STR);
 $query->bindParam(':description',$description,PDO::PARAM_STR);
@@ -32,7 +35,7 @@ echo "<script type='text/javascript'> document.location = 'thankyou.php'; </scri
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>						
 						</div>
 							<section>
-							<form name="help" method="post">
+							<form method="post">
 								<div class="modal-body modal-spa">
 									<div class="writ">
 										<h4>HOW CAN WE HELP YOU</h4>
@@ -54,9 +57,7 @@ echo "<script type='text/javascript'> document.location = 'thankyou.php'; </scri
 													<div class="clearfix"></div>
 											</ul>
 											<div class="sub-bn">
-												<form>
-													<button type="submit" name="submit" class="subbtn">Submit</button>
-												</form>
+											<button type="submit" name="submitIssue" class="subbtn">Submit</button>
 											</div>
 									</div>
 								</div>
