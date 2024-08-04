@@ -10,6 +10,13 @@
 	.profile_details {
 		width: 100% !important;
 	}
+
+	@media print{
+		.dont-print{
+			display: none !important;
+		}
+		
+	}
 </style>
 
 

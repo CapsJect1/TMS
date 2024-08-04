@@ -91,7 +91,7 @@ if (isset($_POST['login'])) {
 						</div>
 
 
-						<a href="forgot-password.php" class="btn btn-link">forgot-password.php</a>
+						<a href="forgot-password.php" class="btn btn-link">Forgot Password</a>
 
 						<div class="row">
 							<div class="col-6">

@@ -69,30 +69,21 @@ if (strlen($_SESSION['alogin']) == 0) {
 		<!-- lined-icons -->
 		<link rel="stylesheet" href="css/icon-font.min.css" type='text/css' />
 		<!-- //lined-icons -->
+        <style>
+            	@media print{
+                    .dont-print{
+                        display: none !important;
+                    }
+
+                    @page {size: A4 landscape !important;max-height:100% !important; max-width:100% !important;}
+                    
+                }
+        </style>
 	</head>
 
 	<body>
-		<div class="page-container">
-			<!--/content-inner-->
-			<div class="left-content">
-				<?php include('includes/navbar.php'); ?>
-				<div class="mother-grid-inner" style="margin-top: 70px;">
-					<!--header start here-->
-
-					<!--header end here-->
-
-
-
-					<ol class="breadcrumb dont-print">
-						<li class="breadcrumb-item"><a href="index.html"></a> <i class="fa fa-angle-right"></i></li>
-					</ol>
-					<!--four-grids here-->
-					<div class="four-grids" style="padding: 0 20px;">
-
-
-
-						<div class="col-md-12">
-							<div class="card mt-4 print">
+		<div class="p-3">
+        <div class="card mt-4 print">
 								<div class="card-body">
                                     <div class="d-flex align-items-center justify-content-between">
                                     <h3>Booking Report</h3>
@@ -101,30 +92,10 @@ if (strlen($_SESSION['alogin']) == 0) {
                                     </div>
 									<canvas id="barChart" style="width:100%;"></canvas>
 
-									<a href="print-report.php" class="float-end mt-3" target="_blank"><i class="fa fa-print"></i> Print</a>
+									<a href="javascript:void(0);" onclick="print()" class="float-end mt-3 dont-print"><i class="fa fa-print"></i> Print</a>
 								</div>
 							</div>
-						</div>
 
-
-
-						<div class="clearfix"></div>
-					</div>
-					<!--//four-grids here-->
-
-
-					<div class="inner-block">
-
-					</div>
-					<!--inner block end here-->
-					<!--copy rights start here-->
-					<?php include('includes/footer.php'); ?>
-				</div>
-			</div>
-
-			<!--/sidebar-menu-->
-			<?php include('includes/sidebarmenu.php'); ?>
-			<div class="clearfix"></div>
 		</div>
 
         

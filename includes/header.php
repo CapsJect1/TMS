@@ -9,6 +9,11 @@
 	}
 </style>
 
+<?php 
+	$user_id = $_SESSION['user_id'];
+	$get_books_payment = $dbh->query("SELECT * FROM `booking` WHERE status ='payment' AND user_id = '$user_id'");
+?>
+
 <?php if ($_SESSION['login']) { ?>
 	<div class="top-header dont-print">
 		<div class="container">
@@ -20,6 +25,10 @@
 				<li class="prnt"><a href="issuetickets.php">Raised Tickets</a></li>
 			</ul>
 			<ul class="tp-hd-rgt wow fadeInRight animated" data-wow-delay=".5s">
+				<li class="tol">
+
+				<a href="javascript:void(0);" class="dropdown-toggle" data-toggle="modal" data-target="#show-books"><i class="fa fa-bell"></i> <?= $get_books_payment->rowCount() ?> <i class="fa fa-caret-down"></i></a>
+				</li>
 				<li class="tol">Welcome :</li>
 				<li class="sig"><?php echo htmlentities($_SESSION['login']); ?></li>
 				<li class="sigi"><a href="logout.php">/ Logout</a></li>

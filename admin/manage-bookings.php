@@ -190,7 +190,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 								<table class="table table-bordered">
 									<thead>
 										<tr>
-											<th>Booikn id</th>
+											<th>Booking id</th>
 											<th>Name</th>
 											<th>Mobile No.</th>
 											<th>Email Id</th>
