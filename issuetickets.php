@@ -305,6 +305,9 @@ if (strlen($_SESSION['login']) == 0) {
 												<?php if($result->status == 'payment'): ?>
 													<a href="issuetickets.php?pay=<?= $result->id ?>" class="btn " style="background: #ddd; color: dark !important;"><i class="fa fa-file"></i> Pay</a>
 												<?php endif; ?>
+													
+												<span>Waiting for confirmation...</span>
+
 												<!-- <a href="issuetickets.php?show=<?= $result->id ?>" class="btn btn-primary" style="color: white !important;"><i class="fa fa-file"></i> View</a> -->
 											</td>
 										</tr>
