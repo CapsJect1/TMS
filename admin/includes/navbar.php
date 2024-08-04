@@ -48,7 +48,7 @@
             if ($get_books_paid->rowCount() > 0) {
               foreach ($get_books_paid as $paid_book) {
                 ?>
-                <li class="dropdown-item border-bottom py-2">
+                <li class=" border-bottom py-2">
                   <p class="mb-1">#: <?= $paid_book['reference_num'] ?></p>
                   <p class="mb-1">Name: <?= ucfirst($paid_book['fname']) . ' ' . ucfirst($paid_book['lname']) ?></p>
                   <p class="mb-1">Date/Time: <?= date('F d,Y : h:i A', strtotime($paid_book['date_created'])) ?></p>
