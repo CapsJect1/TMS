@@ -69,6 +69,31 @@ if (strlen($_SESSION['alogin']) == 0) {
 		<!-- lined-icons -->
 		<link rel="stylesheet" href="css/icon-font.min.css" type='text/css' />
 		<!-- //lined-icons -->
+		<style>
+	@media print {
+
+.dont-print{
+	display: none !important;
+}
+
+.print{
+	transform: translateX(-500px) !important;
+		}
+
+	@page {max-height:100% !important; max-width:100% !important;}
+
+	/* use width if in portrait (use the smaller size to try 
+	and prevent image from overflowing page... */
+	img { height: 90% ; margin: 0; padding: 0; }
+
+	body{
+		width:100% !important;
+		height:100% !important;
+		-webkit-transform: rotate(-90deg) scale(.68,.68) !important; 
+		-moz-transform:rotate(-90deg) scale(.58,.58) !important;
+	}    
+}
+</style>
 	</head>
 
 	<body>

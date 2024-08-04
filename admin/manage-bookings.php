@@ -130,11 +130,13 @@ if (strlen($_SESSION['alogin']) == 0) {
 						?>
 							<div class="privacy print" style="margin: 20px 0;">
 								<div class="container" style="width: 500px; border: 1px dashed #000; padding: 10px; ">
-									<div class="text-center">
-										<h4 style="color: black !important; margin-bottom: 0px !important;">Santa Fe Port TMS</h4>
-										<p style="margin-bottom: 0px !important; color: #000 !important;">Date: <?= date('Y-m-d') ?></p>
-										<p style="margin-bottom: 0px !important; color: #000 !important;">Refer. #: <?= $row['reference_num'] ?></p>
-									</div>
+								<div class="text-center mt-3" style="position: relative;">
+						<img src="../images/Santa_Fe_Cebu.png" alt="logo" style="width: 50px; position: absolute; top: 0px; left: 20px;">
+							<h4 style="color: black !important; margin-bottom: 0px !important;">Santa Fe Port TMS</h4>
+							<p style="margin-bottom: 0px !important; color: #000 !important;">Date: <?= date('Y-m-d') ?></p>
+							<p style="margin-bottom: 0px !important; color: #000 !important;">Refer. #: <?= $row['reference_num'] ?></p>
+
+						</div>
 									<hr style="color: #000 !important;">
 
 									<p style="color: #000 !important;">Name: <?= ucfirst($row['fname']) . ' ' . ucfirst($row['lname']) ?></p>
@@ -280,10 +282,20 @@ if (strlen($_SESSION['alogin']) == 0) {
 													<?php if ($result->status == 'payment') {
 													?>
 														<td>Payment</td>
+														<?php } elseif ($result->status == 'finished') {
+													?>
+														<td>
+															<a href="manage-bookings.php?show=<?php echo htmlentities($result->bookid); ?>" class="text-dark">View</a>
+														
+														</td>
+													
 													<?php } elseif ($result->status == 'booked') {
 													?>
 														<td>
 															<a href="manage-bookings.php?show=<?php echo htmlentities($result->bookid); ?>" class="text-dark">View</a>
+															/
+															<a href="#" onclick="showMessage('manage-bookings.php?finished=<?php echo htmlentities($result->bookid); ?>', 'Is this book already finished?')
+															">Finished</a>
 														</td>
 													<?php } elseif ($result->status == 'declined') {
 													?>
@@ -413,6 +425,31 @@ if (strlen($_SESSION['alogin']) == 0) {
 				   position: 'top-end',
 				   icon: 'success',
 				   title: "Booking confirmed succesfully",
+				   showConfirmButton: false,
+				   timer: 1500
+			   }).then(() => {
+				   window.location.href = "manage-bookings.php"
+			   })
+		   </script>
+		   <?php
+		}
+
+		if (isset($_REQUEST['finished'])) {
+			$bcid = intval($_GET['finished']);
+			$status = 'finished';
+			$cancelby = 'a';
+			$sql = "UPDATE booking SET status=:status WHERE id=:bcid";
+			$query = $dbh->prepare($sql);
+			$query->bindParam(':status', $status, PDO::PARAM_STR);
+			$query->bindParam(':bcid', $bcid, PDO::PARAM_STR);
+			$query->execute();
+			// $msg = "Booking Confirmed successfully";
+			?>
+			<script>
+			   Swal.fire({
+				   position: 'top-end',
+				   icon: 'success',
+				   title: "Book finished",
 				   showConfirmButton: false,
 				   timer: 1500
 			   }).then(() => {

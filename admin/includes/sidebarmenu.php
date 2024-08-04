@@ -1,29 +1,5 @@
 
-<style>
-	@media print {
 
-.dont-print{
-	display: none !important;
-}
-
-.print{
-	transform: translateX(-500px) !important;
-		}
-
-	@page {max-height:100% !important; max-width:100% !important;}
-
-	/* use width if in portrait (use the smaller size to try 
-	and prevent image from overflowing page... */
-	img { height: 90% ; margin: 0; padding: 0; }
-
-	body{
-		width:100% !important;
-		height:100% !important;
-		-webkit-transform: rotate(-90deg) scale(.68,.68) !important; 
-		-moz-transform:rotate(-90deg) scale(.58,.58) !important;
-	}    
-}
-</style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <div class="sidebar-menu dont-print">
 	<header class="logo1">
