@@ -42,14 +42,14 @@
 
     <div style="display: flex; align-items:center; gap: 20px;">
       <div class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> <?= $get_books_paid->rowCount() ?></a>
+        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> <?= $get_books_paid->rowCount() ?></a>
         <ul class="dropdown-menu p-3 dropdown-menu-end">
          <?php 
             if ($get_books_paid->rowCount() > 0) {
               foreach ($get_books_paid as $paid_book) {
                 ?>
                 <li class=" border-bottom py-2">
-                  <p class="mb-1">#: <span onclick="myFunction()" id="myInput"><?= $paid_book['reference_num'] ?></span></p>
+                  <p class="mb-1">#: <span id="myInput"><?= $paid_book['reference_num'] ?></span></p>
                   <p class="mb-1">Name: <?= ucfirst($paid_book['fname']) . ' ' . ucfirst($paid_book['lname']) ?></p>
                   <p class="mb-1">Date/Time: <?= date('F d,Y : h:i A', strtotime($paid_book['date_created'])) ?></p>
                 </li>
@@ -75,12 +75,12 @@
 
 <script>
   function myFunction() {
-  var copyText = document.getElementById("myInput");
-  copyText.select();
-  copyText.setSelectionRange(0, 99999);
+    var copyText = document.getElementById("myInput");
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
 
-  navigator.clipboard.writeText(copyText.value);
+    navigator.clipboard.writeText(copyText.value);
 
-  alert("Copied the text: " + copyText.value);
-}
+    alert("Copied the text: " + copyText.value);
+  }
 </script>

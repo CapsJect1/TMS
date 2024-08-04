@@ -218,7 +218,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 									left join 
 										tblusers on booking.user_id=tblusers.id 
 									left join 
-										tbltourpackages on tbltourpackages.PackageId=booking.package_id WHERE FullName LIKE '%$search%' 
+										tbltourpackages on tbltourpackages.PackageId=booking.package_id WHERE booking.fname LIKE '%$search%' OR booking.lname LIKE '%$search%' 
 									";
 											} else {
 												$sql = "SELECT 
