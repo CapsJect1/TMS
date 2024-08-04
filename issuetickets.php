@@ -211,7 +211,7 @@ if (strlen($_SESSION['login']) == 0) {
 
 							<?php if ($row['status'] === 'booked') {
 					?>
-					<button type="button" class="btn btn-primary" style="color: #fff !important;" onclick="window.print()"><i class="fa fa-print"></i> Print</button>
+					<!-- <button type="button" class="btn btn-primary" style="color: #fff !important;" onclick="window.print()"><i class="fa fa-print"></i> Print</button> -->
 					<?php
 				}?>
 
