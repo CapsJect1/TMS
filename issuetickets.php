@@ -167,7 +167,7 @@ if (strlen($_SESSION['login']) == 0) {
 						<div class="dont-print">
 							<a href="issuetickets.php" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back</a>
 
-							<?php if ($row['status'] === 'paid') {
+							<?php if ($row['status'] === 'booked') {
 					?>
 					<button type="button" class="btn btn-primary" style="color: #fff !important;" onclick="window.print()"><i class="fa fa-print"></i> Print</button>
 					<?php
