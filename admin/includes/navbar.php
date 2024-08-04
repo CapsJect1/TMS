@@ -39,7 +39,7 @@
     <a href="dashboard.php">Santa Fe Port Tourist Biological Fee Staycation Management System</a>
 
     <div style="display: flex; align-items:center; gap: 20px;">
-      <!-- <h6><i class="fa fa-bell"></i> <?= $get_books->rowCount() ?></h6> -->
+      <h6><i class="fa fa-bell"></i> <?= $get_books->rowCount() ?></h6>
       <h6>|</h6>
       <div class="dropdown">
         <h6 class="dropdown-toggle" data-toggle="dropdown" style="cursor: pointer;"><i class="fa fa-user"></i> <?= $_SESSION['email'] ?></h6>
