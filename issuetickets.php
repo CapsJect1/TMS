@@ -1,7 +1,17 @@
 <?php
 session_start();
 error_reporting(0);
+date_default_timezone_set('Asia/Manila');
 include('includes/config.php');
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
+
+require "./phpmailer/src/Exception.php";
+require "./phpmailer/src/PHPMailer.php";
+require "./phpmailer/src/SMTP.php";
+
 if (strlen($_SESSION['login']) == 0) {
 	header('location:index.php');
 } else {
@@ -13,10 +23,42 @@ if (strlen($_SESSION['login']) == 0) {
 		$status = "paid";
 		$cash = $_POST['cash'];
 		$image = file_get_contents($_FILES['proof']['tmp_name']);
+		$fullname = strtoupper($_SESSION['fname'] . ' ' . $_SESSION['lname']);
+		$ref_num = $_POST['reference_num'];
+		$date = date('F d,Y:h:i A');
+
+		$get_admin = $dbh->query("SELECT * FROM admin ORDER BY id DESC");
+		$admin_data = $get_admin->fetch(PDO::FETCH_ASSOC);
 
 		if ($cash === $total) {
 			$stmt = $dbh->prepare("UPDATE booking SET status=:status, payment=:cash, proof =:image WHERE user_id = :user_id AND id =:id ");
 			$stmt->execute([':status' => $status, ':cash' => $cash, ':image' => $image, ':user_id' => $user_id, ':id' => $id]);
+
+			$mail = new PHPMailer(true);
+			$mail->SMTPDebug = 0;
+			$mail->isSMTP();
+			$mail->Host = 'smtp.gmail.com';
+			$mail->SMTPAuth = true;
+			$mail->Username = 'percebuhayan12@gmail.com';
+			$mail->Password = 'msarwgfdelrdyxxh';
+			$mail->Port = 587;
+
+			$mail->SMTPOptions = array(
+				'ssl' => array(
+					'verify_peer' => false,
+					'verify_peer_name' => false,
+					'allow_self_signed' => true
+				)
+			);
+
+			$mail->setFrom('santafeport@gmail.com', 'Santa Fe Port Tourist');
+
+			$mail->addAddress($admin_data['EmailId']);
+			$mail->Subject = "Payment sent";
+			$mail->Body = "$fullname sent a payment, with a reference number of: $ref_num \n Date & Time: $date" ;
+
+			$mail->send();
+
 
 			if ($stmt) {
 				header("location: issuetickets.php");
@@ -238,6 +280,7 @@ if (strlen($_SESSION['login']) == 0) {
 							<div>
 								<img src="./images/gcash.jpg" alt="gcash" style="width: 100%;">
 							</div>
+							<input type="hidden" name="reference_num" value="<?= $row['reference_num'] ?>">
 
 							<h4 style="color: #000 !important; margin: 10px 0 !important;">Cash: <input type="text" class="form-control" name="cash" placeholder="Full payment" required></h4>
 							<h4 style="color: #000 !important; margin: 10px 0 !important;">Proof of Payment: <input type="file" class="form-control" name="proof" required></h4>

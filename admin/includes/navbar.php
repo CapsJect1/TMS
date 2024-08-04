@@ -1,5 +1,7 @@
 <?php 
   $get_books = $dbh->query("SELECT * FROM `booking` WHERE status = 'payment' OR status = 'pending' OR status ='paid'");
+
+  $get_books_paid = $dbh->query("SELECT * FROM `booking` WHERE status ='paid'");
 	// $result_books = $get_books->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
@@ -39,7 +41,23 @@
     <a href="dashboard.php">Santa Fe Port Tourist Biological Fee Staycation Management System</a>
 
     <div style="display: flex; align-items:center; gap: 20px;">
-      <h6><i class="fa fa-bell"></i> <?= $get_books->rowCount() ?></h6>
+      <div class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> <?= $get_books_paid->rowCount() ?></a>
+        <ul class="dropdown-menu p-3">
+         <?php 
+            if ($get_books_paid->rowCount() > 0) {
+              foreach ($get_books_paid as $paid_book) {
+                ?>
+                <li class="dropdown-item border-bottom py-2">
+                  <p>Name: <?= ucfirst($paid_book['fname']) . ' ' . ucfirst($paid_book['lname']) ?></p>
+                  <p>Date/Time: <?= date('F d,Y : h:i A', strtotime($paid_book['date_created'])) ?></p>
+                </li>
+                <?php
+              } 
+            }
+         ?>
+        </ul>
+      </div>
       <h6>|</h6>
       <div class="dropdown">
         <h6 class="dropdown-toggle" data-toggle="dropdown" style="cursor: pointer;"><i class="fa fa-user"></i> <?= $_SESSION['email'] ?></h6>
