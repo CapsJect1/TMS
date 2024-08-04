@@ -107,7 +107,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 							</div>
 						</a>
 
-						<a href="#">
+						<a href="book-report.php">
 							<div class="col-md-4 four-grid">
 								<div class="four-agileits" style="background: #00780a;">
 									<div class="icon">
