@@ -304,9 +304,17 @@ if (strlen($_SESSION['login']) == 0) {
 											<td width="100%" style="display: flex; gap: 10px;">
 												<?php if($result->status == 'payment'): ?>
 													<a href="issuetickets.php?pay=<?= $result->id ?>" class="btn " style="background: #ddd; color: dark !important;"><i class="fa fa-file"></i> Pay</a>
+												<?php elseif($result->status == 'booked'): ?>
+													<span class="badge bg-success">Booked</span>
+												<?php elseif($result->status == 'pending'): ?>	
+														<span class="text-muted">Waiting for confirmation...</span>
+												<?php elseif($result->status == 'paid'): ?>	
+														<span class="text-muted">Waiting for confirmation...</span>
+												<?php elseif($result->status == 'declined'): ?>	
+														<span class="badge bg-danger">Declined</span>
 												<?php endif; ?>
 													
-												<span class="text-muted">Waiting for confirmation...</span>
+												
 
 												<!-- <a href="issuetickets.php?show=<?= $result->id ?>" class="btn btn-primary" style="color: white !important;"><i class="fa fa-file"></i> View</a> -->
 											</td>
