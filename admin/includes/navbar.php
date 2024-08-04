@@ -49,7 +49,7 @@
               foreach ($get_books_paid as $paid_book) {
                 ?>
                 <li class=" border-bottom py-2">
-                  <p class="mb-1">#: <?= $paid_book['reference_num'] ?></p>
+                  <p class="mb-1">#: <span onclick="myFunction()"><?= $paid_book['reference_num'] ?></span></p>
                   <p class="mb-1">Name: <?= ucfirst($paid_book['fname']) . ' ' . ucfirst($paid_book['lname']) ?></p>
                   <p class="mb-1">Date/Time: <?= date('F d,Y : h:i A', strtotime($paid_book['date_created'])) ?></p>
                 </li>
@@ -72,3 +72,20 @@
 
   </div>
 </div>
+
+<script>
+  function myFunction() {
+  // Get the text field
+  var copyText = document.getElementById("myInput");
+
+  // Select the text field
+  copyText.select();
+  copyText.setSelectionRange(0, 99999); // For mobile devices
+
+   // Copy the text inside the text field
+  navigator.clipboard.writeText(copyText.value);
+
+  // Alert the copied text
+  alert("Copied the text: " + copyText.value);
+}
+</script>
