@@ -91,7 +91,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 							</div>
 						</a>
 
-						<a href="manage-booking.php" target="_blank">
+						<a href="manage-bookings.php" target="_blank">
 							<div class="col-md-4 four-grid">
 								<div class="four-agileits" style="background: #3f8de0;">
 									<div class="icon">
