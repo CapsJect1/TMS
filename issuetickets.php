@@ -346,7 +346,7 @@ if (strlen($_SESSION['login']) == 0) {
 											<td><?php echo $result->status; ?></td>
 											<td width="100%" style="display: flex; gap: 10px;">
 												<?php if($result->status == 'payment'): ?>
-													<a href="issuetickets.php?pay=<?= $result->id ?>" class="btn " style="background: #ddd; color: dark !important;"><i class="fa fa-file"></i> Pay (No walk in)</a>
+													<a href="issuetickets.php?pay=<?= $result->id ?>" class="btn " style="background: #ddd; color: dark !important;"><i class="fa fa-file"></i> Pay</a>  (No walk in)
 												<?php elseif($result->status == 'booked'): ?>
 													<span class="badge" style="background: green;">Booked</span>
 												<?php elseif($result->status == 'pending'): ?>	
