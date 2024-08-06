@@ -129,7 +129,7 @@ $msg="Booking Confirm successfully";
 					    <table id="table">
 						<thead>
 						  <tr>
-						  					<th>Booikn id</th>
+						  					<th>Booking id</th>
 											<th>Name</th>
 											<th>Mobile No.</th>
 											<th>Email Id</th>
