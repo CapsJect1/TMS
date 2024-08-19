@@ -1,13 +1,21 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
+
+require "./phpmailer/src/Exception.php";
+require "./phpmailer/src/PHPMailer.php";
+require "./phpmailer/src/SMTP.php";
 // error_reporting(0);
 if (isset($_POST['submit'])) {
+	$verification = uniqid() . rand(100, 999999999);
 	$fname = $_POST['fname'];
 	$lname = $_POST['lname'];
 	$full = $fname . ' ' . $lname; 
 	$mnumber = $_POST['mobilenumber'];
 	$email = $_POST['email'];
 	$password = md5($_POST['password']);
-	$sql = "INSERT INTO  tblusers(FullName,fname,lname,MobileNumber,EmailId,Password) VALUES(:full,:fname, :lname,:mnumber,:email,:password)";
+	$sql = "INSERT INTO  tblusers(FullName,fname,lname,MobileNumber,EmailId,Password,Verification) VALUES(:full,:fname, :lname,:mnumber,:email,:password,:verification)";
 	$query = $dbh->prepare($sql);
 	$query->bindParam(':full', $full, PDO::PARAM_STR);
 	$query->bindParam(':fname', $fname, PDO::PARAM_STR);
@@ -15,12 +23,38 @@ if (isset($_POST['submit'])) {
 	$query->bindParam(':mnumber', $mnumber, PDO::PARAM_STR);
 	$query->bindParam(':email', $email, PDO::PARAM_STR);
 	$query->bindParam(':password', $password, PDO::PARAM_STR);
+	$query->bindParam(':verification', $verification, PDO::PARAM_STR);
 	$query->execute();
 	$lastInsertId = $dbh->lastInsertId();
 	if (strlen($_POST['password']) >= 8) {
 		if ($lastInsertId) {
-			$_SESSION['msg'] = "You are Scuccessfully registered. Now you can login ";
+			$_SESSION['msg'] = "You are Scuccessfully registered. Please verify your account first to login";
 			// header('location:thankyou.php');
+
+			$mail = new PHPMailer(true);
+			$mail->SMTPDebug = 0;
+			$mail->isSMTP();
+			$mail->Host = 'smtp.gmail.com';
+			$mail->SMTPAuth = true;
+			$mail->Username = 'sshin8859@gmail.com';
+			$mail->Password = 'hhgwbzklpinejqjh';
+			$mail->Port = 587;
+	
+			$mail->SMTPOptions = array(
+				'ssl' => array(
+					'verify_peer' => false,
+					'verify_peer_name' => false,
+					'allow_self_signed' => true
+				)
+			);
+	
+			$mail->setFrom('santafe@gmail.com', 'TMS Santa Fe');
+	
+			$mail->addAddress($email);
+			$mail->Subject = "Email Account Verification";
+			$mail->Body = "Click this link to verify account: http://localhost/santafe-edit/verify-account.php?verification=" . $verification . "&email=" . $email;
+	
+			$mail->send();
 			?>
 			<script>
 				window.location.href = "thankyou.php"

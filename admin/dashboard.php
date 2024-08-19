@@ -11,116 +11,67 @@ if (strlen($_SESSION['alogin']) == 0) {
 	$get_booked = $dbh->query("SELECT SUM(payment) AS total_payment, COUNT(*) AS total_booked FROM booking WHERE status = 'booked'");
 	$result_booked = $get_booked->fetch(PDO::FETCH_ASSOC);
 
-
+require 'includes/layout-head.php';
 ?>
-	<!DOCTYPE HTML>
-	<html>
 
-	<head>
-		<title>TMS | Admin Dashboard</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<script type="application/x-javascript">
-			addEventListener("load", function() {
-				setTimeout(hideURLbar, 0);
-			}, false);
+					
+						<div class="col-lg-4">
+							<a href="manage-users.php" target="_blank" class="text-decoration-none">
+								<div class="card">
+									<div class="card-body text-center">
+										<h1 class="text-dark"><i class="fa fa-user"></i></h1>
+										<div class="icon">
+											<i class="glyphicon glyphicon-user" aria-hidden="true"></i>
+										</div>
+										<div class="four-text">
+											<h3>Total Tourist</h3>
 
-			function hideURLbar() {
-				window.scrollTo(0, 1);
-			}
-		</script>
-		<!-- Bootstrap Core CSS -->
-		<link href="css/bootstrap.min.css" rel='stylesheet' type='text/css' />
-		<!-- Custom CSS -->
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-		<link href="css/style.css" rel='stylesheet' type='text/css' />
-		<link rel="stylesheet" href="css/morris.css" type="text/css" />
-		<!-- Graph CSS -->
-		<link href="css/font-awesome.css" rel="stylesheet">
-		<!-- jQuery -->
-		<script src="js/jquery-2.1.4.min.js"></script>
-		<!-- //jQuery -->
-		<link href='//fonts.googleapis.com/css?family=Roboto:700,500,300,100italic,100,400' rel='stylesheet' type='text/css' />
-		<link href='//fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
-		<!-- lined-icons -->
-		<link rel="stylesheet" href="css/icon-font.min.css" type='text/css' />
-		<!-- //lined-icons -->
-	</head>
-
-	<body>
-		<div class="page-container">
-			<!--/content-inner-->
-			<div class="left-content">
-				<?php include('includes/navbar.php'); ?>
-				<div class="mother-grid-inner" style="margin-top: 70px;">
-					<!--header start here-->
-
-					<!--header end here-->
+											<?php $sql = "SELECT id from tblusers";
+											$query = $dbh->prepare($sql);
+											$query->execute();
+											$results = $query->fetchAll(PDO::FETCH_OBJ);
+											$cnt = $query->rowCount();
+											?>
+											<h4> <?php echo htmlentities($cnt); ?> </h4>
 
 
+										</div>
 
-					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="index.html"></a> <i class="fa fa-angle-right"></i></li>
-					</ol>
-					<!--four-grids here-->
-					<div class="four-grids" style="padding: 0 20px;">
-
-
-
-						<a href="manage-users.php" target="_blank">
-							<div class="col-md-4 four-grid">
-								<div class="four-agileits">
-									<div class="icon">
-										<i class="glyphicon glyphicon-user" aria-hidden="true"></i>
 									</div>
-									<div class="four-text">
-										<h3>Total Tourist</h3>
+								</div>
+							</a>
+						</div>
 
-										<?php $sql = "SELECT id from tblusers";
-										$query = $dbh->prepare($sql);
-										$query->execute();
-										$results = $query->fetchAll(PDO::FETCH_OBJ);
-										$cnt = $query->rowCount();
-										?>
-										<h4> <?php echo htmlentities($cnt); ?> </h4>
+						<div class="col-lg-4">
+							<a href="manage-bookings.php" target="_blank" class="text-decoration-none ">
+								<div class="card" style="background: #3f8de0;">
+									<div class="card-body text-center">
+										<h1 class="text-light"><i class="fa fa-repeat" aria-hidden="true"></i></h1>
+										<div class="four-text">
+											<h3 class="text-light">Booking Request</h3>
 
+											<h4 class="text-light"> <?= $get_books->rowCount(); ?> </h4>
+										</div>
 
+									</div>
+								</div>
+							</a>
+						</div>
+
+						<div class="col-lg-4">
+							<a href="book-report.php" class="text-decoration-none">
+								<div class="card" style="background: #00780a;">
+									<div class="card-body text-center">
+										<h1 class="text-light"><i class="fa fa-calendar" aria-hidden="true"></i></h1>
+										<div class="four-text">
+											<h3 class="text-light">Book Report</h3>
+											<h4 class="text-light"> <?php echo number_format($result_booked['total_payment']); ?> </h4>
+										</div>
 									</div>
 
 								</div>
-							</div>
-						</a>
-
-						<a href="manage-bookings.php" target="_blank">
-							<div class="col-md-4 four-grid">
-								<div class="four-agileits" style="background: #3f8de0;">
-									<div class="icon">
-										<i class="glyphicon glyphicon-repeat" aria-hidden="true"></i>
-									</div>
-									<div class="four-text">
-										<h3>Booking Request</h3>
-
-										<h4> <?= $get_books->rowCount(); ?> </h4>
-									</div>
-
-								</div>
-							</div>
-						</a>
-
-						<a href="book-report.php">
-							<div class="col-md-4 four-grid">
-								<div class="four-agileits" style="background: #00780a;">
-									<div class="icon">
-										<i class="glyphicon glyphicon-calendar" aria-hidden="true"></i>
-									</div>
-									<div class="four-text">
-										<h3>Book Report</h3>
-										<h4> <?php echo number_format($result_booked['total_payment']); ?> </h4>
-									</div>
-
-								</div>
-							</div>
-						</a>
+							</a>
+						</div>
 
 						<div class="col-md-12">
 							<div class="card mt-4">
@@ -130,25 +81,17 @@ if (strlen($_SESSION['alogin']) == 0) {
 							</div>
 						</div>
 
-
-
-						<div class="clearfix"></div>
+						<div class="col-12">
+							<?php include('includes/footer.php'); ?>
+						</div>
 					</div>
-					<!--//four-grids here-->
 
-
-					<div class="inner-block">
-
+					
 					</div>
-					<!--inner block end here-->
-					<!--copy rights start here-->
-					<?php include('includes/footer.php'); ?>
+					
 				</div>
 			</div>
 
-			<!--/sidebar-menu-->
-			<?php include('includes/sidebarmenu.php'); ?>
-			<div class="clearfix"></div>
 		</div>
 		<script>
 			var toggle = true;
@@ -312,7 +255,8 @@ if (strlen($_SESSION['alogin']) == 0) {
 				}
 			});
 		</script>
-	</body>
 
-	</html>
-<?php } ?>
+<?php 
+require 'includes/layout-foot.php';
+
+} ?>

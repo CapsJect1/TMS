@@ -17,6 +17,12 @@
 		}
 		
 	}
+
+	@media (max-width: 900px){
+		.w-auto-lg{
+			width: 100% !important;
+		}
+	}
 </style>
 
 

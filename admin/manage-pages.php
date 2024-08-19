@@ -17,30 +17,20 @@ if (strlen($_SESSION['alogin']) == 0) {
 
 	}
 
+	require './includes/layout-head.php';
 	?>
-	<!DOCTYPE HTML>
-	<html>
-
-	<head>
-		<title>TMS | Admin Package Creation</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<meta name="keywords" content="Pooled Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
-Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
 		<script
 			type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-		<link href="css/bootstrap.min.css" rel='stylesheet' type='text/css' />
-		<link href="css/style.css" rel='stylesheet' type='text/css' />
-		<link rel="stylesheet" href="css/morris.css" type="text/css" />
-		<link href="css/font-awesome.css" rel="stylesheet">
+		<!-- <link href="css/bootstrap.min.css" rel='stylesheet' type='text/css' /> -->
+		<!-- <link href="css/style.css" rel='stylesheet' type='text/css' /> -->
+		<!-- <link rel="stylesheet" href="css/morris.css" type="text/css" /> -->
+		<!-- <link href="css/font-awesome.css" rel="stylesheet"> -->
 		<script src="js/jquery-2.1.4.min.js"></script>
 		<link href='//fonts.googleapis.com/css?family=Roboto:700,500,300,100italic,100,400' rel='stylesheet'
 			type='text/css' />
 		<link href='//fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="css/icon-font.min.css" type='text/css' />
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-			integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+		<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> -->
 		<style>
 			.errorWrap {
 				padding: 10px;
@@ -98,40 +88,22 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			bkLib.onDomLoaded(function () { nicEditors.allTextAreas() });
 		</script>
 
-	</head>
-
-	<body>
-		<div class="page-container">
-			<!--/content-inner-->
-			<div class="left-content">
-			<?php include ('includes/navbar.php'); ?>
-				<div class="mother-grid-inner" style="margin-top: 70px;">
-					<!--header start here-->
-					<?php #include ('includes/header.php'); ?>
-
-					<div class="clearfix"> </div>
-				</div>
-				<!--heder end here-->
-				<ol class="breadcrumb">
-					<li class="breadcrumb-item"><a href="index.html"></a><i class="fa fa-angle-right"></i>Update Page
-						Data </li>
-				</ol>
-				<!--grid-->
-				<div class="grid-form">
-
-					<!---->
-					<div class="grid-form1">
-						<h3>Update Page Data</h3>
+		<div class="card">
+			<div class="card-body">
+				<h4>Update Page</h4>
+				<hr>
+				<div class="grid-form1">
+					
 						<?php if ($error) { ?>
 							<div class="errorWrap"><strong>ERROR</strong>:<?php echo htmlentities($error); ?> </div><?php } else if ($msg) { ?>
 								<div class="succWrap"><strong>SUCCESS</strong>:<?php echo htmlentities($msg); ?> </div><?php } ?>
 						<div class="tab-content">
 							<div class="tab-pane active" id="horizontal-form">
 								<form class="form-horizontal" name="package" method="post" enctype="multipart/form-data">
-									<div class="form-group">
-										<label for="focusedinput" class="col-sm-2 control-label">Select page</label>
-										<div class="col-sm-8">
-											<select name="menu1" onChange="MM_jumpMenu('parent',this,0)">
+									<div class="d-flex gap-2 my-3 align-items-center">
+										<label for="focusedinput">Select page</label>
+										<div>
+											<select name="menu1" onChange="MM_jumpMenu('parent',this,0)" class="form-select">
 												<option value="" selected="selected" class="form-control">***Select One***
 												</option>
 												<option value="manage-pages.php?type=terms">terms and condition</option>
@@ -141,9 +113,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 											</select>
 										</div>
 									</div>
-									<div class="form-group">
-										<label for="focusedinput" class="col-sm-2 control-label">Selected Page</label>
-										<div class="col-sm-8">
+									<div class="d-flex gap-2 my-3 align-items-center ">
+										<label for="focusedinput">Selected Page : </label>
+										<div>
 											<?php
 
 											switch ($_GET['type']) {
@@ -202,9 +174,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 
 
-									<div class="form-group">
-										<label for="focusedinput" class="col-sm-2 control-label">Page Details</label>
-										<div class="col-sm-8">
+									<div class="row g-1">
+										<label for="focusedinput" class="col-lg-2 control-label">Page Details</label>
+										<div class="col-lg-10">
 
 
 											<textarea class="form-control" rows="5" cols="50" name="pgedetails"
@@ -230,9 +202,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 
 									<div class="row">
-										<div class="col-sm-8 col-sm-offset-2">
+										<div class="col-lg-2"></div>
+										<div class="col-lg-10 col-sm-offset-2">
 											<button type="submit" name="submit" value="Update" id="submit"
-												class="btn-primary btn">Update</button>
+												class="btn-primary btn mt-3">Update</button>
 
 
 										</div>
@@ -256,65 +229,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							</form>
 						</div>
 					</div>
-					<!--//grid-->
-
-					<!-- script-for sticky-nav -->
-					<script>
-						$(document).ready(function () {
-							var navoffeset = $(".header-main").offset().top;
-							$(window).scroll(function () {
-								var scrollpos = $(window).scrollTop();
-								if (scrollpos >= navoffeset) {
-									$(".header-main").addClass("fixed");
-								} else {
-									$(".header-main").removeClass("fixed");
-								}
-							});
-
-						});
-					</script>
-					<!-- /script-for sticky-nav -->
-					<!--inner block start here-->
-					<div class="inner-block">
-
-					</div>
-					<!--inner block end here-->
-					<!--copy rights start here-->
-					<?php include ('includes/footer.php'); ?>
-					<!--COPY rights end here-->
-				</div>
 			</div>
-			<!--//content-inner-->
-			<!--/sidebar-menu-->
-			<?php include ('includes/sidebarmenu.php'); ?>
-			<div class="clearfix"></div>
 		</div>
-		<script>
-			var toggle = true;
-
-			$(".sidebar-icon").click(function () {
-				if (toggle) {
-					$(".page-container").addClass("sidebar-collapsed").removeClass("sidebar-collapsed-back");
-					$("#menu span").css({ "position": "absolute" });
-				}
-				else {
-					$(".page-container").removeClass("sidebar-collapsed").addClass("sidebar-collapsed-back");
-					setTimeout(function () {
-						$("#menu span").css({ "position": "relative" });
-					}, 400);
-				}
-
-				toggle = !toggle;
-			});
-		</script>
-		<!--js -->
-		<script src="js/jquery.nicescroll.js"></script>
 		<script src="js/scripts.js"></script>
-		<!-- Bootstrap Core JavaScript -->
-		<script src="js/bootstrap.min.js"></script>
-		<!-- /Bootstrap Core JavaScript -->
+<?php 
+	require 'includes/footer.php';
+	require 'includes/layout-foot.php';
 
-	</body>
-
-	</html>
-<?php } ?>
+} ?>

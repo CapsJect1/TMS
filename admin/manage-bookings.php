@@ -8,113 +8,25 @@ if (strlen($_SESSION['alogin']) == 0) {
 	// code for cancel
 
 
-
+require 'includes/layout-head.php';
 ?>
-	<!DOCTYPE HTML>
-	<html>
-
-	<head>
-		<title>TMS | Admin manage Bookings</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<script type="application/x-javascript">
-			addEventListener("load", function() {
-				setTimeout(hideURLbar, 0);
-			}, false);
-
-			function hideURLbar() {
-				window.scrollTo(0, 1);
-			}
-		</script>
-		<link href="css/bootstrap.min.css" rel='stylesheet' type='text/css' />
-		<link href="css/style.css" rel='stylesheet' type='text/css' />
-		<link rel="stylesheet" href="css/morris.css" type="text/css" />
-		<link href="css/font-awesome.css" rel="stylesheet">
-		<script src="js/jquery-2.1.4.min.js"></script>
-		<script src="js/sweet_alert.js"></script>
-		<link rel="stylesheet" type="text/css" href="css/table-style.css" />
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-		<link rel="stylesheet" type="text/css" href="css/basictable.css" />
-		<script type="text/javascript" src="js/jquery.basictable.min.js"></script>
-		<script type="text/javascript">
-			$(document).ready(function() {
-				$('#table').basictable();
-
-				$('#table-breakpoint').basictable({
-					breakpoint: 768
-				});
-
-				$('#table-swap-axis').basictable({
-					swapAxis: true
-				});
-
-				$('#table-force-off').basictable({
-					forceResponsive: false
-				});
-
-				$('#table-no-resize').basictable({
-					noResize: true
-				});
-
-				$('#table-two-axis').basictable();
-
-				$('#table-max-height').basictable({
-					tableWrapper: true
-				});
-			});
-		</script>
-		<link href='//fonts.googleapis.com/css?family=Roboto:700,500,300,100italic,100,400' rel='stylesheet' type='text/css' />
-		<link href='//fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
-		<link rel="stylesheet" href="css/icon-font.min.css" type='text/css' />
-		<style>
-			.errorWrap {
-				padding: 10px;
-				margin: 0 0 20px 0;
-				background: #fff;
-				border-left: 4px solid #dd3d36;
-				-webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1);
-				box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1);
-			}
-
-			.succWrap {
-				padding: 10px;
-				margin: 0 0 20px 0;
-				background: #fff;
-				border-left: 4px solid #5cb85c;
-				-webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1);
-				box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1);
-			}
-
-			@media print {
-				.dont-print {
-					display: none !important;
-				}
-			}
-		</style>
-	</head>
-
-	<body>
-		<div class="page-container">
-			<!--/content-inner-->
-			<div class="left-content">
-				<?php include('includes/navbar.php'); ?>
-				<div class="mother-grid-inner" style="margin-top: 70px;">
-					<!--header start here-->
-
-					<div class="clearfix dont-print"> </div>
-				</div>
-				<!--heder end here-->
-				<ol class="breadcrumb dont-print">
-					<li class="breadcrumb-item"><a href="index.html"></a><i class="fa fa-angle-right"></i>Manage
-						Bookings</li>
-				</ol>
-				<div class="agile-grids">
+<style>
+	@media print{
+		.card{
+			border: none !important;
+		}
+		.dont-print{
+			display: none !important;
+		}
+	}
+</style>
+		<div class="agile-grids">
 					<!-- tables -->
 					<?php if ($error) { ?>
 						<div class="errorWrap"><strong>ERROR</strong>:<?php echo htmlentities($error); ?> </div>
 					<?php } else if ($msg) { ?>
 						<div class="succWrap"><strong>SUCCESS</strong>:<?php echo htmlentities($msg); ?> </div><?php } ?>
-					<div class="card">
+					<div class="card p-4">
 
 						<?php if (isset($_GET['show'])) :
 
@@ -129,9 +41,9 @@ if (strlen($_SESSION['alogin']) == 0) {
 
 						?>
 							<div class="privacy print" style="margin: 20px 0;">
-								<div class="container" style="width: 500px; border: 1px dashed #000; padding: 10px; ">
+								<div class="container w-auto" style="width: 500px; border: 1px dashed #000; padding: 10px; ">
 								<div class="text-center mt-3" style="position: relative;">
-						<img src="../images/Santa_Fe_Cebu.png" alt="logo" style="width: 50px; position: absolute; top: 0px; left: 20px;">
+						<img src="../images/Santa_Fe_Cebu.png" alt="logo" style="width: 70px; position: absolute; top: 0px; left: 20px;">
 							<h4 style="color: black !important; margin-bottom: 0px !important;">Santa Fe Port TMS</h4>
 							<p style="margin-bottom: 0px !important; color: #000 !important;">Date: <?= date('Y-m-d') ?></p>
 							<p style="margin-bottom: 0px !important; color: #000 !important;">Refer. #: <?= $row['reference_num'] ?></p>
@@ -145,7 +57,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 									<p style="color: #000 !important;">Package: <?= $row['PackageName'] ?></p>
 
 
-									<table>
+									<table class="table table-bordered">
 										<thead>
 											<th>Regular</th>
 											<th>Student</th>
@@ -173,31 +85,33 @@ if (strlen($_SESSION['alogin']) == 0) {
 									<?php
 									}
 									?>
-									<div class="dont-print">
-										<a href="manage-bookings.php" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back</a>
+									<div class="dont-print mt-3">
+										<a href="manage-bookings.php" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back</a>
 										<button type="button" class="btn btn-primary" style="color: #fff !important;" onclick="window.print()"><i class="fa fa-print"></i> Print</button>
 									</div>
 								</div>
 							</div>
 						<?php else : ?>
-							<div class="card-header text-center bg-primary dont-print">
-								<h2>Manage Bookings</h2>
-
-							</div>
 							<div class="card-body">
-								<form method="post" class="d-flex align-items-center gap-2">
+								<h4>Manage Bookings</h4>
+
+								
+
+								<hr>
+								<!-- <form method="post" class="d-flex align-items-center gap-2">
 									<input type="search" name="search" class="form-control my-3" placeholder="Search...">
 									<button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
-								</form>
-								<table class="table table-bordered">
+								</form> -->
+								<div class="table-responsive">
+								<table id="table">
 									<thead>
 										<tr>
 											<th>Booking id</th>
 											<th>Name</th>
 											<th>Mobile No.</th>
-											<th>Email Id</th>
-											<th>Package</th>
-											<th>Date / Time</th>
+											<!-- <th>Email Id</th> -->
+											<!-- <th>Package</th> -->
+											<th >Date / Time</th>
 											<th>Status </th>
 											<th>Action </th>
 										</tr>
@@ -268,11 +182,11 @@ if (strlen($_SESSION['alogin']) == 0) {
 													<td>#BK-<?php echo htmlentities($result->bookid); ?></td>
 													<td><?php echo htmlentities($result->fname); ?></td>
 													<td><?php echo htmlentities($result->mnumber); ?></td>
-													<td><?php echo htmlentities($result->email); ?></td>
-													<td><a href="update-package.php?pid=<?php echo htmlentities($result->pid); ?>"><?php echo htmlentities($result->pckname); ?></a>
+													<!-- <td><?php echo htmlentities($result->email); ?></td> -->
+													<!-- <td><a href="update-package.php?pid=<?php echo htmlentities($result->pid); ?>"><?php echo htmlentities($result->pckname); ?></a> -->
 													</td>
 													<td>
-														<?= date('m-d-Y : h:i:s A', strtotime($result->date_created)) ?>
+														<?= date('M d,Y : h:i A', strtotime($result->date_created)) ?>
 													</td>
 
 													<td>
@@ -291,29 +205,29 @@ if (strlen($_SESSION['alogin']) == 0) {
 													
 													<?php } elseif ($result->status == 'booked') {
 													?>
-														<td>
-															<a href="manage-bookings.php?show=<?php echo htmlentities($result->bookid); ?>" class="text-dark">View</a>
-															/
+														<td class="d-flex gap-1 align-items-center">
+															<a href="manage-bookings.php?show=<?php echo htmlentities($result->bookid); ?>" class="btn btn-secondary rounded-1">View</a>
+															
 															<a href="#" onclick="showMessage('manage-bookings.php?finished=<?php echo htmlentities($result->bookid); ?>', 'Is this book already finished?')
-															">Finished</a>
+															" class="btn btn-success rounded-1">Finished</a>
 														</td>
 													<?php } elseif ($result->status == 'declined') {
 													?>
-														<td>Declined</td>
+														<td class="text-danger">Declined</td>
 													<?php } else if ($result->status == 'pending') { ?>
-														<td class="d-flex gap-2"> 
+														<td class="d-flex gap-1"> 
 															<a href="#" onclick="showMessage('manage-bookings.php?decline=<?php echo htmlentities($result->bookid); ?>', 'Do you really want to decline this request?')
-															" class="text-danger">Decline</a>
-															/ <a href="#" onclick="showMessage('manage-bookings.php?accept=<?php echo htmlentities($result->bookid); ?>', 'Do you really want to accept this request?')
-															">Accept</a> /
-															<a href="manage-bookings.php?show=<?php echo htmlentities($result->bookid); ?>" class="text-dark">View</a>
+															" class="btn btn-danger rounded-1">Decline</a>
+															<a href="#" onclick="showMessage('manage-bookings.php?accept=<?php echo htmlentities($result->bookid); ?>', 'Do you really want to accept this request?')
+															" class="btn btn-primary">Accept</a>
+															<a href="manage-bookings.php?show=<?php echo htmlentities($result->bookid); ?>" class="btn btn-secondary rounded-1">View</a>
 														</td>
 													<?php } else if ($result->status == 'paid') { ?>
-														<td class="d-flex gap-2"> <a href="#"  onclick="showMessage('manage-bookings.php?decline=<?php echo htmlentities($result->bookid); ?>', 'Do you really want to decline this request?')
-															" class="text-danger">Decline</a>
-															/ <a href="#" onclick="showMessage('manage-bookings.php?confirm=<?php echo htmlentities($result->bookid); ?>', 'Do you really want to confirm this request?')
-															">Confirm</a> /
-															<a href="manage-bookings.php?show=<?php echo htmlentities($result->bookid); ?>" class="text-dark">View</a>
+														<td class="d-flex gap-1"> <a href="#"  onclick="showMessage('manage-bookings.php?decline=<?php echo htmlentities($result->bookid); ?>', 'Do you really want to decline this request?')
+															" class="btn btn-danger rounded-1">Decline</a>
+															<a href="#" onclick="showMessage('manage-bookings.php?confirm=<?php echo htmlentities($result->bookid); ?>', 'Do you really want to confirm this request?')
+															" class="btn btn-primary rounded-1">Confirm</a>
+															<a href="manage-bookings.php?show=<?php echo htmlentities($result->bookid); ?>" class="btn btn-secondary rounded-1">View</a>
 														</td>
 													<?php } ?>
 
@@ -323,40 +237,11 @@ if (strlen($_SESSION['alogin']) == 0) {
 										} ?>
 									</tbody>
 								</table>
+								</div>
 							</div>
 						<?php endif; ?>
 					</div>
-					<!-- script-for sticky-nav -->
-					<script>
-						$(document).ready(function() {
-							var navoffeset = $(".header-main").offset().top;
-							$(window).scroll(function() {
-								var scrollpos = $(window).scrollTop();
-								if (scrollpos >= navoffeset) {
-									$(".header-main").addClass("fixed");
-								} else {
-									$(".header-main").removeClass("fixed");
-								}
-							});
-
-						});
-					</script>
-					<!-- /script-for sticky-nav -->
-					<!--inner block start here-->
-					<div class="inner-block dont-print">
-
-					</div>
-					<!--inner block end here-->
-					<!--copy rights start here-->
-					<?php include('includes/footer.php'); ?>
-					<!--COPY rights end here-->
 				</div>
-			</div>
-			<!--//content-inner-->
-			<!--/sidebar-menu-->
-			<?php include('includes/sidebarmenu.php'); ?>
-			<div class="clearfix"></div>
-		</div>
 
 		<?php
 		if (isset($_REQUEST['decline'])) {
@@ -475,35 +360,14 @@ if (strlen($_SESSION['alogin']) == 0) {
 				});
 			}
 		</script>
-		<script>
-			var toggle = true;
-
-			$(".sidebar-icon").click(function() {
-				if (toggle) {
-					$(".page-container").addClass("sidebar-collapsed").removeClass("sidebar-collapsed-back");
-					$("#menu span").css({
-						"position": "absolute"
-					});
-				} else {
-					$(".page-container").removeClass("sidebar-collapsed").addClass("sidebar-collapsed-back");
-					setTimeout(function() {
-						$("#menu span").css({
-							"position": "relative"
-						});
-					}, 400);
-				}
-
-				toggle = !toggle;
-			});
-		</script>
 		<!--js -->
-		<script src="js/jquery.nicescroll.js"></script>
-		<script src="js/scripts.js"></script>
+		<!-- <script src="js/jquery.nicescroll.js"></script> -->
+		<!-- <script src="js/scripts.js"></script> -->
 		<!-- Bootstrap Core JavaScript -->
-		<script src="js/bootstrap.min.js"></script>
+		<!-- <script src="js/bootstrap.min.js"></script> -->
 		<!-- /Bootstrap Core JavaScript -->
+<?php 
+require 'includes/footer.php';
+require 'includes/layout-foot.php';
 
-	</body>
-
-	</html>
-<?php } ?>
+} ?>

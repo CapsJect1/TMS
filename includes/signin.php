@@ -3,17 +3,20 @@ session_start();
 if (isset($_POST['signin'])) {
 	$email = $_POST['email'];
 	$password = md5($_POST['password']); // Note: MD5 hashing is used here for simplicity; consider using more secure hashing methods
+	$status = 2;
 
 	// SQL query to fetch user details based on email and password
-	$sql = "SELECT id, FullName, EmailId, fname, lname FROM tblusers WHERE EmailId=:email AND Password=:password";
+	$sql = "SELECT id, FullName, EmailId, fname, lname FROM tblusers WHERE EmailId=:email AND Password=:password AND Status = :status";
 	$query = $dbh->prepare($sql);
 	$query->bindParam(':email', $email, PDO::PARAM_STR);
 	$query->bindParam(':password', $password, PDO::PARAM_STR);
+	$query->bindParam(':status', $status, PDO::PARAM_INT);
 	$query->execute();
 	$user = $query->fetch(PDO::FETCH_ASSOC);
 
-	if ($user) {
-		// Set session variables upon successful login
+	if ($query->rowCount() > 0) {
+		if ($user['Status'] == 2) {
+			// Set session variables upon successful login
 		$_SESSION['user_id'] = $user['id'];
 		$_SESSION['user_name'] = $user['FullName'];
 		$_SESSION['login'] = $user['EmailId'];
@@ -28,6 +31,18 @@ if (isset($_POST['signin'])) {
 			window.location.href = "package-list.php"
 		</script>
 		<?php 
+		}else{
+			echo "<script>
+			Swal.fire({
+				title: 'Error!',
+				text: 'Please confirm your account first',
+				icon: 'error',
+				timer: 1500,
+				showConfirmButton: false
+			});
+			</script>";
+		}
+
 		exit;
 	} else {
 		echo "<script>alert('Invalid Email or Password');</script>";
