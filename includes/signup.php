@@ -14,7 +14,7 @@ if (isset($_POST['submit'])) {
 	$full = $fname . ' ' . $lname; 
 	$mnumber = $_POST['mobilenumber'];
 	$email = $_POST['email'];
-	$password = md5($_POST['password']);
+	$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 	$sql = "INSERT INTO  tblusers(FullName,fname,lname,MobileNumber,EmailId,Password,Verification) VALUES(:full,:fname, :lname,:mnumber,:email,:password,:verification)";
 	$query = $dbh->prepare($sql);
 	$query->bindParam(':full', $full, PDO::PARAM_STR);
@@ -110,7 +110,7 @@ if (isset($_POST['submit'])) {
 
 									<input type="text" value="" placeholder="First Name" name="fname" autocomplete="off" required="">
 									<input type="text" value="" placeholder="Last Name" name="lname" autocomplete="off" required="">
-									<input type="text" value="" placeholder="Mobile number" maxlength="10" name="mobilenumber" autocomplete="off" required="">
+									<input type="text" value="" placeholder="Mobile number" onkeyup="this.value=this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')" maxlength="11" name="mobilenumber" autocomplete="off" required="">
 									<input type="text" value="" placeholder="Email id" name="email" id="email" onBlur="checkAvailability()" autocomplete="off" required="">
 									<span id="user-availability-status" style="font-size:12px;"></span>
 									<div style="position: relative;">
