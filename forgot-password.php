@@ -5,7 +5,7 @@ include('includes/config.php');
 if (isset($_POST['submit50'])) {
 	$email = $_POST['email'];
 	$mobile = $_POST['mobile'];
-	$newpassword = md5($_POST['newpassword']);
+	$newpassword = password_hash($_POST['newpassword'], PASSWORD_DEFAULT);
 	$sql = "SELECT EmailId FROM tblusers WHERE EmailId=:email and MobileNumber=:mobile";
 	$query = $dbh->prepare($sql);
 	$query->bindParam(':email', $email, PDO::PARAM_STR);
