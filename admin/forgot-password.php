@@ -8,7 +8,7 @@ if(isset($_POST['submit']))
 	{
 $email=$_POST['email'];
 $mobile=$_POST['mobile'];
-$newpassword=md5($_POST['newpassword']);
+$newpassword=password_hash($_POST['newpassword'], PASSWORD_DEFAULT);
 	$sql ="SELECT EmailId FROM admin WHERE EmailId=:email and MobileNumber=:mobile";
 $query= $dbh -> prepare($sql);
 $query-> bindParam(':email', $email, PDO::PARAM_STR);
