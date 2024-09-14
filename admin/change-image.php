@@ -10,7 +10,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 
 		$pimage = $_FILES["packageimage"]["name"];
 		move_uploaded_file($_FILES["packageimage"]["tmp_name"], "pacakgeimages/" . $_FILES["packageimage"]["name"]);
-		$sql = "update TblTourPackages set PackageImage=:pimage where PackageId=:imgid";
+		$sql = "update tbltourpackages set PackageImage=:pimage where PackageId=:imgid";
 		$query = $dbh->prepare($sql);
 
 		$query->bindParam(':imgid', $imgid, PDO::PARAM_STR);
@@ -30,7 +30,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 								<form class="form-horizontal" name="package" method="post" enctype="multipart/form-data">
 									<?php
 									$imgid = intval($_GET['imgid']);
-									$sql = "SELECT PackageImage from TblTourPackages where PackageId=:imgid";
+									$sql = "SELECT packageimage from tbltourpackages where PackageId=:imgid";
 									$query = $dbh->prepare($sql);
 									$query->bindParam(':imgid', $imgid, PDO::PARAM_STR);
 									$query->execute();
