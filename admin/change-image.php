@@ -30,7 +30,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 								<form class="form-horizontal" name="package" method="post" enctype="multipart/form-data">
 									<?php
 									$imgid = intval($_GET['imgid']);
-									$sql = "SELECT packageimage from tbltourpackages where PackageId=:imgid";
+									$sql = "SELECT PackageImage from tbltourpackages where PackageId=:imgid";
 									$query = $dbh->prepare($sql);
 									$query->bindParam(':imgid', $imgid, PDO::PARAM_STR);
 									$query->execute();
