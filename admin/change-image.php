@@ -34,10 +34,11 @@ if (strlen($_SESSION['alogin']) == 0) {
 									$query = $dbh->prepare($sql);
 									$query->bindParam(':imgid', $imgid, PDO::PARAM_STR);
 									$query->execute();
-									$results = $query->fetchAll(PDO::FETCH_OBJ);
+									$result = $query->fetch(PDO::FETCH_OBJ);
 									$cnt = 1;
 									if ($query->rowCount() > 0) {
-										foreach ($results as $result) {	?>
+										# $result = $query->fetch_assoc();
+										#foreach ($results as) {	?>
 											<div class="row my-3">
 												<label for="focusedinput" class="col-lg-2 control-label"> Package Image </label>
 												<div class="col-lg-10">
@@ -51,7 +52,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 													<input type="file" name="packageimage" id="packageimage" required>
 												</div>
 											</div>
-									<?php }
+									<?php }#
 									} ?>
 
 									<div class="row">
