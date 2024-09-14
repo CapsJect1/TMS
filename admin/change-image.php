@@ -52,7 +52,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 													<input type="file" name="packageimage" id="packageimage" required>
 												</div>
 											</div>
-									<?php }#
+									<?php # }
 									} ?>
 
 									<div class="row">
