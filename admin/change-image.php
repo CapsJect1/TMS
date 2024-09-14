@@ -32,7 +32,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 									$imgid = intval($_GET['imgid']);
 									$sql = "SELECT PackageImage from tbltourpackages where PackageId=:imgid";
 									$query = $dbh->prepare($sql);
-									$query->bindParam(':imgid', $imgid, PDO::PARAM_STR);
+									$query->bindParam(':imgid', $imgid, PDO::PARAM_INT);
 									$query->execute();
 									$result = $query->fetch(PDO::FETCH_OBJ);
 									$cnt = 1;
