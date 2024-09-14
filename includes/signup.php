@@ -52,7 +52,7 @@ if (isset($_POST['submit'])) {
 	
 			$mail->addAddress($email);
 			$mail->Subject = "Email Account Verification";
-			$mail->Body = "Click this link to verify account: http://localhost/santafe-edit/verify-account.php?verification=" . $verification . "&email=" . $email;
+			$mail->Body = "Click this link to verify account: https://santafeport.com/verify-account.php?verification=" . $verification . "&email=" . $email;
 	
 			$mail->send();
 			?>
