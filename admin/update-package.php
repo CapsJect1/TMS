@@ -124,7 +124,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 		$pfeatures = $_POST['packagefeatures'];
 		$pdetails = $_POST['packagedetails'];
 		// $pimage = $_FILES["packageimage"]["name"];
-		$sql = "UPDATE TblTourPackages SET PackageName=:pname,PackageType=:ptype,PackageLocation=:plocation,PackagePrice=:pprice,PackageFetures=:pfeatures,PackageDetails=:pdetails where PackageId=:pid";
+		$sql = "UPDATE tbltourpackages SET PackageName=:pname,PackageType=:ptype,PackageLocation=:plocation,PackagePrice=:pprice,PackageFetures=:pfeatures,PackageDetails=:pdetails where PackageId=:pid";
 		$query = $dbh->prepare($sql);
 		$query->bindParam(':pname', $pname, PDO::PARAM_STR);
 		$query->bindParam(':ptype', $ptype, PDO::PARAM_STR);
