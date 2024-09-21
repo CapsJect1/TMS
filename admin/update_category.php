@@ -4,7 +4,7 @@ include ('includes/config.php');
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
 
-    $sql = "SELECT * FROM ticket_Category WHERE id = :id";
+    $sql = "SELECT * FROM ticket_category WHERE id = :id";
     $query = $dbh->prepare($sql);
     $query->bindParam(':id', $id, PDO::PARAM_INT);
     $query->execute();
@@ -15,7 +15,7 @@ if (isset($_GET['id'])) {
         $description = $_POST['description'];
         $rate = $_POST['rate'];
 
-        $sql = "UPDATE ticket_Category SET name = :name, description = :description, rate = :rate WHERE id = :id";
+        $sql = "UPDATE ticket_category SET name = :name, description = :description, rate = :rate WHERE id = :id";
         $query = $dbh->prepare($sql);
         $query->bindParam(':name', $name, PDO::PARAM_STR);
         $query->bindParam(':description', $description, PDO::PARAM_STR);
