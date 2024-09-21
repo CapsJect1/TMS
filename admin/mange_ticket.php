@@ -15,9 +15,9 @@ if (strlen($_SESSION['alogin']) == 0) {
         echo "<script>window.location.href='manage-packages.php'</script>";
 
     }
-    $sql = "SELECT ticker.id, ticker.name AS ticket_name, ticker.status, ticker.number_of_passengers, ticket_Category.name AS category_name
+    $sql = "SELECT ticker.id, ticker.name AS ticket_name, ticker.status, ticker.number_of_passengers, ticket_category.name AS category_name
 FROM ticker
-LEFT JOIN ticket_Category ON ticker.ticket_category_id = ticket_Category.id";
+LEFT JOIN ticket_category ON ticker.ticket_category_id = ticket_category.id";
     $query = $dbh->prepare($sql);
     $query->execute();
     $tickets = $query->fetchAll(PDO::FETCH_ASSOC);
