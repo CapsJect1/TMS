@@ -111,15 +111,15 @@ if (isset($_POST['submit2'])) {
 					
 						<div class="selectroom_top">
 							<div class="col-md-4 selectroom_left wow fadeInLeft animated" data-wow-delay=".5s">
-								<img src="admin/pacakgeimages/<?php echo htmlentities($result->PackageImage); ?>"
+								<img src="admin/pacakgeimages/<?php echo htmlspecialchars($result->PackageImage); ?>"
 									class="img-responsive" alt="">
 							</div>
 							<div class="col-md-8 selectroom_right wow fadeInRight animated" data-wow-delay=".5s">
-								<h2><?php echo htmlentities($result->PackageName); ?></h2>
-								<p class="dow">#PKG-<?php echo htmlentities($result->PackageId); ?></p>
-								<p><b> Type :</b> <?php echo htmlentities($result->PackageType); ?></p>
-								<p><b> Location :</b> <?php echo htmlentities($result->PackageLocation); ?></p>
-								<p><b>Features</b> <?php echo htmlentities($result->PackageFetures); ?></p>
+								<h2><?php echo htmlspecialchars($result->PackageName); ?></h2>
+								<p class="dow">#PKG-<?php echo htmlspecialchars($result->PackageId); ?></p>
+								<p><b> Type :</b> <?php echo htmlspecialchars($result->PackageType); ?></p>
+								<p><b> Location :</b> <?php echo htmlspecialchars($result->PackageLocation); ?></p>
+								<p><b>Features</b> <?php echo htmlspecialchars($result->PackageFetures); ?></p>
 								<!-- <div class="ban-bottom">
 									<div class="bnr-right">
 										<label class="inputLabel">From</label>
@@ -135,11 +135,11 @@ if (isset($_POST['submit2'])) {
 								<div class="clearfix"></div>
 								<div class="grand">
 									<p>Grand Total</p>
-									<h5>PHP <?php echo htmlentities($result->PackagePrice); ?></h5>
+									<h5>PHP <?php echo htmlspecialchars($result->PackagePrice); ?></h5>
 								</div>
 							</div>
 							<h3>Package Details</h3>
-							<p style="padding-top: 1%"><?php echo htmlentities($result->PackageDetails); ?> </p>
+							<p style="padding-top: 1%"><?php echo htmlspecialchars($result->PackageDetails); ?> </p>
 							<a href="ticket.php" class="btn-primary btn" style="color: #fff !important; float: right;">
 												Book Now</a>
 							<div class="clearfix"></div>
