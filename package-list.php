@@ -59,18 +59,18 @@ include ('includes/config.php');
 					
 						<div class="rom-btm">
 							<div class="col-md-3 room-left wow fadeInLeft animated" data-wow-delay=".5s">
-								<img src="admin/pacakgeimages/<?php echo $result->PackageImage; ?>"
+								<img src="admin/pacakgeimages/<?php echo htmlspecialchars($result->PackageImage;) ?>"
 									class="img-responsive" alt="">
 							</div>
 							<div class="col-md-6 room-midle wow fadeInUp animated" data-wow-delay=".5s">
-								<h4>Package Name: <?php echo htmlentities($result->PackageName); ?></h4>
-								<h6>Package Type : <?php echo htmlentities($result->PackageType); ?></h6>
-								<p><b>Package Location :</b> <?php echo htmlentities($result->PackageLocation); ?></p>
-								<p><b>Features</b> <?php echo htmlentities($result->PackageFetures); ?></p>
+								<h4>Package Name: <?php echo htmlspecialchars($result->PackageName); ?></h4>
+								<h6>Package Type : <?php echo htmlspecialchars($result->PackageType); ?></h6>
+								<p><b>Package Location :</b> <?php echo htmlspecialchars($result->PackageLocation); ?></p>
+								<p><b>Features</b> <?php echo htmlspecialchars($result->PackageFetures); ?></p>
 							</div>
 							<div class="col-md-3 room-right wow fadeInRight animated" data-wow-delay=".5s">
-								<h5>PHP <?php echo htmlentities($result->PackagePrice); ?></h5>
-								<a href="package-details.php?pkgid=<?php echo htmlentities($result->PackageId); ?>"
+								<h5>PHP <?php echo htmlspecialchars($result->PackagePrice); ?></h5>
+								<a href="package-details.php?pkgid=<?php echo htmlspecialchars($result->PackageId); ?>"
 									class="view">Details</a>
 							</div>
 							<div class="clearfix"></div>
