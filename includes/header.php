@@ -10,7 +10,7 @@
 </style>
 
 <?php 
-	$user_id = $_SESSION['user_id'];
+	$user_id = clean($_SESSION['user_id']);
 	$get_books_payment = $dbh->query("SELECT * FROM `booking` WHERE status ='payment' AND user_id = '$user_id'");
 ?>
 

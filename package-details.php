@@ -3,11 +3,11 @@ session_start();
 error_reporting(0);
 include ('includes/config.php');
 if (isset($_POST['submit2'])) {
-	$pid = intval($_GET['pkgid']);
-	$useremail = $_SESSION['login'];
-	$fromdate = $_POST['fromdate'];
-	$todate = $_POST['todate'];
-	$comment = $_POST['comment'];
+	$pid = intval(clean($_GET['pkgid']));
+	$useremail = clean($_SESSION['login']);
+	$fromdate = clean($_POST['fromdate']);
+	$todate = clean($_POST['todate']);
+	$comment = clean($_POST['comment']);
 	$status = 0;
 	$sql = "INSERT INTO tblbooking(PackageId,UserEmail,FromDate,ToDate,Comment,status) VALUES(:pid,:useremail,:fromdate,:todate,:comment,:status)";
 	$query = $dbh->prepare($sql);
@@ -94,11 +94,11 @@ if (isset($_POST['submit2'])) {
 	<div class="selectroom">
 		<div class="container">
 			<?php if ($error) { ?>
-				<div class="errorWrap"><strong>ERROR</strong>:<?php echo htmlentities($error); ?> </div>
+				<div class="errorWrap"><strong>ERROR</strong>:<?php echo clean($error); ?> </div>
 			<?php } else if ($msg) { ?>
-					<div class="succWrap"><strong>SUCCESS</strong>:<?php echo htmlentities($msg); ?> </div><?php } ?>
+					<div class="succWrap"><strong>SUCCESS</strong>:<?php echo clean($msg); ?> </div><?php } ?>
 			<?php
-			$pid = intval($_GET['pkgid']);
+			$pid = intval(clean($_GET['pkgid']));
 			$sql = "SELECT * from tbltourpackages where PackageId=:pid";
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':pid', $pid, PDO::PARAM_STR);

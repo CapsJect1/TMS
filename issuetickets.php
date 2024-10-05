@@ -149,17 +149,17 @@ if (strlen($_SESSION['login']) == 0) {
 			<!--- privacy ---->
 			<?php
 			if (isset($_GET['show'])) {
-				$id = $_GET['show'];
-				$user_id = $_SESSION['user_id'];
+				$id = clean($_GET['show']);
+				$user_id = clean($_SESSION['user_id']);
 				$stmt = $dbh->query("SELECT b.*, p.PackageName, p.PackagePrice from booking b INNER JOIN tbltourpackages p ON b.package_id = p.PackageId where b.user_id= '" . $user_id . "' AND b.id = '" . $id . "'");
 				$row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-				$regular = $row['regular'] * 300;
-				$student = $row['student'] * 240;
-				$senior_pwd = $row['senior_pwd'] * 214;
+				$regular = clean($row['regular']) * 300;
+				$student = clean($row['student']) * 240;
+				$senior_pwd = clean($row['senior_pwd']) * 214;
 				$total_ship = $regular + $student + $senior_pwd;
 				
-				if ($row['status'] === 'paid') {
+				if (clean($row['status']) === 'paid') {
 					?>
 					<script>
 						alert("Please for the confirmation");
@@ -174,12 +174,12 @@ if (strlen($_SESSION['login']) == 0) {
 						<img src="images/Santa_Fe_Cebu.png" alt="logo" style="width: 50px; position: absolute; top: 0px; left: 20px;">
 							<h4 style="color: black !important; margin-bottom: 0px !important;">Santa Fe Port TMS</h4>
 							<p style="margin-bottom: 0px !important; color: #000 !important;">Date: <?= date('Y-m-d') ?></p>
-							<p style="margin-bottom: 0px !important; color: #000 !important;">Refer. #: <?= $row['reference_num'] ?></p>
+							<p style="margin-bottom: 0px !important; color: #000 !important;">Refer. #: <?= clean($row['reference_num']) ?></p>
 
 						</div>
 						<hr style="color: #000 !important;">
 
-						<p style="color: #000 !important;">Name: <?= clean(ucfirst($row['fname'])) . ' ' . clean(ucfirst($row['lname'])) ?></p>
+						<p style="color: #000 !important;">Name: <?= ucfirst(clean($row['fname'])) . ' ' . ucfirst(clean($row['lname'])) ?></p>
 						<p style="color: #000 !important;">Email: <?= clean($row['email']) ?></p>
 						<p style="color: #000 !important;">Ship: <?= clean($row['ship']) ?></p>
 						<p style="color: #000 !important;">Package: <?= clean($row['PackageName']) ?></p>
