@@ -9,7 +9,7 @@ if (!isset($_SESSION['login'])) {
 }
 
 // Fetch user's full name from session
-$user_name = $_SESSION['user_name'];
+$user_name = clean($_SESSION['user_name']);
 
 // Initialize cart session if not already initialized
 if (!isset($_SESSION['cart'])) {
@@ -23,8 +23,8 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $total_amount = 0;
 foreach ($_SESSION['cart'] as $ticket) {
-    $ticket_category_id = $ticket['ticket_category_id'];
-    $number_of_passengers = $ticket['number_of_passengers'];
+    $ticket_category_id = clean($ticket['ticket_category_id']);
+    $number_of_passengers = clean($ticket['number_of_passengers']);
 
     $rate = 0;
     foreach ($categories as $category) {
@@ -40,8 +40,8 @@ foreach ($_SESSION['cart'] as $ticket) {
 
 if (isset($_POST['save_cart'])) {
     foreach ($_SESSION['cart'] as $ticket) {
-        $ticket_category_id = $ticket['ticket_category_id'];
-        $number_of_passengers = $ticket['number_of_passengers'];
+        $ticket_category_id = clean($ticket['ticket_category_id']);
+        $number_of_passengers = clean($ticket['number_of_passengers']);
 
         // Assuming you have a valid $ticket_category_id and $user_name
         $sql = "INSERT INTO ticker (name, status, number_of_passengers, ticket_category_id) VALUES (:name, :status, :number_of_passengers, :ticket_category_id)";
@@ -104,7 +104,7 @@ if (isset($_POST['save_cart'])) {
                                 }
                                 ?>
                             </td>
-                            <td><?php echo $ticket['number_of_passengers']; ?></td>
+                            <td><?php echo clean($ticket['number_of_passengers']); ?></td>
                             <td><?php echo number_format($rate, 2); ?></td>
                             <td><?php echo number_format($subtotal, 2); ?></td>
                         </tr>
