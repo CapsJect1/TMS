@@ -21,4 +21,12 @@ catch (PDOException $e)
 {
 exit("Error: " . $e->getMessage());
 }
+
+
+function clean($data){
+    $data = htmlspecialchars(stripslashes(trim($data)));
+    return $data;
+}
+
+
 ?>

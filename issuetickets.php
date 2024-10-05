@@ -16,16 +16,17 @@ if (strlen($_SESSION['login']) == 0) {
 	header('location:index.php');
 } else {
 
+	
 	if (isset($_GET['submit'])) {
-		$id = $_POST['id'];
-		$user_id = $_SESSION['user_id'];
-		$total = $_POST['total'];
-		$status = "paid";
-		$cash = $_POST['cash'];
-		$image = file_get_contents($_FILES['proof']['tmp_name']);
-		$fullname = strtoupper($_SESSION['fname'] . ' ' . $_SESSION['lname']);
-		$ref_num = $_POST['reference_num'];
-		$date = date('F d,Y:h:i A');
+		$id = clean($_POST['id']);
+		$user_id = clean($_SESSION['user_id']);
+		$total = clean($_POST['total']);
+		$status = clean("paid");
+		$cash = clean($_POST['cash']);
+		$image = file_get_contents(clean($_FILES['proof']['tmp_name']));
+		$fullname = strtoupper(clean($_SESSION['fname']) . ' ' . clean($_SESSION['lname']));
+		$ref_num = clean($_POST['reference_num']);
+		$date = clean(date('F d,Y:h:i A'));
 
 		$get_admin = $dbh->query("SELECT * FROM admin ORDER BY id DESC");
 		$admin_data = $get_admin->fetch(PDO::FETCH_ASSOC);
@@ -178,10 +179,10 @@ if (strlen($_SESSION['login']) == 0) {
 						</div>
 						<hr style="color: #000 !important;">
 
-						<p style="color: #000 !important;">Name: <?= ucfirst($row['fname']) . ' ' . ucfirst($row['lname']) ?></p>
-						<p style="color: #000 !important;">Email: <?= $row['email'] ?></p>
-						<p style="color: #000 !important;">Ship: <?= $row['ship'] ?></p>
-						<p style="color: #000 !important;">Package: <?= $row['PackageName'] ?></p>
+						<p style="color: #000 !important;">Name: <?= clean(ucfirst($row['fname'])) . ' ' . clean(ucfirst($row['lname'])) ?></p>
+						<p style="color: #000 !important;">Email: <?= clean($row['email']) ?></p>
+						<p style="color: #000 !important;">Ship: <?= clean($row['ship']) ?></p>
+						<p style="color: #000 !important;">Package: <?= clean($row['PackageName']) ?></p>
 
 
 						<table>
@@ -193,23 +194,23 @@ if (strlen($_SESSION['login']) == 0) {
 							</thead>
 							<tbody>
 								<tr>
-									<td><?= $row['regular'] ?></td>
-									<td><?= $row['student'] ?></td>
-									<td><?= $row['senior_pwd'] ?></td>
-									<td><?= $total_ship ?></td>
+									<td><?= clean($row['regular']) ?></td>
+									<td><?= clean($row['student']) ?></td>
+									<td><?= clean($row['senior_pwd']) ?></td>
+									<td><?= clean($total_ship) ?></td>
 								</tr>
 							</tbody>
 						</table>
-						<p style="color: #000 !important; margin-bottom: 0px !important; text-align: right;">Ship: <?= number_format($total_ship) ?></p>
-						<p style="color: #000 !important; margin: 0px !important; text-align: right;">Package: <?= number_format($row['PackagePrice']) ?></p>
-						<h4 style="color: #000 !important; text-align: right; margin: 10px 0 !important;">Cash: &#8369 <?= number_format($row['payment']) ?></h4>
+						<p style="color: #000 !important; margin-bottom: 0px !important; text-align: right;">Ship: <?= number_format(clena($total_ship)) ?></p>
+						<p style="color: #000 !important; margin: 0px !important; text-align: right;">Package: <?= number_format(clean($row['PackagePrice'])) ?></p>
+						<h4 style="color: #000 !important; text-align: right; margin: 10px 0 !important;">Cash: &#8369 <?= number_format(clean($row['payment'])) ?></h4>
 
-						<h3 style="color: #000 !important; text-align: right; margin: 10px 0 !important;">Total: &#8369 <?= number_format($total_ship + $row['PackagePrice']) ?></h3>
+						<h3 style="color: #000 !important; text-align: right; margin: 10px 0 !important;">Total: &#8369 <?= number_format(clena($total_ship) + clean($row['PackagePrice'])) ?></h3>
 
 						<div class="dont-print">
 							<a href="issuetickets.php" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back</a>
 
-							<?php if ($row['status'] === 'booked') {
+							<?php if (clean($row['status']) === 'booked') {
 					?>
 					<!-- <button type="button" class="btn btn-primary" style="color: #fff !important;" onclick="window.print()"><i class="fa fa-print"></i> Print</button> -->
 					<?php
@@ -221,8 +222,8 @@ if (strlen($_SESSION['login']) == 0) {
 				</div>
 				<?php
 			} else if (isset($_GET['pay'])) {
-				$id = $_GET['pay'];
-				$user_id = $_SESSION['user_id'];
+				$id = clean($_GET['pay']);
+				$user_id = clean($_SESSION['user_id']);
 				$status = 'payment';
 
 				$stmt = $dbh->query("SELECT b.*, p.PackageName, p.PackagePrice from booking b INNER JOIN tbltourpackages p ON b.package_id = p.PackageId where b.user_id= '" . $user_id . "' AND b.id = '" . $id . "'");
