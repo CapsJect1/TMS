@@ -13,8 +13,8 @@ include ('includes/config.php');
 
 
     if (isset($_GET['verification'])) {
-        $email = trim($_GET['email']);
-        $verification = trim($_GET['verification']);
+        $email = clean($_GET['email']);
+        $verification = clean($_GET['verification']);
 
         $stmt = $dbh->prepare("SELECT * FROM tblusers WHERE EmailId = :email AND Verification = :verification");
         $stmt->execute([':email' => $email, ':verification' => $verification]);

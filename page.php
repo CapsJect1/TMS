@@ -3,11 +3,11 @@ session_start();
 error_reporting(0);
 include ('includes/config.php');
 if (isset($_POST['submit1'])) {
-	$fname = $_POST['fname'];
-	$email = $_POST['email'];
-	$mobile = $_POST['mobileno'];
-	$subject = $_POST['subject'];
-	$description = $_POST['description'];
+	$fname = clean($_POST['fname']);
+	$email = clean($_POST['email']);
+	$mobile = clean($_POST['mobileno']);
+	$subject = clean($_POST['subject']);
+	$description = clean($_POST['description']);
 	$sql = "INSERT INTO  tblenquiry(FullName,EmailId,MobileNumber,Subject,Description) VALUES(:fname,:email,:mobile,:subject,:description)";
 	$query = $dbh->prepare($sql);
 	$query->bindParam(':fname', $fname, PDO::PARAM_STR);
@@ -89,7 +89,7 @@ if (isset($_POST['submit1'])) {
 		<div class="privacy">
 			<div class="container">
 				<?php
-				$pagetype = $_GET['type'];
+				$pagetype = clean($_GET['type']);
 				$sql = "SELECT type,detail from tblpages where type=:pagetype";
 				$query = $dbh->prepare($sql);
 				$query->bindParam(':pagetype', $pagetype, PDO::PARAM_STR);
@@ -104,7 +104,7 @@ if (isset($_POST['submit1'])) {
 
 						<h3 class="wow fadeInDown animated animated" data-wow-delay=".5s"
 							style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInDown;">
-							<?php echo $_GET['type'] ?>
+							<?php echo clean($_GET['type']) ?>
 						</h3>
 
 

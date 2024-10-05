@@ -21,28 +21,28 @@ require "./phpmailer/src/PHPMailer.php";
 require "./phpmailer/src/SMTP.php";
 
 
-$user_name = $_SESSION['user_name'];
+$user_name = clean($_SESSION['user_name']);
 
 $sql = "SELECT id,rate,name FROM ticket_category WHERE isActive = 1";
 $stmt = $dbh->prepare($sql);
 $stmt->execute();
 $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 if (isset($_POST['submit'])) {
-    $user_id = $_SESSION['user_id'];
+    $user_id = clean($_SESSION['user_id']);
     $reference_num = uniqid();
-    $fname = $_POST['fname'];
-    $lname = $_POST['lname'];
-    $email = $_POST['email'];
-    $ship = $_POST['ship'];
-    $regular = $_POST['regular'];
-    $student = $_POST['student'];
-    $senior_pwd = $_POST['senior_pwd'];
-    $package_id = $_POST['package_id'];
-    $arriv_date = $_POST['arriv_date'];
-    $arriv_time = $_POST['arriv_time'];
-    $dept_date = $_POST['dept_date'];
-    $dept_time = $_POST['dept_time'];
-    $agreement = $_POST['agreement'];
+    $fname = clean($_POST['fname']);
+    $lname = clean($_POST['lname']);
+    $email = clean($_POST['email']);
+    $ship = clean($_POST['ship']);
+    $regular = clean($_POST['regular']);
+    $student = clean($_POST['student']);
+    $senior_pwd = clean($_POST['senior_pwd']);
+    $package_id = clean($_POST['package_id']);
+    $arriv_date = clean($_POST['arriv_date']);
+    $arriv_time = clean($_POST['arriv_time']);
+    $dept_date = clean($_POST['dept_date']);
+    $dept_time = clean($_POST['dept_time']);
+    $agreement = clean($_POST['agreement']);
 
     $validated = true;
 
@@ -176,19 +176,19 @@ if (isset($_POST['submit'])) {
             <div class="row" style="margin-bottom: 10px;">
                 <div class="col-lg-6">
                     <label for="">First Name <span class="text-danger">*</span> </label>
-                    <input type="text" name="fname" class="form-control" style="margin: 10px 0;" value="<?= $_SESSION['fname'] ?>" readonly required>
+                    <input type="text" name="fname" class="form-control" style="margin: 10px 0;" value="<?= clean($_SESSION['fname']) ?>" readonly required>
                     <p class="text-danger"><?= $error_fname ?? '' ?></p>
                 </div>
 
                 <div class="col-lg-6">
                     <label for="">Last Name <span class="text-danger">*</span></label>
-                    <input type="text" name="lname" class="form-control" style="margin: 10px 0;" value="<?= $_SESSION['lname'] ?>" readonly required>
+                    <input type="text" name="lname" class="form-control" style="margin: 10px 0;" value="<?= clean($_SESSION['lname']) ?>" readonly required>
                    <p class="text-danger"> <?= $error_lname ?? '' ?></p>
                 </div>
 
                 <div class="col-lg-12">
                     <label for="">Email <span class="text-danger">*</span></label>
-                    <input type="email" name="email" class="form-control" style="margin: 10px 0;" value="<?= $_SESSION['login'] ?>" readonly required>
+                    <input type="email" name="email" class="form-control" style="margin: 10px 0;" value="<?= clean($_SESSION['login']) ?>" readonly required>
                     <p class="text-danger"><?= $error_email ?? '' ?></p>
                 </div>
 
