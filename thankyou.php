@@ -43,7 +43,7 @@ include('includes/config.php');
 			<div class="con-top animated wow fadeInUp animated" data-wow-duration="1200ms" data-wow-delay="500ms" style="visibility: visible; animation-duration: 1200ms; animation-delay: 500ms; animation-name: fadeInUp;">
 	
 
-              <h4>  <?php echo htmlentities($_SESSION['msg']);?></h4>
+              <h4>  <?php echo clean($_SESSION['msg']);?></h4>
             
 			</div>
 		

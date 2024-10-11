@@ -17,7 +17,7 @@ require 'includes/layout-head.php';
 					
 						<div class="col-lg-4">
 							<a href="manage-users.php" target="_blank" class="text-decoration-none">
-								<div class="card">
+								<div class="card bg-danger">
 									<div class="card-body text-center">
 										<h1 class="text-dark"><i class="fa fa-user"></i></h1>
 										<div class="icon">
