@@ -118,6 +118,9 @@ if (isset($_POST['submit'])) {
 									required>
 									<i class="fa fa-eye" id="show-pass" style="position: absolute; top: 0; right: 0; margin: 35px 10px 0 0;"></i>
 								</div>
+
+								<div id="html_element"></div>
+
 									<input type="submit" name="submit" id="submit" value="CREATE ACCOUNT">
 								</form>
 							</div>
@@ -130,6 +133,19 @@ if (isset($_POST['submit'])) {
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+      var onloadCallback = function() {
+        grecaptcha.render('html_element', {
+          'sitekey' : '6LeBZG0qAAAAAHpE8Nr7ZxDcFQw3dVdkeJ4p3stl'
+        });
+      };
+    </script>
+
+
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+        async defer>
+    </script>
 
 <script>
 	let showPass = document.getElementById('show-pass');
