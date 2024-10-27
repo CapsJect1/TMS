@@ -19,7 +19,7 @@ require 'includes/layout-head.php';
 							<a href="manage-users.php" target="_blank" class="text-decoration-none">
 								<div class="card bg-danger">
 									<div class="card-body text-center">
-										<h1 class="text-dark"><i class="fa fa-user"></i></h1>
+										<h1 class="text-light"><i class="fa fa-user"></i></h1>
 										<div class="icon">
 											<i class="glyphicon glyphicon-user text-light" aria-hidden="true"></i>
 										</div>
