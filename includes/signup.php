@@ -108,10 +108,6 @@ if (isset($_POST['submit'])) {
 							<div class="login-right">
 								<form name="signup" method="post">
 									<h3>Create your account </h3>
-
-									<?php echo " hello world"; ?>
-
-
 									<input type="text" value="" placeholder="First Name" name="fname" autocomplete="off" required="">
 									<input type="text" value="" placeholder="Last Name" name="lname" autocomplete="off" required="">
 									<input type="text" value="" placeholder="Mobile number" onkeyup="this.value=this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')" maxlength="11" name="mobilenumber" autocomplete="off" required="">
