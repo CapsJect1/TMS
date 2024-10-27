@@ -24,7 +24,7 @@ require 'includes/layout-head.php';
 											<i class="glyphicon glyphicon-user" aria-hidden="true"></i>
 										</div>
 										<div class="four-text">
-											<h3>Total Tourist</h3>
+											<h3>Total Tourist </h3>
 
 											<?php $sql = "SELECT id from tblusers";
 											$query = $dbh->prepare($sql);
