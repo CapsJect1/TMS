@@ -102,14 +102,14 @@ if (isset($_POST['submit'])) {
 			</div>
 			<section>
 				<div class="modal-body modal-spa">
-					<div class="login-grids">
+					<div class="login-grids "> 
 						<div class="login">
 
 							<div class="login-right">
 								<form name="signup" method="post">
 									<h3>Create your account </h3>
 
-									<?php echo "hello world"; ?>
+									<?php echo " hello world"; ?>
 
 
 									<input type="text" value="" placeholder="First Name" name="fname" autocomplete="off" required="">
