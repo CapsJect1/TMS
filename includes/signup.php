@@ -3,7 +3,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\SMTP;
 
-echo "hello world";
+
 
 require "./phpmailer/src/Exception.php";
 require "./phpmailer/src/PHPMailer.php";
@@ -108,6 +108,8 @@ if (isset($_POST['submit'])) {
 							<div class="login-right">
 								<form name="signup" method="post">
 									<h3>Create your account </h3>
+
+									<?php echo "hello world"; ?>
 
 
 									<input type="text" value="" placeholder="First Name" name="fname" autocomplete="off" required="">
