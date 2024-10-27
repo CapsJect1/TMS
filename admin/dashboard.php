@@ -21,7 +21,7 @@ require 'includes/layout-head.php';
 									<div class="card-body text-center">
 										<h1 class="text-dark"><i class="fa fa-user"></i></h1>
 										<div class="icon">
-											<i class="glyphicon glyphicon-user" aria-hidden="true"></i>
+											<i class="glyphicon glyphicon-user tex" aria-hidden="true"></i>
 										</div>
 										<div class="four-text text-light">
 											<h3>Total Tourist </h3>
