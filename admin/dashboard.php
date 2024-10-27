@@ -23,7 +23,7 @@ require 'includes/layout-head.php';
 										<div class="icon">
 											<i class="glyphicon glyphicon-user" aria-hidden="true"></i>
 										</div>
-										<div class="four-text ">
+										<div class="four-text text-light">
 											<h3>Total Tourist </h3>
 
 											<?php $sql = "SELECT id from tblusers";
