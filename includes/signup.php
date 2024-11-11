@@ -7,7 +7,7 @@ require "./phpmailer/src/Exception.php";
 require "./phpmailer/src/PHPMailer.php";
 require "./phpmailer/src/SMTP.php";
 error_reporting(E_ALL);
-if (isset($_POST['submit'])) {
+if (isset($_POST['submit_register'])) {
 
 	echo "hello";
 
@@ -122,7 +122,7 @@ if (isset($_POST['submit'])) {
 
 								<div id="html_element"></div>
 
-									<input type="submit" name="submit" id="submit" value="CREATE ACCOUNT">
+									<input type="submit" name="submit_register" id="submit" value="CREATE ACCOUNT">
 								</form>
 							</div>
 							<div class="clearfix"></div>
