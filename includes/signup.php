@@ -106,7 +106,7 @@ if (isset($_POST['submit'])) {
 						<div class="login">
 
 							<div class="login-right">
-								<form name="signup" method="post">
+								<form method="post">
 									<h3>Create your account </h3>
 									<input type="text" value="" placeholder="First Name" name="fname" autocomplete="off" required="">
 									<input type="text" value="" placeholder="Last Name" name="lname" autocomplete="off" required="">
