@@ -2,7 +2,7 @@
 session_start();
 error_reporting(0);
 include ('includes/config.php');
-echo "Yo"
+
 ?>
 <!DOCTYPE HTML>
 <html>
