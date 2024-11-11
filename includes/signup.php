@@ -3,8 +3,6 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\SMTP;
 
-
-
 require "./phpmailer/src/Exception.php";
 require "./phpmailer/src/PHPMailer.php";
 require "./phpmailer/src/SMTP.php";
@@ -143,9 +141,9 @@ if (isset($_POST['submit'])) {
     </script>
 
 
-<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+<!-- <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
         async defer>
-    </script>
+    </script> -->
 
 <script>
 	let showPass = document.getElementById('show-pass');
