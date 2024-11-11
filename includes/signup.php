@@ -9,8 +9,6 @@ require "./phpmailer/src/SMTP.php";
 error_reporting(E_ALL);
 if (isset($_POST['submit_register'])) {
 
-	echo "hello";
-
 	$verification = uniqid() . rand(100, 999999999);
 	$fname = $_POST['fname'];
 	$lname = $_POST['lname'];
