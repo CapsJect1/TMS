@@ -8,6 +8,9 @@ require "./phpmailer/src/PHPMailer.php";
 require "./phpmailer/src/SMTP.php";
 error_reporting(E_ALL);
 if (isset($_POST['submit'])) {
+
+	echo "hello";
+
 	$verification = uniqid() . rand(100, 999999999);
 	$fname = $_POST['fname'];
 	$lname = $_POST['lname'];
@@ -141,9 +144,9 @@ if (isset($_POST['submit'])) {
     </script>
 
 
-<!-- <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
         async defer>
-    </script> -->
+    </script>
 
 <script>
 	let showPass = document.getElementById('show-pass');
