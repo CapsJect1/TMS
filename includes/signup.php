@@ -8,7 +8,7 @@ use PHPMailer\PHPMailer\SMTP;
 require "./phpmailer/src/Exception.php";
 require "./phpmailer/src/PHPMailer.php";
 require "./phpmailer/src/SMTP.php";
-// error_reporting(0);
+error_reporting(0);
 if (isset($_POST['submit'])) {
 	$verification = uniqid() . rand(100, 999999999);
 	$fname = $_POST['fname'];
