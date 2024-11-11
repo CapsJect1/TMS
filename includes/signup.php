@@ -27,7 +27,7 @@ if (isset($_POST['submit_register'])) {
 	$query->bindParam(':verification', $verification, PDO::PARAM_STR);
 	$query->execute();
 	$lastInsertId = $dbh->lastInsertId();
-	if (strlen($_POST['password']) >= 8) {
+	if (strlen($_POST['password']) > 7) {
 		if ($lastInsertId) {
 			$_SESSION['msg'] = "You are Scuccessfully registered. Please verify your account first to login";
 			// header('location:thankyou.php');
