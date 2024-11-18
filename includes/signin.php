@@ -88,7 +88,7 @@ if (isset($_POST['signin'])) {
 								<div style="position: relative;">
 									<input type="password" name="password" id="password" placeholder="Password" value=""
 										required="">
-									<i class="fa fa-eye" id="show-pass2" style="position: absolute; top: 0; right: 0; margin: 35px 10px 0 0;"></i>
+									<i class="fa fa-eye" id="show-passw" style="position: absolute; top: 0; right: 0; margin: 35px 10px 0 0;"></i>
 								</div>
 								<h4><a href="forgot-password.php">Forgot password</a></h4>
 								<input type="submit" name="signin" value="SIGN IN">
@@ -105,15 +105,15 @@ if (isset($_POST['signin'])) {
 </div>
 
 <script>
-	let showPass2 = document.getElementById('show-pass2');
-	showPass2.onclick = () => {
+	let showpassw = document.getElementById('show-passw');
+	showpassw.onclick = () => {
 		let passwordInp = document.forms['login']['password'];
 		if (passwordInp.getAttribute('type') == 'password') {
-			showPass2.classList.replace('fa-eye', 'fa-eye-slash')
+			showpassw.classList.replace('fa-eye', 'fa-eye-slash')
 
 			passwordInp.setAttribute('type', 'text')
 		} else {
-			showPass2.classList.replace('fa-eye-slash', 'fa-eye')
+			showpassw.classList.replace('fa-eye-slash', 'fa-eye')
 			passwordInp.setAttribute('type', 'password')
 		}
 	}
