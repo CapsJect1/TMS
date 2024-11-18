@@ -1,5 +1,4 @@
 <?php
-session_start();
 if (isset($_POST['signin'])) {
 	$email = htmlspecialchars(stripslashes(trim($_POST['email'])));
 	// $password = md5($_POST['password']); // Note: MD5 hashing is used here for simplicity; consider using more secure hashing methods
@@ -105,16 +104,16 @@ if (isset($_POST['signin'])) {
 </div>
 
 <script>
-	// let showPass2 = document.getElementById('show-pass2');
-	// showPass2.onclick = () => {
-	// 	let passwordInp = document.forms['login']['password'];
-	// 	if (passwordInp.getAttribute('type') == 'password') {
-	// 		showPass2.classList.replace('fa-eye', 'fa-eye-slash')
+	let showPass2 = document.getElementById('show-pass2');
+	showPass2.onclick = () => {
+		let passwordInp = document.forms['login']['password'];
+		if (passwordInp.getAttribute('type') == 'password') {
+			showPass2.classList.replace('fa-eye', 'fa-eye-slash')
 
-	// 		passwordInp.setAttribute('type', 'text')
-	// 	} else {
-	// 		showPass2.classList.replace('fa-eye-slash', 'fa-eye')
-	// 		passwordInp.setAttribute('type', 'password')
-	// 	}
-	// }
+			passwordInp.setAttribute('type', 'text')
+		} else {
+			showPass2.classList.replace('fa-eye-slash', 'fa-eye')
+			passwordInp.setAttribute('type', 'password')
+		}
+	}
 </script>
