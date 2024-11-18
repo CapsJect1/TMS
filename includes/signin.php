@@ -1,72 +1,7 @@
 <?php
 session_start();
 if (isset($_POST['signin'])) {
-	$email = htmlspecialchars(stripslashes(trim($_POST['email'])));
-	// $password = md5($_POST['password']); // Note: MD5 hashing is used here for simplicity; consider using more secure hashing methods
-	$password = htmlspecialchars(stripslashes(trim($_POST['password'])));
-	$status = 2;
-
-	// SQL query to fetch user details based on email and password
-	$sql = "SELECT id, FullName, EmailId, fname, lname,Password, Status FROM tblusers WHERE EmailId=:email AND Status = :stat";
-	$query = $dbh->prepare($sql);
-	$query->bindParam(':email', $email, PDO::PARAM_STR);
-	// $query->bindParam(':password', $password, PDO::PARAM_STR);
-	$query->bindParam(':stat', $status, PDO::PARAM_INT);
-	$query->execute();
-	$user = $query->fetch(PDO::FETCH_ASSOC);
-
-	if ($query->rowCount() > 0) {
-		if ($user['Status'] == 2) {
-			// Set session variables upon successful login
-
-			if (password_verify($password, $user['Password'])) {
-				$_SESSION['user_id'] = $user['id'];
-				$_SESSION['user_name'] = $user['FullName'];
-				$_SESSION['login'] = $user['EmailId'];
-				$_SESSION['fname'] = $user['fname'];
-				$_SESSION['lname'] = $user['lname'];
-				// Redirect to a dashboard or home page after successful login
-				// header("Location: package-list.php");\
-				?>
-				<script>
-					window.location.href = "package-list.php"
-				</script>
-				<?php
-			} else {
-				echo "<script>
-					Swal.fire({
-						title: 'Error!',
-						text: 'Incorrect email or password',
-						icon: 'error',
-						timer: 1500,
-						showConfirmButton: false
-					});
-					</script>";
-			}
-		} else {
-			echo "<script>
-			Swal.fire({
-				title: 'Error!',
-				text: 'Please confirm your account first',
-				icon: 'error',
-				timer: 1500,
-				showConfirmButton: false
-			});
-			</script>";
-		}
-
-		exit;
-	} else {
-		echo "<script>
-			Swal.fire({
-				title: 'Error!',
-				text: 'Please confirm your account first',
-				icon: 'error',
-				timer: 1500,
-				showConfirmButton: false
-			});
-			</script>";
-	}
+	echo 'hello world';
 }
 ?>
 
