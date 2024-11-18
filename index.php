@@ -148,7 +148,8 @@ include ('includes/config.php');
 	</div>
 
 	<?php include ('includes/footer.php'); ?>
-
+	<!-- signup -->
+	<?php include ('includes/signup.php'); ?>
 	<!-- //signu -->
 	<!-- signin -->
 	<?php include ('includes/signin.php'); ?>
