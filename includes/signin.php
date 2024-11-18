@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 if (isset($_POST['signin'])) {
 	$email = htmlspecialchars(stripslashes(trim($_POST['email'])));
 	// $password = md5($_POST['password']); // Note: MD5 hashing is used here for simplicity; consider using more secure hashing methods
