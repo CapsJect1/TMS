@@ -18,7 +18,7 @@
                                     <i class="fa fa-eye" id="show-pass2" style="position: absolute; top: 0; right: 0; margin: 35px 10px 0 0;"></i>
                                 </div>
                                 <h4><a href="forgot-password.php">Forgot password</a></h4>
-                                <button type="submit">SIGN IN</button>
+                                <button type="submit" class="btn btn-success w-100">SIGN IN</button>
                             </form>
                         </div>
                         <div class="clearfix"></div>
@@ -41,7 +41,7 @@ $(document).ready(function() {
             type: 'POST',
             url: 'includes/ajax.php', // The PHP file to handle the login
             data: $(this).serialize(), // Serialize the form data
- success: function(response) {
+ 			success: function(response) {
                 const result = JSON.parse(response);
                 if (result.status === 'success') {
                     window.location.href = result.redirect; // Redirect on success
