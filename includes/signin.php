@@ -39,7 +39,7 @@ $(document).ready(function() {
 
         $.ajax({
             type: 'POST',
-            url: 'includes/ajax.php', // The PHP file to handle the login
+            url: '../includes/ajax.php', // The PHP file to handle the login
             data: $(this).serialize(), // Serialize the form data
  			success: function(response) {
                 const result = JSON.parse(response);
