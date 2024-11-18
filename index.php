@@ -1,8 +1,8 @@
 <?php
 session_start();
-error_reporting(0);
+error_reporting(E_ALL);
 include ('includes/config.php');
-
+echo "hwllo eoll";
 ?>
 <!DOCTYPE HTML>
 <html>
