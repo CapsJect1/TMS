@@ -10,8 +10,12 @@
 </style>
 
 <?php 
-	$user_id = clean($_SESSION['user_id']);
-	$get_books_payment = $dbh->query("SELECT * FROM `booking` WHERE status ='payment' AND user_id = '$user_id'");
+	if (isset($_SESSION['user_id'])) {
+		$user_id = clean($_SESSION['user_id']);
+		$get_books_payment = $dbh->query("SELECT * FROM `booking` WHERE status ='payment' AND user_id = '$user_id'");
+	}else{
+		$get_books_payment = 0;
+	}
 ?>
 
 <?php if ($_SESSION['login']) { ?>
