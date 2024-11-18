@@ -93,7 +93,7 @@
 					<li><a href="page.php?type=privacy">Privacy Policy</a></li>
 					<li><a href="page.php?type=terms">Terms of Use</a></li>
 					<li><a href="page.php?type=contact">Contact Us</a></li>
-					<?php if ($_SESSION['login']) { ?>
+					<?php if (isset($_SESSION['login'])) { ?>
 						<li>Need Help?<a href="#" data-toggle="modal" data-target="#myModal3"> / Write Us </a> </li>
 					<?php } else { ?>
 						<li><a href="enquiry.php"> Enquiry </a> </li>
