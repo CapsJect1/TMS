@@ -147,16 +147,16 @@ if (isset($_POST['submit_register'])) {
     </script>
 
 <script>
-	let showPass = document.getElementById('show-pass');
-    showPass.onclick = () => {
-        let passwordInp = document.forms['signup']['password'];
-        if (passwordInp.getAttribute('type') == 'password') {
-            showPass.classList.replace('fa-eye', 'fa-eye-slash')
+	// let showPass = document.getElementById('show-pass');
+    // showPass.onclick = () => {
+    //     let passwordInp = document.forms['signup']['password'];
+    //     if (passwordInp.getAttribute('type') == 'password') {
+    //         showPass.classList.replace('fa-eye', 'fa-eye-slash')
             
-            passwordInp.setAttribute('type', 'text')
-        }else{
-            showPass.classList.replace('fa-eye-slash', 'fa-eye')
-            passwordInp.setAttribute('type', 'password')
-        }
-    }
+    //         passwordInp.setAttribute('type', 'text')
+    //     }else{
+    //         showPass.classList.replace('fa-eye-slash', 'fa-eye')
+    //         passwordInp.setAttribute('type', 'password')
+    //     }
+    // }
 </script>
