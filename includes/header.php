@@ -18,7 +18,7 @@
 	}
 ?>
 
-<?php if ($_SESSION['login']) { ?>
+<?php if (isset($_SESSION['login'])) { ?>
 	<div class="top-header dont-print">
 		<div class="container">
 			<ul class="tp-hd-lft wow fadeInLeft animated" data-wow-delay=".5s">
