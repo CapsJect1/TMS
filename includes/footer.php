@@ -41,20 +41,20 @@
 
 				
 				<?php 
-				if ($get_books_payment->rowCount() > 0) {
-				foreach ($get_books_payment as $payments_book) {
-					?>
-					<div class="col-md-12">
-					<p class="mb-1">#: <span id="myInput"><?= $payments_book['reference_num'] ?></span></p>
-					<p class="mb-1">Name: <?= ucfirst($payments_book['fname']) . ' ' . ucfirst($payments_book['lname']) ?></p>
-					<div style="display: flex; align-items: center; justify-content: space-between;">
-					<span class="badge">Proceed to payment</span>
-					<a href="issuetickets.php?pay=<?= $payments_book['id'] ?>" style="color: blue !important; text-decoration: underline;">Proceed</a>
-					</div>
-					</div>
-					<?php
-				} 
-				}
+				// if ($get_books_payment->rowCount() > 0) {
+				// foreach ($get_books_payment as $payments_book) {
+				// 	?>
+				// 	<div class="col-md-12">
+				// 	<p class="mb-1">#: <span id="myInput"><?= $payments_book['reference_num'] ?></span></p>
+				// 	<p class="mb-1">Name: <?= ucfirst($payments_book['fname']) . ' ' . ucfirst($payments_book['lname']) ?></p>
+				// 	<div style="display: flex; align-items: center; justify-content: space-between;">
+				// 	<span class="badge">Proceed to payment</span>
+				// 	<a href="issuetickets.php?pay=<?= $payments_book['id'] ?>" style="color: blue !important; text-decoration: underline;">Proceed</a>
+				// 	</div>
+				// 	</div>
+				// 	<?php
+				// } 
+				// }
 			?>	
 			</div>
 			</div>
