@@ -34,7 +34,7 @@
 				<a href="javascript:void(0);" class="dropdown-toggle" data-toggle="modal" data-target="#show-books"><i class="fa fa-bell"></i> <?= $get_books_payment->rowCount() ?> <i class="fa fa-caret-down"></i></a>
 				</li>
 				<li class="tol">Welcome :</li>
-				<li class="sig"><?php echo isset($_SESSION['login']) ? htmlentities($_SESSION['login']) : 'User'; ?></li>
+				<li class="sig"><?php echo htmlentities($_SESSION['login']); ?></li>
 				<li class="sigi"><a href="logout.php">/ Logout</a></li>
 			</ul>
 			<div class="clearfix"></div>
