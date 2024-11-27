@@ -132,6 +132,15 @@ if (isset($_POST['submit1'])) {
 		<!-- //signin -->
 		<!-- write us -->
 		<?php include ('includes/write-us.php'); ?>
+
+		<script>
+document.addEventListener("DOMContentLoaded", function(){
+  const newUrl = '/';
+
+// Change the URL without refreshing the page
+history.pushState(null, '', newUrl);
+})
+</script>
 </body>
 
 </html>

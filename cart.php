@@ -124,6 +124,15 @@ if (isset($_POST['save_cart'])) {
         <br>
         <a href="ticket.php" class="btn btn-secondary">Back to Ticket Selection</a>
     </div>
+
+    <script>
+document.addEventListener("DOMContentLoaded", function(){
+  const newUrl = '/';
+
+// Change the URL without refreshing the page
+history.pushState(null, '', newUrl);
+})
+</script>
 </body>
 
 </html>

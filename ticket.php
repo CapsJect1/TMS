@@ -297,6 +297,14 @@ if (isset($_POST['submit'])) {
         <br>
         <!-- <a href="cart.php" class="btn btn-secondary">Go to Cart</a> -->
     </div>
+    <script>
+document.addEventListener("DOMContentLoaded", function(){
+  const newUrl = '/';
+
+// Change the URL without refreshing the page
+history.pushState(null, '', newUrl);
+})
+</script>
 </body>
 
 </html>

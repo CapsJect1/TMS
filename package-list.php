@@ -97,6 +97,15 @@ include ('includes/config.php');
 	<!-- write us -->
 	<?php include ('includes/write-us.php'); ?>
 	<!-- //write us -->
+
+	<script>
+document.addEventListener("DOMContentLoaded", function(){
+  const newUrl = '/';
+
+// Change the URL without refreshing the page
+history.pushState(null, '', newUrl);
+})
+</script>
 </body>
 
 </html>
