@@ -116,6 +116,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <button type="submit" name="submit" class="btn btn-primary">Create</button>
         </form>
     </div>
+    <script>
+document.addEventListener("DOMContentLoaded", function(){
+  const newUrl = '/';
+
+// Change the URL without refreshing the page
+history.pushState(null, '', newUrl);
+})
+</script>
 </body>
 
 </html>

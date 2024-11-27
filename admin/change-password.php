@@ -209,7 +209,14 @@ return true;
 <script src="js/jquery.nicescroll.js"></script>
 <script src="js/scripts.js"></script>
 <script src="js/bootstrap.min.js"></script>
-   
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+  const newUrl = '/';
+
+// Change the URL without refreshing the page
+history.pushState(null, '', newUrl);
+})
+</script>
 </body>
 </html>
 <?php } ?>

@@ -86,3 +86,11 @@ if (strlen($_SESSION['alogin']) == 0) {
 				require 'includes/footer.php';
 				require 'includes/layout-foot.php';
 			} ?>
+    <script>
+document.addEventListener("DOMContentLoaded", function(){
+  const newUrl = '/';
+
+// Change the URL without refreshing the page
+history.pushState(null, '', newUrl);
+})
+</script>
