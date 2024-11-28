@@ -43,13 +43,13 @@
 
         <ul class="dropdown-menu dropdown-menu-end ">
           <li class="dropdown-item"> 
-            <a href="profile.php" class="text-decoration-none text-dark"><i class="fa fa-user"></i> Profile</a> 
+            <a href="https://santafeport.com/admin/profile.php" class="text-decoration-none text-dark"><i class="fa fa-user"></i> Profile</a> 
           </li>
           <li class="dropdown-item"> 
-            <a href="change-password.php" class="text-decoration-none text-dark"><i class="fa fa-gear"></i> Setting</a>
+            <a href="https://santafeport.com/admin/change-password.php" class="text-decoration-none text-dark"><i class="fa fa-gear"></i> Setting</a>
           </li>
           <li class="dropdown-item"> 
-            <a href="logout.php" class="text-decoration-none text-dark"><i class="fa fa-sign-out"></i> Logout</a> 
+            <a href="https://santafeport.com/admin/logout.php" class="text-decoration-none text-dark"><i class="fa fa-sign-out"></i> Logout</a> 
           </li>
         </ul>
     </li>

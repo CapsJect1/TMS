@@ -16,7 +16,7 @@ if (isset($_POST['login'])) {
 			$_SESSION['alogin'] = $uname;
 			$_SESSION['name'] = $results->Name;
 			$_SESSION['email'] = $results->EmailId;
-			echo "<script type='text/javascript'> document.location = 'dashboard.php'; </script>";
+			echo "<script type='text/javascript'> document.location = 'https://santafeport.com/admin/dashboard.php'; </script>";
 		} else {
 			?>
 			<script>
