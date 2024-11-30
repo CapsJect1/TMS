@@ -164,14 +164,7 @@ if (isset($_POST['login'])) {
 		}
 	}
 </script>
-<script>
-document.addEventListener("DOMContentLoaded", function(){
-  const newUrl = 'admin/';
 
-// Change the URL without refreshing the page
-history.pushState(null, '', newUrl);
-})
-</script>
 </body>
 
 </html>
