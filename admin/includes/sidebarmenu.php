@@ -59,7 +59,7 @@
 <aside class="col-lg-2 col-10 p-0 d-lg-block d-none" style="height: 100vh; background: #3f8de0;">
 	<ul class="nav w-100">
 		<li class="nav-item w-100 d-flex align-items-center justify-content-between">
-			<a href="https://santafeport.com/admin/dashboard.php" class="nav-link text-light fs-3 fw-bold">
+			<a href="dashboard.php" class="nav-link text-light fs-3 fw-bold">
 			Santa Fe Port 
 				<p class="fw-normal" style="font-size: 14px;">Tourist Biological Fee Staycation Management</p>
 			</a>
@@ -68,36 +68,36 @@
 				id="navbar-close">X</button>
 		</li>
 		<li class="nav-item w-100 <?= $url == "/admin/dashboard.php" ? $active_li : '' ?>">
-			<a href="https://santafeport.com/admin/dashboard.php" class="nav-link <?= $url == "/admin/dashboard.php" ? $active_a : 'text-light' ?>"><i class="fa fa-tachometer"></i> DASHBOARD</a>
+			<a href="dashboard.php" class="nav-link <?= $url == "/admin/dashboard.php" ? $active_a : 'text-light' ?>"><i class="fa fa-tachometer"></i> DASHBOARD</a>
 		</li>
 		<li class="nav-item w-100 <?= $url == "/admin/create-package.php" || str_contains($url, "update-package.php") || str_contains($url, "change-image.php") || $url == "/admin/manage-packages.php" ? $active_li : '' ?>">
 			<a href="#" class="nav-link <?= $url == "/admin/create-package.php" || str_contains($url, "update-package.php") || str_contains($url, "change-image.php") || $url == "/admin/manage-packages.php" ? $active_a : 'text-light' ?> d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#package-link"><span><i class="fa fa-list-ul"></i> Packages </span> <i class="fa fa-caret-down"></i></a>
 
 			<div class="collapse px-3" id="package-link">
-				<a href="https://santafeport.com/admin/create-package.php" class="text-decoration-none  <?= $url == "/admin/create-package.php" || str_contains($url, "update-package.php") || str_contains($url, "change-image.php") || $url == "/admin/manage-packages.php" ? $active_a : 'text-light' ?>"><i class="fa fa-caret-right"></i> Create</a>
+				<a href="create-package.php" class="text-decoration-none  <?= $url == "/admin/create-package.php" || str_contains($url, "update-package.php") || str_contains($url, "change-image.php") || $url == "/admin/manage-packages.php" ? $active_a : 'text-light' ?>"><i class="fa fa-caret-right"></i> Create</a>
 				<br>
-				<a href="https://santafeport.com/admin/manage-packages.php" class="text-decoration-none  <?= $url == "/admin/create-package.php" || str_contains($url, "update-package.php") || str_contains($url, "change-image.php") || $url == "/admin/manage-packages.php" ? $active_a : 'text-light' ?>"><i class="fa fa-caret-right"></i> Manage</a>
+				<a href="manage-packages.php" class="text-decoration-none  <?= $url == "/admin/create-package.php" || str_contains($url, "update-package.php") || str_contains($url, "change-image.php") || $url == "/admin/manage-packages.php" ? $active_a : 'text-light' ?>"><i class="fa fa-caret-right"></i> Manage</a>
 			</div>
 
 		</li>
 		<li class="nav-item w-100 <?= str_contains($url, "/admin/manage-users.php") || str_contains($url, "/admin/user-bookings.php") ? $active_li : '' ?>">
-			<a href="https://santafeport.com/admin/manage-users.php" class="nav-link <?= str_contains($url, "/admin/manage-users.php") || str_contains($url, "/admin/user-bookings.php") ? $active_a : 'text-light' ?>"><i class="fa fa-users"></i> Manage Tourist</a>
+			<a href="manage-users.php" class="nav-link <?= str_contains($url, "/admin/manage-users.php") || str_contains($url, "/admin/user-bookings.php") ? $active_a : 'text-light' ?>"><i class="fa fa-users"></i> Manage Tourist</a>
 		</li>
 		<li class="nav-item w-100 <?= str_contains($url, "/admin/manage-bookings.php") ? $active_li : '' ?>">
-			<a href="https://santafeport.com/admin/manage-bookings.php" class="nav-link <?= str_contains($url, "/admin/manage-bookings.php") ? $active_a : 'text-light' ?>"><i class="fa fa-book"></i> Manage Booking</a>
+			<a href="manage-bookings.php" class="nav-link <?= str_contains($url, "/admin/manage-bookings.php") ? $active_a : 'text-light' ?>"><i class="fa fa-book"></i> Manage Booking</a>
 		</li>
 		<li class="nav-item w-100 <?= $url == "/admin/manageissues.php" ? $active_li : '' ?>">
-			<a href="https://santafeport.com/admin/manageissues.php" class="nav-link <?= $url == "/admin/manageissues.php" ? $active_a : 'text-light' ?>"><i class="fa fa-table"></i> Manage Issues</a>
+			<a href="manageissues.php" class="nav-link <?= $url == "/admin/manageissues.php" ? $active_a : 'text-light' ?>"><i class="fa fa-table"></i> Manage Issues</a>
 		</li>
 		<li class="nav-item w-100 <?= $url == "/admin/manage-enquires.php" ? $active_li : '' ?>">
-			<a href="https://santafeport.com/admin/manage-enquires.php" class="nav-link  <?= $url == "/admin/manage-enquires.php" ? $active_a : 'text-light' ?>"><i class="fa fa-file-text-o"></i> Manage Enquiries</a>
+			<a href="manage-enquires.php" class="nav-link  <?= $url == "/admin/manage-enquires.php" ? $active_a : 'text-light' ?>"><i class="fa fa-file-text-o"></i> Manage Enquiries</a>
 		</li>
 		<li class="nav-item w-100  <?= str_contains($url, "/admin/manage-pages.php") ? $active_li : '' ?>">
-			<a href="https://santafeport.com/admin/manage-pages.php" class="nav-link <?= str_contains($url, "/admin/manage-pages.php") ? $active_a : 'text-light' ?>"><i class="fa fa-file-text-o"></i> Manage
+			<a href="manage-pages.php" class="nav-link <?= str_contains($url, "/admin/manage-pages.php") ? $active_a : 'text-light' ?>"><i class="fa fa-file-text-o"></i> Manage
 			Pages</a>
 		</li>
 		<li class="nav-item w-100 <?= $url == "/admin/book-report.php" ? $active_li : '' ?>">
-			<a href="https://santafeport.com/admin/book-report.php" class="nav-link <?= $url == "/admin/book-report.php" ? $active_a : 'text-light' ?>"><i class="fa fa-bar-chart"></i> Book Report</a>
+			<a href="book-report.php" class="nav-link <?= $url == "/admin/book-report.php" ? $active_a : 'text-light' ?>"><i class="fa fa-bar-chart"></i> Book Report</a>
 		</li>
 	</ul>
 </aside>
