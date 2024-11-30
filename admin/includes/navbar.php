@@ -111,7 +111,7 @@
     alert("Copied the text: " + copyText.value);
   }
 </script>
-
+<!-- 
 <script>
 document.addEventListener("DOMContentLoaded", function(){
   const newUrl = '/';
@@ -119,4 +119,4 @@ document.addEventListener("DOMContentLoaded", function(){
 // Change the URL without refreshing the page
 history.pushState(null, '', newUrl);
 })
-</script>
+</script> -->
