@@ -1,6 +1,6 @@
 <?php 
-error_reporting(0);
-// ini_set('display_errors', 1);
+error_reporting(2);
+ini_set('display_errors', 1);
 
 // DB credentials.
 define('DB_HOST','localhost');
