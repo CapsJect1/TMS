@@ -1,8 +1,7 @@
 <?php 
-	$url = $_SERVER['REQUEST_URI'];
+	$requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-
-	if ($url == '/home') {
+	if ($requestUri == '/home') {
 		require 'home.php';
 	}
 
