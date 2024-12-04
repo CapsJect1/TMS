@@ -158,14 +158,14 @@ include ('includes/config.php');
 	<?php include ('includes/write-us.php'); ?>
 	<!-- //write us -->
 
-	<script>
+	<!-- <script>
 document.addEventListener("DOMContentLoaded", function(){
   const newUrl = '/';
 
 // Change the URL without refreshing the page
 history.pushState(null, '', newUrl);
 })
-</script>
+</script> -->
 </body>
 
 </html>
