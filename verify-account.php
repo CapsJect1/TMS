@@ -54,12 +54,12 @@ include ('includes/config.php');
     ?>
 
 <script>
-document.addEventListener("DOMContentLoaded", function(){
-  const newUrl = '/';
+// document.addEventListener("DOMContentLoaded", function(){
+//   const newUrl = '/';
 
-// Change the URL without refreshing the page
-history.pushState(null, '', newUrl);
-})
+// // Change the URL without refreshing the page
+// history.pushState(null, '', newUrl);
+// })
 </script>
 </body>
 
