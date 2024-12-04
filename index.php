@@ -2,6 +2,8 @@
 	$url = $_SERVER['REQUEST_URI'];
 
 
-	echo $url;
+	if ($url == '/home') {
+		require 'home.php';
+	}
 
 ?>
