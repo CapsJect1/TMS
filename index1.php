@@ -44,7 +44,7 @@ include ('includes/config.php');
 			<div class="row">
 				
 				<div class="col-md-12 text-center">
-					<img src="./images/Santa_Fe_Cebu.png" alt="hero-img-logo">
+					<img src="./images/port.webp" alt="hero-img-logo">
 					<h1 style="color: #ffff;">Welcome to Santa Fe</h1>
 					<p style="color: #fff;">Book your package of choice. Book na Bhaii!!</p>
 					<a href="package-list.php" class="btn btn-primary" style="color: #fff !important; margin-top: 15px;">Book Now</a>
