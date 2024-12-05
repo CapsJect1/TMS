@@ -92,7 +92,7 @@ include ('includes/config.php');
 							<p><b>Features</b> <?php echo clean($result->PackageFetures); ?></p>
 						</div>
 						<div class="col-md-3 room-right wow fadeInRight animated" data-wow-delay=".5s">
-							<h5>USD <?php echo clean($result->PackagePrice); ?></h5>
+							<h5>PHP <?php echo clean($result->PackagePrice); ?></h5>
 							<a href="package-details.php?pkgid=<?php echo clean($result->PackageId); ?>"
 								class="view">Details</a>
 						</div>
