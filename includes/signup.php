@@ -43,9 +43,7 @@ if (isset($_POST['submit_register'])) {
 
     // If there are errors, show them and prevent registration
     if (!empty($errors)) {
-        foreach ($errors as $error) {
-            echo "<script>alert('$error');</script>";
-        }
+        $errorMessages = implode("<br>", $errors);
     } else {
         // No errors, proceed with registration
         $verification = uniqid() . rand(100, 999999999);
@@ -126,6 +124,10 @@ if (isset($_POST['submit_register'])) {
                                     <input type="text" placeholder="Last Name" name="lname" autocomplete="off" required>
                                     <input type="text" placeholder="Mobile number" maxlength="11" name="mobilenumber" autocomplete="off" required>
                                     <input type="text" placeholder="Email id" name="email" id="email" autocomplete="off" required>
+                                    
+                                    <!-- Show errors dynamically here -->
+                                    <div id="password-errors" class="alert alert-danger" style="display: none;"></div>
+
                                     <div style="position: relative;">
                                         <input type="password" name="password" id="password" placeholder="Password" value="" minlength="8" required>
                                         <i class="fa fa-eye" id="show-pass" style="position: absolute; top: 0; right: 0; margin: 35px 10px 0 0;"></i>
@@ -145,63 +147,51 @@ if (isset($_POST['submit_register'])) {
     </div>
 </div>
 
-
-<script type="text/javascript">
-      var onloadCallback = function() {
-        grecaptcha.render('html_element', {
-          'sitekey' : '6LeBZG0qAAAAAHpE8Nr7ZxDcFQw3dVdkeJ4p3stl'
-        });
-      };
-    </script>
-
-
-<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
-        async defer>
-    </script>
-
 <script>
-	// let showPass = document.getElementById('show-pass');
-    // showPass.onclick = () => {
-    //     let passwordInp = document.forms['signup']['password'];
-    //     if (passwordInp.getAttribute('type') == 'password') {
-    //         showPass.classList.replace('fa-eye', 'fa-eye-slash')
-            
-    //         passwordInp.setAttribute('type', 'text')
-    //     }else{
-    //         showPass.classList.replace('fa-eye-slash', 'fa-eye')
-    //         passwordInp.setAttribute('type', 'password')
-    //     }
-    // }
-
-	  // Password validation function
+    // Password validation function (Client-side)
     function validatePassword() {
         var password = document.getElementById('password').value;
-        var alertMessage = '';
+        var errorMessages = [];
         var regexUppercase = /[A-Z]/;
         var regexLowercase = /[a-z]/;
         var regexNumbers = /[0-9]/;
         var regexSpecialChars = /[!@#$%^&*(),.?":{}|<>]/;
 
         if (password.length < 8) {
-            alertMessage += 'Password must be at least 8 characters long.\n';
+            errorMessages.push('Password must be at least 8 characters long.');
         }
         if (!regexUppercase.test(password)) {
-            alertMessage += 'Password must contain at least one uppercase letter.\n';
+            errorMessages.push('Password must contain at least one uppercase letter.');
         }
         if (!regexLowercase.test(password)) {
-            alertMessage += 'Password must contain at least one lowercase letter.\n';
+            errorMessages.push('Password must contain at least one lowercase letter.');
         }
         if (!regexNumbers.test(password)) {
-            alertMessage += 'Password must contain at least one number.\n';
+            errorMessages.push('Password must contain at least one number.');
         }
         if (!regexSpecialChars.test(password)) {
-            alertMessage += 'Password must contain at least one special character.\n';
+            errorMessages.push('Password must contain at least one special character.');
         }
 
-        if (alertMessage !== '') {
-            alert(alertMessage);
-            return false; // Prevent form submission if validation fails
+        if (errorMessages.length > 0) {
+            // Display errors in a Bootstrap alert
+            document.getElementById('password-errors').innerHTML = errorMessages.join('<br>');
+            document.getElementById('password-errors').style.display = 'block';
+            return false; // Prevent form submission
+        } else {
+            // Hide any previous errors if password is valid
+            document.getElementById('password-errors').style.display = 'none';
         }
-        return true; // Allow form submission if validation passes
+        return true; // Allow form submission
     }
 </script>
+
+<script type="text/javascript">
+    var onloadCallback = function() {
+        grecaptcha.render('html_element', {
+            'sitekey' : '6LeBZG0qAAAAAHpE8Nr7ZxDcFQw3dVdkeJ4p3stl'
+        });
+    };
+</script>
+
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
