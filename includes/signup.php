@@ -1,3 +1,10 @@
+<stlye>
+    .top{
+    margin: 20px 0px 0px 0px;
+    
+    }
+</stlye>
+
 <?php
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -126,7 +133,7 @@ if (isset($_POST['submit_register'])) {
                                     <input type="text" placeholder="Email id" name="email" id="email" autocomplete="off" required>
                                     
                                     <!-- Show errors dynamically here -->
-                                    <div id="password-errors" class="alert alert-danger mt-5" style="display: none;"></div>
+                                    <div id="password-errors" class="alert alert-danger top" style="display: none; "></div>
 
                                     <div style="position: relative;">
                                         <input type="password" name="password" id="password" placeholder="Password" value="" minlength="8" required>
