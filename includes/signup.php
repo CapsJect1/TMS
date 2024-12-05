@@ -120,13 +120,14 @@ if (isset($_POST['submit_register'])) {
                             <div class="login-right">
                                 <form method="post" onsubmit="return validateForm()">
                                     <h3>Create your account</h3>
+                                  <div id="password-errors" class="alert alert-danger" style="display: none;"></div>
                                     <input type="text" placeholder="First Name" name="fname" id="fname" autocomplete="off" required>
                                     <input type="text" placeholder="Last Name" name="lname" id="lname" autocomplete="off" required>
                                     <input type="text" placeholder="Mobile number" maxlength="11" name="mobilenumber" autocomplete="off" required>
                                     <input type="text" placeholder="Email id" name="email" id="email" autocomplete="off" required>
                                     
-                                    <!-- Show errors dynamically here -->
-                                    <div id="password-errors" class="alert alert-danger" style="display: none;"></div>
+                                   
+                                  
 
                                     <div style="position: relative;">
                                         <input type="password" name="password" id="password" placeholder="Password" value="" minlength="8" required>
