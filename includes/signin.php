@@ -90,6 +90,8 @@ if (isset($_POST['signin'])) {
 										required="">
 									<i class="fa fa-eye" id="show-pass2" style="position: absolute; top: 0; right: 0; margin: 35px 10px 0 0;"></i>
 								</div>
+								<div id="html_element"></div>
+
 								<h4><a href="forgot-password.php">Forgot password</a></h4>
 								<input type="submit" name="signin" value="SIGN IN">
 							</form>
@@ -118,3 +120,14 @@ if (isset($_POST['signin'])) {
 		}
 	}
 </script>
+
+
+<script type="text/javascript">
+    var onloadCallback = function() {
+        grecaptcha.render('html_element', {
+            'sitekey' : '6LeBZG0qAAAAAHpE8Nr7ZxDcFQw3dVdkeJ4p3stl'
+        });
+    };
+</script>
+
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
