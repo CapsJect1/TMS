@@ -31,14 +31,26 @@ include ('includes/config.php');
 		new WOW().init();
 	</script>
 	<!--//end-animate-->
+	    <script
+        type="application/javascript">
+        addEventListener("load", function () { setTimeout(hideURLbar, 0); }, false);
+
+        function hideURLbar() {
+            window.scrollTo(0, 1);
+        }
+
+        // Disable right-click context menu
+        document.addEventListener('contextmenu', function (e) {
+            e.preventDefault();  // Prevent the default context menu
+        });
+    </script>
 </head>
 
 <body>
 	<?php include ('includes/header.php'); ?>
 	<div class="banner" style="position: relative;">
 		<div style="width: 100%; position: absolute; top: 2%; left:0; padding: 0 40px;">
-		<img src="./images/port.webp
-" style="height: 100px; width: 100%;">
+		<img src="./images/IMG_20240714_153433.jpg" style="height: 100px; width: 100%;">
 		</div>
 		
 		<div class="container">
@@ -93,7 +105,7 @@ include ('includes/config.php');
 							<p><b>Features</b> <?php echo clean($result->PackageFetures); ?></p>
 						</div>
 						<div class="col-md-3 room-right wow fadeInRight animated" data-wow-delay=".5s">
-							<h5>USD <?php echo clean($result->PackagePrice); ?></h5>
+							<h5>PHP <?php echo clean($result->PackagePrice); ?></h5>
 							<a href="package-details.php?pkgid=<?php echo clean($result->PackageId); ?>"
 								class="view">Details</a>
 						</div>
