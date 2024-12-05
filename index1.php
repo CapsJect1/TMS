@@ -48,7 +48,7 @@ include ('includes/config.php');
 
 <body>
 	<?php include ('includes/header.php'); ?>
-	<div class="banner" style="position: relative;">
+	<div class="" style="position: relative;">
 		<div style="width: 100%; position: absolute; top: 2%; left:0; padding: 0 40px;">
 		<img src="./images/IMG_20240714_153433.jpg" style="height: 100px; width: 100%;">
 		</div>
