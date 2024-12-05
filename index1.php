@@ -63,8 +63,7 @@ include ('includes/config.php');
 					<a href="package-list.php" class="btn btn-primary" style="color: #fff !important; margin-top: 15px;">Book Now</a>
 				</div>
 				<!-- <div class="col-md-6" >
-				<img src="./images/port.webp
-" alt="hero-img-1">
+				<img src="./images/port.webp" alt="hero-img-1">
 				</div> -->
 				
 			</div>
