@@ -31,6 +31,19 @@ include ('includes/config.php');
 		new WOW().init();
 	</script>
 	<!--//end-animate-->
+	    <script
+        type="application/javascript">
+        addEventListener("load", function () { setTimeout(hideURLbar, 0); }, false);
+
+        function hideURLbar() {
+            window.scrollTo(0, 1);
+        }
+
+        // Disable right-click context menu
+        document.addEventListener('contextmenu', function (e) {
+            e.preventDefault();  // Prevent the default context menu
+        });
+    </script>
 </head>
 
 <body>
