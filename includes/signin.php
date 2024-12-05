@@ -6,7 +6,7 @@ if (isset($_POST['signin'])) {
     $status = 2;
 
     // reCAPTCHA verification
-    $recaptchaSecret = 'YOUR_SECRET_KEY';  // Replace with your secret key
+    $recaptchaSecret = '6LeBZG0qAAAAAHpE8Nr7ZxDcFQw3dVdkeJ4p3stl';  // Replace with your secret key
     $recaptchaResponse = $_POST['g-recaptcha-response'];
 
     $recaptchaUrl = "https://www.google.com/recaptcha/api/siteverify";
@@ -96,7 +96,7 @@ if (isset($_POST['signin'])) {
                     <div class="login">
                         <div class="login-left">
                             <!-- Add your logo here -->
-                            <img src="path/to/your/logo.png" alt="Logo" style="max-width: 200px; margin-bottom: 20px;">
+                     
                         </div>
                         <div class="login-right">
                             <form method="post" name="login">
@@ -110,7 +110,7 @@ if (isset($_POST['signin'])) {
                                 <h4><a href="forgot-password.php">Forgot password</a></h4>
 
                                 <!-- Google reCAPTCHA v2 widget -->
-                                <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY"></div>
+                                <div class="g-recaptcha" data-sitekey="6LeBZG0qAAAAAHpE8Nr7ZxDcFQw3dVdkeJ4p3stl"></div>
                                 
                                 <input type="submit" name="signin" value="SIGN IN">
                             </form>
