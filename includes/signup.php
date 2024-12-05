@@ -1,4 +1,3 @@
-
 <?php
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -119,16 +118,15 @@ if (isset($_POST['submit_register'])) {
                     <div class="login-grids"> 
                         <div class="login">
                             <div class="login-right">
-                                <form method="post" onsubmit="return validatePassword()">
+                                <form method="post" onsubmit="return validateForm()">
                                     <h3>Create your account</h3>
-                                     <div id="password-errors" class="alert alert-danger top" style="display: none; "></div>
-                                    <input type="text" placeholder="First Name" name="fname" autocomplete="off" required>
-                                    <input type="text" placeholder="Last Name" name="lname" autocomplete="off" required>
+                                    <input type="text" placeholder="First Name" name="fname" id="fname" autocomplete="off" required>
+                                    <input type="text" placeholder="Last Name" name="lname" id="lname" autocomplete="off" required>
                                     <input type="text" placeholder="Mobile number" maxlength="11" name="mobilenumber" autocomplete="off" required>
                                     <input type="text" placeholder="Email id" name="email" id="email" autocomplete="off" required>
                                     
                                     <!-- Show errors dynamically here -->
-                                   
+                                    <div id="password-errors" class="alert alert-danger" style="display: none;"></div>
 
                                     <div style="position: relative;">
                                         <input type="password" name="password" id="password" placeholder="Password" value="" minlength="8" required>
@@ -151,13 +149,26 @@ if (isset($_POST['submit_register'])) {
 
 <script>
     // Password validation function (Client-side)
-    function validatePassword() {
+    function validateForm() {
         var password = document.getElementById('password').value;
         var errorMessages = [];
         var regexUppercase = /[A-Z]/;
         var regexLowercase = /[a-z]/;
         var regexNumbers = /[0-9]/;
         var regexSpecialChars = /[!@#$%^&*(),.?":{}|<>]/;
+
+        // First and Last Name validation: Check for numbers
+        var fname = document.getElementById('fname').value;
+        var lname = document.getElementById('lname').value;
+
+        var regexName = /^[A-Za-z]+$/;
+
+        if (!regexName.test(fname)) {
+            errorMessages.push('First Name cannot contain numbers.');
+        }
+        if (!regexName.test(lname)) {
+            errorMessages.push('Last Name cannot contain numbers.');
+        }
 
         if (password.length < 8) {
             errorMessages.push('Password must be at least 8 characters long.');
