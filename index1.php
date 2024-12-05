@@ -45,10 +45,19 @@ include ('includes/config.php');
         });
     </script>
 </head>
-
+<style>
+.banner {
+    background: url('./images/port.webp') no-repeat center center !important; /* Set the image as the background */
+    background-size: cover; /* Make sure the image covers the entire banner */
+    height: 400px; /* Adjust the height of the banner */
+    position: relative; /* To position the overlay and content properly */
+    width: 100%; /* Ensure it takes up the full width of the screen */
+}
+	
+</style>
 <body>
 	<?php include ('includes/header.php'); ?>
-	<div class="" style="position: relative;">
+	<div class="banner" style="position: relative;">
 		<div style="width: 100%; position: absolute; top: 2%; left:0; padding: 0 40px;">
 		<img src="./images/IMG_20240714_153433.jpg" style="height: 100px; width: 100%;">
 		</div>
