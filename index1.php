@@ -48,10 +48,8 @@ include ('includes/config.php');
 <style>
 .banner {
     background: url('./images/port.webp') no-repeat center center !important; /* Set the image as the background */
-    background-size: cover; /* Make sure the image covers the entire banner */
-    height: 400px; /* Adjust the height of the banner */
-    position: relative; /* To position the overlay and content properly */
-    width: 100%; /* Ensure it takes up the full width of the screen */
+    background-size: cover !important; /* Make sure the image covers the entire banner */
+    
 }
 	
 </style>
