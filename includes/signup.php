@@ -1,9 +1,3 @@
-<stlye>
-    .top{
-    margin: 20px 0px 0px 0px;
-    
-    }
-</stlye>
 
 <?php
 use PHPMailer\PHPMailer\PHPMailer;
