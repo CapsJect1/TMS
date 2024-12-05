@@ -3,7 +3,7 @@ session_start();
 
 if (isset($_POST['signin'])) {
     // Google reCAPTCHA verification
-    $recaptcha_secret = '6LehNpMqAAAAAOjjCZXNSj_MpWDbq0jxTQkPmWwl'; // Secret key
+    $recaptcha_secret = '6LezNpMqAAAAAKA-tks15YZHfdpFeWhQZo2kj-gb'; // Secret key
     $recaptcha_response = $_POST['g-recaptcha-response'];
 
     // Make request to verify reCAPTCHA response
@@ -110,7 +110,7 @@ if (isset($_POST['signin'])) {
                                 <h4><a href="forgot-password.php">Forgot password</a></h4>
 
                                 <!-- Google reCAPTCHA widget -->
-                                <div class="g-recaptcha" data-sitekey="6LehNpMqAAAAAN3bU5JAMswG4U1ExDBKk5uQnDsv"></div>
+                                <div class="g-recaptcha" data-sitekey="6LezNpMqAAAAAJo_vbJQ6Lo10T2GxhtxeROWoB8p"></div>
 
                                 <input type="submit" name="signin" value="SIGN IN">
                             </form>
