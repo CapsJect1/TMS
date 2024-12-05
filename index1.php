@@ -37,7 +37,8 @@ include ('includes/config.php');
 	<?php include ('includes/header.php'); ?>
 	<div class="banner" style="position: relative;">
 		<div style="width: 100%; position: absolute; top: 2%; left:0; padding: 0 40px;">
-		<img src="./images/IMG_20240714_153433.jpg" style="height: 100px; width: 100%;">
+		<img src="./images/port.webp
+" style="height: 100px; width: 100%;">
 		</div>
 		
 		<div class="container">
