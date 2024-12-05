@@ -6,99 +6,75 @@ use PHPMailer\PHPMailer\SMTP;
 require "./phpmailer/src/Exception.php";
 require "./phpmailer/src/PHPMailer.php";
 require "./phpmailer/src/SMTP.php";
-
 error_reporting(E_ALL);
-
-// Function to check password complexity
-function isStrongPassword($password) {
-    // Minimum 8 characters, 1 uppercase, 1 lowercase, 1 number, and 1 special character
-    return preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $password);
-}
-
 if (isset($_POST['submit_register'])) {
-    // Retrieve form data
-    $verification = uniqid() . rand(100, 999999999);
-    $fname = $_POST['fname'];
-    $lname = $_POST['lname'];
-    $full = $fname . ' ' . $lname;
-    $mnumber = $_POST['mobilenumber'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
 
-    // Validate the password
-    if (!isStrongPassword($password)) {
-        $_SESSION['msg'] = "Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a number, and a special character.";
-        header('Location: signup.php');
-        exit;
-    }
+	$verification = uniqid() . rand(100, 999999999);
+	$fname = $_POST['fname'];
+	$lname = $_POST['lname'];
+	$full = $fname . ' ' . $lname; 
+	$mnumber = $_POST['mobilenumber'];
+	$email = $_POST['email'];
+	$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+	$sql = "INSERT INTO  tblusers(FullName,fname,lname,MobileNumber,EmailId,Password,Verification) VALUES(:full,:fname, :lname,:mnumber,:email,:password,:verification)";
+	$query = $dbh->prepare($sql);
+	$query->bindParam(':full', $full, PDO::PARAM_STR);
+	$query->bindParam(':fname', $fname, PDO::PARAM_STR);
+	$query->bindParam(':lname', $lname, PDO::PARAM_STR);
+	$query->bindParam(':mnumber', $mnumber, PDO::PARAM_STR);
+	$query->bindParam(':email', $email, PDO::PARAM_STR);
+	$query->bindParam(':password', $password, PDO::PARAM_STR);
+	$query->bindParam(':verification', $verification, PDO::PARAM_STR);
+	$query->execute();
+	$lastInsertId = $dbh->lastInsertId();
+	if (strlen($_POST['password']) > 7) {
+		if ($lastInsertId) {
+			$_SESSION['msg'] = "You are Scuccessfully registered. Please verify your account first to login";
+			// header('location:thankyou.php');
 
-    // Hash the password
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-    // Insert user data into database
-    $sql = "INSERT INTO tblusers (FullName, fname, lname, MobileNumber, EmailId, Password, Verification) 
-            VALUES (:full, :fname, :lname, :mnumber, :email, :password, :verification)";
-    $query = $dbh->prepare($sql);
-    $query->bindParam(':full', $full, PDO::PARAM_STR);
-    $query->bindParam(':fname', $fname, PDO::PARAM_STR);
-    $query->bindParam(':lname', $lname, PDO::PARAM_STR);
-    $query->bindParam(':mnumber', $mnumber, PDO::PARAM_STR);
-    $query->bindParam(':email', $email, PDO::PARAM_STR);
-    $query->bindParam(':password', $hashedPassword, PDO::PARAM_STR);
-    $query->bindParam(':verification', $verification, PDO::PARAM_STR);
-    $query->execute();
-    $lastInsertId = $dbh->lastInsertId();
-
-    if ($lastInsertId) {
-        $_SESSION['msg'] = "You are successfully registered. Please verify your account first to login.";
-
-        // Set up PHPMailer
-        $mail = new PHPMailer(true);
-        try {
-            $mail->SMTPDebug = 0; // Disable SMTP debug
-            $mail->isSMTP(); // Set mailer to use SMTP
-            $mail->Host = 'smtp.gmail.com'; // Set SMTP server
-            $mail->SMTPAuth = true;
-            $mail->Username = 'percebuhayan12@gmail.com'; // SMTP username
-            $mail->Password = 'jnolufsoqvqbsjim'; // SMTP password
-            $mail->Port = 587; // TCP port for SMTP
-
-            // Disable SSL verification (for localhost or testing environments)
-            $mail->SMTPOptions = [
-                'ssl' => [
-                    'verify_peer' => false,
-                    'verify_peer_name' => false,
-                    'allow_self_signed' => true,
-                ],
-            ];
-
-            // Set the email sender
-            $mail->setFrom('santafe@gmail.com', 'TMS Santa Fe');
-            $mail->addAddress($email); // Recipient email
-            $mail->Subject = "Email Account Verification";
-            $mail->Body = "Click this link to verify your account: https://santafeport.com/verify-account.php?verification=" . $verification . "&email=" . $email;
-
-            // Send the email
-            $mail->send();
-
-            // Redirect after successful registration
-            echo "<script>window.location.href = 'thankyou.php';</script>";
-        } catch (Exception $e) {
-            // Error handling
-            $_SESSION['msg'] = "Message could not be sent. Mailer Error: " . $mail->ErrorInfo;
-            echo "<script>window.location.href = 'thankyou.php';</script>";
-        }
-    } else {
-        $_SESSION['msg'] = "Something went wrong. Please try again.";
-        echo "<script>window.location.href = 'thankyou.php';</script>";
-    }
-} else {
-    // Handle case if the form is not submitted
-    $_SESSION['msg'] = "Please fill in the registration form.";
-    echo "<script>window.location.href = 'signup.php';</script>";
+			$mail = new PHPMailer(true);
+			$mail->SMTPDebug = 0;
+			$mail->isSMTP();
+			$mail->Host = 'smtp.gmail.com';
+			$mail->SMTPAuth = true;
+			$mail->Username = 'percebuhayan12@gmail.com';
+			$mail->Password = 'jnolufsoqvqbsjim';
+			$mail->Port = 587;
+	
+			$mail->SMTPOptions = array(
+				'ssl' => array(
+					'verify_peer' => false,
+					'verify_peer_name' => false,
+					'allow_self_signed' => true
+				)
+			);
+	
+			$mail->setFrom('santafe@gmail.com', 'TMS Santa Fe');
+	
+			$mail->addAddress($email);
+			$mail->Subject = "Email Account Verification";
+			$mail->Body = "Click this link to verify account: https://santafeport.com/verify-account.php?verification=" . $verification . "&email=" . $email;
+	
+			$mail->send();
+			?>
+			<script>
+				window.location.href = "thankyou.php"
+			</script>
+			<?php 
+		} else {
+			$_SESSION['msg'] = "Something went wrong. Please try again.";
+			// header('location:thankyou.php');
+			?>
+			<script>
+				window.location.href = "thankyou.php"
+			</script>
+			<?php 
+		}
+	}else{
+		
+	}
 }
 ?>
-
 <!--Javascript for check email availabilty-->
 <script>
 	function checkAvailability() {
@@ -169,22 +145,7 @@ if (isset($_POST['submit_register'])) {
 <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
         async defer>
     </script>
-<script>
-    // Password strength check
-    function checkPasswordStrength(password) {
-        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        return regex.test(password);
-    }
 
-    // Trigger password check on form submit
-    document.querySelector('form').addEventListener('submit', function (e) {
-        const password = document.getElementById('password').value;
-        if (!checkPasswordStrength(password)) {
-            e.preventDefault();
-            alert('Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.');
-        }
-    });
-</script>
 <script>
 	// let showPass = document.getElementById('show-pass');
     // showPass.onclick = () => {
