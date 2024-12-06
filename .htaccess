@@ -8,7 +8,7 @@ RewriteRule ^mcc-admin$ /admin/index.php [R=301,L]
 RewriteCond %{REQUEST_URI} ^/admin$
 RewriteRule ^admin$ /index.php [R=301,L]
 
-# Optional: Remove .php extension for clean URLs
+# Optional: Remove .php extension for clean URLs (you can remove this if you don't need it)
 RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^([^/]+)/?$ $1.php [L]
 
