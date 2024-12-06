@@ -8,6 +8,6 @@ RewriteRule ^$ index.php [L]
 RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^([^/]+)/?$ $1.php [L]
 
-# Optional: Redirect requests with .php extension to the clean URL
-RewriteCond %{https://santafeport.com/admin/index.php} \s([^.]+)\.php[\s?] [NC]
+# Redirect requests with .php extension to the clean URL
+RewriteCond %{THE_REQUEST} \s([^.]+)\.php[\s?] [NC]
 RewriteRule ^ %1 [R=301,L]
