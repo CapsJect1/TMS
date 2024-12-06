@@ -1,4 +1,5 @@
 
+
 <?php
 session_start();
 
@@ -120,3 +121,24 @@ if (isset($_POST['signin'])) {
                     </div>
                     <p>By logging in you agree to our <a href="page.php?type=terms">Terms and Conditions</a> and <a
                             href="page.php?type=privacy">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let showPass2 = document.getElementById('show-pass2');
+    showPass2.onclick = () => {
+        let passwordInp = document.forms['login']['password'];
+        if (passwordInp.getAttribute('type') == 'password') {
+            showPass2.classList.replace('fa-eye', 'fa-eye-slash')
+            passwordInp.setAttribute('type', 'text')
+        } else {
+            showPass2.classList.replace('fa-eye-slash', 'fa-eye')
+            passwordInp.setAttribute('type', 'password')
+        }
+    }
+</script>
+
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
