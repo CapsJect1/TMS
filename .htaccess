@@ -8,4 +8,4 @@ RewriteRule ^$ index.php [L]
 RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^([^/]+)/?$ $1.php [L]
 
-Redirect 303 /santafeport.com/admin/index /santafeport.com/admin/
+Redirect 303 /https://santafeport.com/admin/index /https://santafeport.com/admin/
