@@ -4,7 +4,7 @@ RewriteEngine On
 RewriteCond %{REQUEST_URI} ^/mcc-admin\.php$
 RewriteRule ^mcc-admin\.php$ /admin/ [R=301,L]
 
-# Redirect /admin/ to /index.php (note the trailing slash to match the directory)
+# Redirect /admin/ to /index.php
 RewriteCond %{REQUEST_URI} ^/admin/$
 RewriteRule ^admin/$ /index.php [R=301,L]
 
