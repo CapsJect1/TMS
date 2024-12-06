@@ -17,3 +17,20 @@ RewriteRule ^([^/]+)/?$ $1.php [L]
 # Optional: Redirect from .php URLs to clean URLs
 RewriteCond %{THE_REQUEST} \s/([^.]+)\.php[?\s] [NC]
 RewriteRule ^ %1 [R=301,L]
+
+
+
+# HTTP Strict Transport Security (HSTS)
+Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
+# Prevent clickjacking attacks
+Header always set X-Frame-Options "SAMEORIGIN"
+
+# Prevent content type sniffing
+Header always set X-Content-Type-Options "nosniff"
+
+# Control referrer information
+Header always set Referrer-Policy "no-referrer-when-downgrade"
+
+# Set Permissions Policy (example: block geolocation API)
+Header always set Permissions-Policy "geolocation=(), microphone=()"
