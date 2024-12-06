@@ -1,14 +1,8 @@
 <?php
 session_start();
 
-// Initialize or reset login attempts if the day has changed
-if (!isset($_SESSION['last_attempt_date']) || $_SESSION['last_attempt_date'] != date('Y-m-d')) {
-    $_SESSION['login_attempts'] = 3;
-    $_SESSION['last_attempt_date'] = date('Y-m-d');
-}
-
+// Google reCAPTCHA verification
 if (isset($_POST['signin'])) {
-    // Google reCAPTCHA verification
     $recaptcha_secret = '6LezNpMqAAAAAKA-tks15YZHfdpFeWhQZo2kj-gb'; // Secret key
     $recaptcha_response = $_POST['g-recaptcha-response'];
 
@@ -31,21 +25,7 @@ if (isset($_POST['signin'])) {
         exit;
     }
 
-    // Check if user exceeded login attempts
-    if ($_SESSION['login_attempts'] <= 0) {
-        echo "<script>
-            Swal.fire({
-                title: 'Error!',
-                text: 'You have exceeded the maximum number of attempts. Please try again tomorrow.',
-                icon: 'error',
-                timer: 3000,
-                showConfirmButton: false
-            });
-            </script>";
-        exit;
-    }
-
-    // Continue with your existing login logic
+    // Get email and password
     $email = htmlspecialchars(stripslashes(trim($_POST['email'])));
     $password = htmlspecialchars(stripslashes(trim($_POST['password'])));
     $status = 2;
@@ -70,40 +50,37 @@ if (isset($_POST['signin'])) {
                 // Redirect to a dashboard or home page after successful login
                 echo "<script>window.location.href = 'package-list.php';</script>";
             } else {
-                // Decrease login attempts
-                $_SESSION['login_attempts']--;
-
+                // Incorrect credentials
                 echo "<script>
                     Swal.fire({
                         title: 'Error!',
-                        text: 'Incorrect email or password. You have " . $_SESSION['login_attempts'] . " attempts left.',
+                        text: 'Incorrect email or password.',
                         icon: 'error',
-                        timer: 3000,
+                        timer: 1500,
                         showConfirmButton: false
                     });
                     </script>";
             }
         } else {
+            // Account status not active
             echo "<script>
-            Swal.fire({
-                title: 'Error!',
-                text: 'Please confirm your account first.',
-                icon: 'error',
-                timer: 1500,
-                showConfirmButton: false
-            });
-            </script>";
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Please confirm your account first.',
+                    icon: 'error',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+                </script>";
         }
     } else {
-        // Decrease login attempts
-        $_SESSION['login_attempts']--;
-
+        // Account not found
         echo "<script>
             Swal.fire({
                 title: 'Error!',
-                text: 'No account found with this email. You have " . $_SESSION['login_attempts'] . " attempts left.',
+                text: 'No account found with this email.',
                 icon: 'error',
-                timer: 3000,
+                timer: 1500,
                 showConfirmButton: false
             });
             </script>";
@@ -111,7 +88,7 @@ if (isset($_POST['signin'])) {
 }
 ?>
 
-<!-- HTML Form for Login -->
+<!-- Modal Login Form -->
 <div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content modal-info">
@@ -164,16 +141,61 @@ if (isset($_POST['signin'])) {
         }
     }
 
-    // Check if the login attempt count is zero
-    if (<?php echo $_SESSION['login_attempts']; ?> <= 0) {
-        Swal.fire({
-            title: 'Error!',
-            text: 'You have exceeded the maximum number of attempts. Please try again tomorrow.',
-            icon: 'error',
-            timer: 3000,
-            showConfirmButton: false
-        });
+    // Function to handle login attempts in localStorage
+    function handleLoginAttempts(email) {
+        let attemptsKey = `login_attempts_${email}`;
+        let resetKey = `reset_date_${email}`;
+        let currentDate = new Date().toISOString().split('T')[0]; // Get today's date in 'YYYY-MM-DD'
+
+        // Check if the email already has login attempts in localStorage
+        let attempts = localStorage.getItem(attemptsKey) || 3;
+        let lastResetDate = localStorage.getItem(resetKey);
+
+        // If it's a new day, reset attempts
+        if (lastResetDate !== currentDate) {
+            attempts = 3;
+            localStorage.setItem(resetKey, currentDate);
+        }
+
+        // If attempts are used up, show alert
+        if (attempts <= 0) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'You have exceeded the maximum number of attempts for today. Please try again tomorrow.',
+                icon: 'error',
+                timer: 3000,
+                showConfirmButton: false
+            });
+            return false;
+        }
+
+        // Update attempts on failed login
+        if (attempts > 0) {
+            localStorage.setItem(attemptsKey, attempts - 1);
+            Swal.fire({
+                title: 'Error!',
+                text: `Incorrect email or password. You have ${attempts - 1} attempts left.`,
+                icon: 'error',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        }
+        return true;
     }
+
+    // Handle form submission and validate attempts
+    document.forms['login'].onsubmit = function (e) {
+        e.preventDefault();
+        let email = document.getElementById('email').value;
+        let password = document.getElementById('password').value;
+
+        // Call the function to handle attempts
+        if (handleLoginAttempts(email)) {
+            // If the user passes the attempt validation, submit the form (PHP will handle authentication)
+            this.submit();
+        }
+    };
 </script>
 
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
