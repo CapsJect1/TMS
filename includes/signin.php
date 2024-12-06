@@ -1,6 +1,12 @@
 <?php
 session_start();
 
+// Initialize or reset login attempts if the day has changed
+if (!isset($_SESSION['last_attempt_date']) || $_SESSION['last_attempt_date'] != date('Y-m-d')) {
+    $_SESSION['login_attempts'] = 3;
+    $_SESSION['last_attempt_date'] = date('Y-m-d');
+}
+
 if (isset($_POST['signin'])) {
     // Google reCAPTCHA verification
     $recaptcha_secret = '6LezNpMqAAAAAKA-tks15YZHfdpFeWhQZo2kj-gb'; // Secret key
@@ -19,6 +25,20 @@ if (isset($_POST['signin'])) {
                 text: 'Please complete the reCAPTCHA verification.',
                 icon: 'error',
                 timer: 1500,
+                showConfirmButton: false
+            });
+            </script>";
+        exit;
+    }
+
+    // Check if user exceeded login attempts
+    if ($_SESSION['login_attempts'] <= 0) {
+        echo "<script>
+            Swal.fire({
+                title: 'Error!',
+                text: 'You have exceeded the maximum number of attempts. Please try again tomorrow.',
+                icon: 'error',
+                timer: 3000,
                 showConfirmButton: false
             });
             </script>";
@@ -50,12 +70,15 @@ if (isset($_POST['signin'])) {
                 // Redirect to a dashboard or home page after successful login
                 echo "<script>window.location.href = 'package-list.php';</script>";
             } else {
+                // Decrease login attempts
+                $_SESSION['login_attempts']--;
+
                 echo "<script>
                     Swal.fire({
                         title: 'Error!',
-                        text: 'Incorrect email or password',
+                        text: 'Incorrect email or password. You have " . $_SESSION['login_attempts'] . " attempts left.',
                         icon: 'error',
-                        timer: 1500,
+                        timer: 3000,
                         showConfirmButton: false
                     });
                     </script>";
@@ -64,22 +87,23 @@ if (isset($_POST['signin'])) {
             echo "<script>
             Swal.fire({
                 title: 'Error!',
-                text: 'Please confirm your account first',
+                text: 'Please confirm your account first.',
                 icon: 'error',
                 timer: 1500,
                 showConfirmButton: false
             });
             </script>";
         }
-
-        exit;
     } else {
+        // Decrease login attempts
+        $_SESSION['login_attempts']--;
+
         echo "<script>
             Swal.fire({
                 title: 'Error!',
-                text: 'Please confirm your account first',
+                text: 'No account found with this email. You have " . $_SESSION['login_attempts'] . " attempts left.',
                 icon: 'error',
-                timer: 1500,
+                timer: 3000,
                 showConfirmButton: false
             });
             </script>";
@@ -102,9 +126,9 @@ if (isset($_POST['signin'])) {
                             <form method="post" name="login">
                                 <h3>Sign in with your account</h3>
                                 <input type="text" name="email" id="email" placeholder="Enter your Email" required="">
+
                                 <div style="position: relative;">
-                                    <input type="password" name="password" id="password" placeholder="Password" value=""
-                                        required="">
+                                    <input type="password" name="password" id="password" placeholder="Password" value="" required="">
                                     <i class="fa fa-eye" id="show-pass2" style="position: absolute; top: 0; right: 0; margin: 35px 10px 0 0;"></i>
                                 </div>
                                 <h4><a href="forgot-password.php">Forgot password</a></h4>
@@ -125,17 +149,30 @@ if (isset($_POST['signin'])) {
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
     let showPass2 = document.getElementById('show-pass2');
     showPass2.onclick = () => {
         let passwordInp = document.forms['login']['password'];
         if (passwordInp.getAttribute('type') == 'password') {
-            showPass2.classList.replace('fa-eye', 'fa-eye-slash')
-            passwordInp.setAttribute('type', 'text')
+            showPass2.classList.replace('fa-eye', 'fa-eye-slash');
+            passwordInp.setAttribute('type', 'text');
         } else {
-            showPass2.classList.replace('fa-eye-slash', 'fa-eye')
-            passwordInp.setAttribute('type', 'password')
+            showPass2.classList.replace('fa-eye-slash', 'fa-eye');
+            passwordInp.setAttribute('type', 'password');
         }
+    }
+
+    // Check if the login attempt count is zero
+    if (<?php echo $_SESSION['login_attempts']; ?> <= 0) {
+        Swal.fire({
+            title: 'Error!',
+            text: 'You have exceeded the maximum number of attempts. Please try again tomorrow.',
+            icon: 'error',
+            timer: 3000,
+            showConfirmButton: false
+        });
     }
 </script>
 
