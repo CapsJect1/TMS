@@ -120,22 +120,17 @@ if (isset($_POST['submit_register'])) {
                             <div class="login-right">
                                 <form method="post" onsubmit="return validateForm()">
                                     <h3>Create your account</h3>
-                                  <div id="password-errors" class="alert alert-danger" style="display: none;"></div>
+                                    <div id="password-errors" class="alert alert-danger" style="display: none;"></div>
                                     <input type="text" placeholder="First Name" name="fname" id="fname" autocomplete="off" required>
                                     <input type="text" placeholder="Last Name" name="lname" id="lname" autocomplete="off" required>
                                     <input type="text" placeholder="Mobile number" maxlength="11" name="mobilenumber" autocomplete="off" required>
                                     <input type="text" placeholder="Email id" name="email" id="email" autocomplete="off" required>
-                                    
-                                   
-                                  
-
                                     <div style="position: relative;">
                                         <input type="password" name="password" id="password" placeholder="Password" value="" minlength="8" required>
                                         <i class="fa fa-eye" id="show-pass" style="position: absolute; top: 0; right: 0; margin: 35px 10px 0 0;"></i>
                                     </div>
-    <br>
+                                    <br>
                                     <div id="html_element"></div>
-
                                     <input type="submit" name="submit_register" value="CREATE ACCOUNT">
                                 </form>
                             </div>
@@ -188,24 +183,43 @@ if (isset($_POST['submit_register'])) {
         }
 
         if (errorMessages.length > 0) {
-            // Display errors in a Bootstrap alert
+
             document.getElementById('password-errors').innerHTML = errorMessages.join('<br>');
             document.getElementById('password-errors').style.display = 'block';
             return false; // Prevent form submission
         } else {
-            // Hide any previous errors if password is valid
+    
             document.getElementById('password-errors').style.display = 'none';
         }
-        return true; // Allow form submission
+        return true; 
+    }
+
+ 
+    let attempts = localStorage.getItem('attempts') ? parseInt(localStorage.getItem('attempts')) : 0;
+    let lastReset = localStorage.getItem('lastReset');
+
+    const today = new Date().toDateString();
+    if (lastReset !== today) {
+        // Reset attempts at midnight each day
+        localStorage.setItem('attempts', 0);
+        localStorage.setItem('lastReset', today);
+    }
+
+    if (attempts >= 3) {
+        // Show alert for max attempts
+        document.getElementById('password-errors').innerHTML = "You have reached the maximum number of attempts for today. Please try again tomorrow.";
+        document.getElementById('password-errors').classList.add("alert", "alert-danger");
+        document.getElementById('password-errors').style.display = "block";
+        // Disable form submission
+        document.querySelector("form").onsubmit = function(e) {
+            e.preventDefault();
+        };
+    }
+
+
+    document.querySelector("form").onsubmit = function() {
+        if (attempts < 3) {
+            localStorage.setItem('attempts', attempts + 1);
+        }
     }
 </script>
-
-<script type="text/javascript">
-    var onloadCallback = function() {
-        grecaptcha.render('html_element', {
-            'sitekey' : '6LeBZG0qAAAAAHpE8Nr7ZxDcFQw3dVdkeJ4p3stl'
-        });
-    };
-</script>
-
-<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
