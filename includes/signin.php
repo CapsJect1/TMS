@@ -164,7 +164,7 @@ if (isset($_POST['signin'])) {
                 text: 'You have exceeded the maximum number of attempts for today. Please try again tomorrow.',
                 icon: 'error',
                 timer: 3000,
-                showConfirmButton: false
+                showConfirmButton: true
             });
             return false;
         }
@@ -177,7 +177,7 @@ if (isset($_POST['signin'])) {
                 text: `Incorrect email or password. You have ${attempts - 1} attempts left.`,
                 icon: 'error',
                 timer: 3000,
-                showConfirmButton: false
+                showConfirmButton: true
             });
         }
         return true;
