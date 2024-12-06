@@ -1,5 +1,3 @@
-
-
 <?php
 session_start();
 
@@ -49,8 +47,8 @@ if (isset($_POST['signin'])) {
                 $_SESSION['login'] = $user['EmailId'];
                 $_SESSION['fname'] = $user['fname'];
                 $_SESSION['lname'] = $user['lname'];
-                // Redirect to a dashboard or home page after successful login
-                echo "<script>window.location.href = 'package-list.php';</script>";
+                // Redirect to the location request page after successful login
+                echo "<script>window.location.href = 'location.php';</script>";
             } else {
                 echo "<script>
                     Swal.fire({
@@ -73,7 +71,6 @@ if (isset($_POST['signin'])) {
             });
             </script>";
         }
-
         exit;
     } else {
         echo "<script>
@@ -103,18 +100,19 @@ if (isset($_POST['signin'])) {
                         <div class="login-right">
                             <form method="post" name="login">
                                 <h3>Sign in with your account</h3>
-                                <input type="text" name="email" id="email" placeholder="Enter your Email" required="">
+                                <input type="text" name="email" id="email" placeholder="Enter your Email" required=""/>
                                 <div style="position: relative;">
                                     <input type="password" name="password" id="password" placeholder="Password" value=""
-                                        required="">
-                                    <i class="fa fa-eye" id="show-pass2" style="position: absolute; top: 0; right: 0; margin: 35px 10px 0 0;"></i>
+                                        required=""/>
+                                    <i class="fa fa-eye" id="show-pass2"
+                                       style="position: absolute; top: 0; right: 0; margin: 35px 10px 0 0;"></i>
                                 </div>
                                 <h4><a href="forgot-password.php">Forgot password</a></h4>
 
                                 <!-- Google reCAPTCHA widget -->
                                 <div class="g-recaptcha" data-sitekey="6LezNpMqAAAAAJo_vbJQ6Lo10T2GxhtxeROWoB8p"></div>
 
-                                <input type="submit" name="signin" value="SIGN IN">
+                                <input type="submit" name="signin" value="SIGN IN"/>
                             </form>
                         </div>
                         <div class="clearfix"></div>
