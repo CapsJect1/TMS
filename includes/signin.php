@@ -87,7 +87,6 @@ if (isset($_POST['signin'])) {
     }
 }
 ?>
-
 <!-- Modal Login Form -->
 <div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -148,7 +147,7 @@ if (isset($_POST['signin'])) {
         let currentDate = new Date().toISOString().split('T')[0]; // Get today's date in 'YYYY-MM-DD'
 
         // Check if the email already has login attempts in localStorage
-        let attempts = localStorage.getItem(attemptsKey) || 3;
+        let attempts = localStorage.getItem(attemptsKey) || 3; // Default to 3 if not set
         let lastResetDate = localStorage.getItem(resetKey);
 
         // If it's a new day, reset attempts
@@ -164,7 +163,7 @@ if (isset($_POST['signin'])) {
                 text: 'You have exceeded the maximum number of attempts for today. Please try again tomorrow.',
                 icon: 'error',
                 timer: 3000,
-                showConfirmButton: true
+                showConfirmButton: false
             });
             return false;
         }
@@ -177,7 +176,7 @@ if (isset($_POST['signin'])) {
                 text: `Incorrect email or password. You have ${attempts - 1} attempts left.`,
                 icon: 'error',
                 timer: 3000,
-                showConfirmButton: true
+                showConfirmButton: false
             });
         }
         return true;
