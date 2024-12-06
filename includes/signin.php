@@ -14,7 +14,7 @@ if (isset($_POST['signin'])) {
     $password = htmlspecialchars(stripslashes(trim($_POST['password']))); 
     $status = 2; 
     $sql = "SELECT id, FullName, EmailId, fname, lname, Password, Status FROM tblusers WHERE EmailId=:email AND Status = :stat"; 
-    $query = $dbh->prepare($sql); 
+    $query=$dbh->prepare($sql); 
     $query->bindParam(':email', $email, PDO::PARAM_STR); 
     $query->bindParam(':stat', $status, PDO::PARAM_INT); 
     $query->execute(); 
@@ -100,48 +100,71 @@ if (isset($_POST['signin'])) {
             }
         }
 
-        function getCurrentDate() { return new Date().toLocaleDateString(); }
-        function checkResetAttempts(email) { 
-            const lastResetDate = localStorage.getItem(`${email}_last_reset`); 
-            const currentDate = getCurrentDate(); 
-            if (lastResetDate !== currentDate) { 
-                localStorage.setItem(`${email}_attempts`, 3); 
-                localStorage.setItem(`${email}_last_reset`, currentDate); 
-            }
+        // Utility function to get current date
+        function getCurrentDate() {
+            return new Date().toLocaleDateString();
         }
-        function getRemainingAttempts(email) { return localStorage.getItem(`${email}_attempts`) || 3; }
-        function decreaseAttempts(email) { 
-            let attempts = getRemainingAttempts(email); 
-            if (attempts > 0) { 
-                attempts--; 
-                localStorage.setItem(`${email}_attempts`, attempts); 
-            } 
-            return attempts; 
-        }
-        function handleLoginAttempt(email, password) { 
-            checkResetAttempts(email); 
-            const remainingAttempts = getRemainingAttempts(email); 
-            if (remainingAttempts <= 0) { 
-                alert("You have reached the maximum login attempts for today. Please try again tomorrow.");
-                return false; 
-            } 
-            const loginSuccessful = false; 
-            if (loginSuccessful) { 
-                localStorage.setItem(`${email}_attempts`, 3); 
-                return true; 
-            } else { 
-                const remainingAfterFailedLogin = decreaseAttempts(email); 
-                alert(`Incorrect credentials! You have ${remainingAfterFailedLogin} attempts remaining.`); 
-                return false; 
+
+        // Function to check/reset attempts for a specific email
+        function checkResetAttempts(email) {
+            const lastResetDate = localStorage.getItem(`${email}_last_reset`);
+            const currentDate = getCurrentDate();
+            if (lastResetDate !== currentDate) {
+                localStorage.setItem(`${email}_attempts`, 3); // Reset attempts to 3
+                localStorage.setItem(`${email}_last_reset`, currentDate); // Update reset date
             }
         }
 
-        document.querySelector('form[name="login"]').addEventListener('submit', function(e) { 
-            e.preventDefault(); 
-            const email = document.querySelector('input[name="email"]').value; 
-            const password = document.querySelector('input[name="password"]').value; 
-            if (handleLoginAttempt(email, password)) { 
-                this.submit(); 
+        // Function to get remaining attempts for a specific email
+        function getRemainingAttempts(email) {
+            return localStorage.getItem(`${email}_attempts`) || 3; // Default to 3 attempts if not set
+        }
+
+        // Function to decrease attempts after failed login
+        function decreaseAttempts(email) {
+            let attempts = getRemainingAttempts(email);
+            if (attempts > 0) {
+                attempts--;
+                localStorage.setItem(`${email}_attempts`, attempts);
+            }
+            return attempts;
+        }
+
+        // Function to handle login attempts
+        function handleLoginAttempt(email, password) {
+            checkResetAttempts(email); // Check if attempts need to be reset
+
+            const remainingAttempts = getRemainingAttempts(email);
+            if (remainingAttempts <= 0) {
+                alert("You have reached the maximum login attempts for today. Please try again tomorrow.");
+                return false; // Prevent login
+            }
+
+            // Proceed with your PHP backend authentication here
+            const loginSuccessful = false; // Replace with your actual login check logic
+
+            if (loginSuccessful) {
+                // Reset attempts on successful login
+                localStorage.setItem(`${email}_attempts`, 3);
+                return true; // Proceed to the next page or action after login
+            } else {
+                // Decrease attempts on failed login
+                const remainingAfterFailedLogin = decreaseAttempts(email);
+                alert(`Incorrect credentials! You have ${remainingAfterFailedLogin} attempts remaining.`);
+                return false; // Prevent login
+            }
+        }
+
+        // Listen for form submit and handle login attempt
+        document.querySelector('form[name="login"]').addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent the form from submitting normally
+
+            const email = document.querySelector('input[name="email"]').value;
+            const password = document.querySelector('input[name="password"]').value;
+
+            if (handleLoginAttempt(email, password)) {
+                // If login was successful, submit the form or redirect
+                this.submit(); // Or perform your actual login logic
             }
         });
     </script>
