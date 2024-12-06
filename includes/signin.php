@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-// Google reCAPTCHA verification
 if (isset($_POST['signin'])) {
+    // Google reCAPTCHA verification
     $recaptcha_secret = '6LezNpMqAAAAAKA-tks15YZHfdpFeWhQZo2kj-gb'; // Secret key
     $recaptcha_response = $_POST['g-recaptcha-response'];
 
@@ -25,7 +25,7 @@ if (isset($_POST['signin'])) {
         exit;
     }
 
-    // Get email and password
+    // Continue with your existing login logic
     $email = htmlspecialchars(stripslashes(trim($_POST['email'])));
     $password = htmlspecialchars(stripslashes(trim($_POST['password'])));
     $status = 2;
@@ -50,11 +50,10 @@ if (isset($_POST['signin'])) {
                 // Redirect to a dashboard or home page after successful login
                 echo "<script>window.location.href = 'package-list.php';</script>";
             } else {
-                // Incorrect credentials
                 echo "<script>
                     Swal.fire({
                         title: 'Error!',
-                        text: 'Incorrect email or password.',
+                        text: 'Incorrect email or password',
                         icon: 'error',
                         timer: 1500,
                         showConfirmButton: false
@@ -62,23 +61,23 @@ if (isset($_POST['signin'])) {
                     </script>";
             }
         } else {
-            // Account status not active
             echo "<script>
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Please confirm your account first.',
-                    icon: 'error',
-                    timer: 1500,
-                    showConfirmButton: false
-                });
-                </script>";
+            Swal.fire({
+                title: 'Error!',
+                text: 'Please confirm your account first',
+                icon: 'error',
+                timer: 1500,
+                showConfirmButton: false
+            });
+            </script>";
         }
+
+        exit;
     } else {
-        // Account not found
         echo "<script>
             Swal.fire({
                 title: 'Error!',
-                text: 'No account found with this email.',
+                text: 'Please confirm your account first',
                 icon: 'error',
                 timer: 1500,
                 showConfirmButton: false
@@ -87,7 +86,8 @@ if (isset($_POST['signin'])) {
     }
 }
 ?>
-<!-- Modal Login Form -->
+
+<!-- HTML Form for Login -->
 <div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content modal-info">
@@ -102,9 +102,9 @@ if (isset($_POST['signin'])) {
                             <form method="post" name="login">
                                 <h3>Sign in with your account</h3>
                                 <input type="text" name="email" id="email" placeholder="Enter your Email" required="">
-
                                 <div style="position: relative;">
-                                    <input type="password" name="password" id="password" placeholder="Password" value="" required="">
+                                    <input type="password" name="password" id="password" placeholder="Password" value=""
+                                        required="">
                                     <i class="fa fa-eye" id="show-pass2" style="position: absolute; top: 0; right: 0; margin: 35px 10px 0 0;"></i>
                                 </div>
                                 <h4><a href="forgot-password.php">Forgot password</a></h4>
@@ -125,76 +125,18 @@ if (isset($_POST['signin'])) {
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 <script>
     let showPass2 = document.getElementById('show-pass2');
     showPass2.onclick = () => {
         let passwordInp = document.forms['login']['password'];
         if (passwordInp.getAttribute('type') == 'password') {
-            showPass2.classList.replace('fa-eye', 'fa-eye-slash');
-            passwordInp.setAttribute('type', 'text');
+            showPass2.classList.replace('fa-eye', 'fa-eye-slash')
+            passwordInp.setAttribute('type', 'text')
         } else {
-            showPass2.classList.replace('fa-eye-slash', 'fa-eye');
-            passwordInp.setAttribute('type', 'password');
+            showPass2.classList.replace('fa-eye-slash', 'fa-eye')
+            passwordInp.setAttribute('type', 'password')
         }
     }
-
-    // Function to handle login attempts in localStorage
-    function handleLoginAttempts(email) {
-        let attemptsKey = `login_attempts_${email}`;
-        let resetKey = `reset_date_${email}`;
-        let currentDate = new Date().toISOString().split('T')[0]; // Get today's date in 'YYYY-MM-DD'
-
-        // Check if the email already has login attempts in localStorage
-        let attempts = localStorage.getItem(attemptsKey) || 3; // Default to 3 if not set
-        let lastResetDate = localStorage.getItem(resetKey);
-
-        // If it's a new day, reset attempts
-        if (lastResetDate !== currentDate) {
-            attempts = 3;
-            localStorage.setItem(resetKey, currentDate);
-        }
-
-        // If attempts are used up, show alert
-        if (attempts <= 0) {
-            Swal.fire({
-                title: 'Error!',
-                text: 'You have exceeded the maximum number of attempts for today. Please try again tomorrow.',
-                icon: 'error',
-                timer: 3000,
-                showConfirmButton: false
-            });
-            return false;
-        }
-
-        // Update attempts on failed login
-        if (attempts > 0) {
-            localStorage.setItem(attemptsKey, attempts - 1);
-            Swal.fire({
-                title: 'Error!',
-                text: `Incorrect email or password. You have ${attempts - 1} attempts left.`,
-                icon: 'error',
-                timer: 3000,
-                showConfirmButton: false
-            });
-        }
-        return true;
-    }
-
-    // Handle form submission and validate attempts
-    document.forms['login'].onsubmit = function (e) {
-        e.preventDefault();
-        let email = document.getElementById('email').value;
-        let password = document.getElementById('password').value;
-
-        // Call the function to handle attempts
-        if (handleLoginAttempts(email)) {
-            // If the user passes the attempt validation, submit the form (PHP will handle authentication)
-            this.submit();
-        }
-    };
 </script>
 
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
