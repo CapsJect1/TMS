@@ -1,8 +1,8 @@
 RewriteEngine On
 
-# Redirect /mcc-admin to /admin/index.php
-RewriteCond %{REQUEST_URI} ^/mcc-admin$
-RewriteRule ^mcc-admin$ /admin/index.php [R=301,L]
+# Redirect /mcc-admin.php to /admin/
+RewriteCond %{REQUEST_URI} ^/mcc-admin\.php$
+RewriteRule ^mcc-admin\.php$ /admin/ [R=301,L]
 
 # Redirect /admin to /index.php
 RewriteCond %{REQUEST_URI} ^/admin$
