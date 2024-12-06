@@ -1,14 +1,14 @@
 RewriteEngine On
 
-# Redirect /mcc-admin to /admin
+# Redirect /mcc-admin to /admin/index.php
 RewriteCond %{REQUEST_URI} ^/mcc-admin$
-RewriteRule ^mcc-admin$ /admin [R=301,L]
+RewriteRule ^mcc-admin$ /admin/index.php [R=301,L]
 
 # Redirect /admin to /index.php
 RewriteCond %{REQUEST_URI} ^/admin$
 RewriteRule ^admin$ /index.php [R=301,L]
 
-# Optional: Rewrite clean URLs (without .php)
+# Optional: Remove .php extension for clean URLs
 RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^([^/]+)/?$ $1.php [L]
 
