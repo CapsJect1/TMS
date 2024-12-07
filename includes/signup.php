@@ -118,7 +118,7 @@ if (isset($_POST['submit_register'])) {
                     <div class="login-grids"> 
                         <div class="login">
                             <div class="login-right">
-                                <form method="post" onsubmit="return validateForm()">
+                                <form method="post" id="register_account" onsubmit="return validateForm()">
                                     <h3>Create your account</h3>
                                   <div id="password-errors" class="alert alert-danger" style="display: none;"></div>
                                     <input type="text" placeholder="First Name" name="fname" id="fname" autocomplete="off" required>
@@ -201,7 +201,7 @@ if (isset($_POST['submit_register'])) {
 
     let showPass1 = document.getElementById('show-pass');
     showPass1.onclick = () => {
-        let passwordInp = document.forms['login']['password'];
+        let passwordInp = document.forms['register_account']['password'];
         if (passwordInp.getAttribute('type') == 'password') {
             showPass1.classList.replace('fa-eye', 'fa-eye-slash')
             passwordInp.setAttribute('type', 'text')
