@@ -57,7 +57,7 @@ include ('includes/config.php');
             $mail->setFrom('santafe@gmail.com', 'TMS Santa Fe');
             $mail->addAddress($email);
             $mail->Subject = "User Pin | Forgot Password";
-            $mail->Body = "Hello,\nYou are successfully registered\nIf you forgot your password you can change it using your Pin below \n PIN: $userpin \nPlease don't share your pin to others. Thank you.\nSincerely,\n Santa Fe, Cebu City,Philippines - Port";
+            $mail->Body = "Hello,\nYou are successfully registered\nIf you forgot your password you can change it using your Pin below \nPIN: $userpin \nPlease don't share your pin to others. Thank you.\nSincerely,\nSanta Fe, Cebu City,Philippines - Port";
 
             $mail->send();
 
