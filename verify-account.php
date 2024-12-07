@@ -8,19 +8,19 @@
 </head>
 <body>
 <?php
-session_start();
-include ('includes/config.php');
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\SMTP;
 
-error_reporting(E_ALL);
-
-echo "hello world";
-
 require "./phpmailer/src/Exception.php";
 require "./phpmailer/src/PHPMailer.php";
 require "./phpmailer/src/SMTP.php";
+
+error_reporting(1);
+
+session_start();
+include ('includes/config.php');
+
 
     if (isset($_GET['verification'])) {
         $email = clean($_GET['email']);
