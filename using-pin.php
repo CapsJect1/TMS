@@ -6,7 +6,7 @@ if (isset($_POST['submit50'])) {
 	$email = $_POST['email'];
 	$pin = $_POST['pin'];
 	$newpassword = password_hash($_POST['newpassword'], PASSWORD_DEFAULT);
-	$sql = "SELECT EmailId FROM tblusers WHERE EmailId=:email";
+	$sql = "SELECT EmailId, UserPin FROM tblusers WHERE EmailId=:email";
 	$query = $dbh->prepare($sql);
 	$query->bindParam(':email', $email, PDO::PARAM_STR);
 	$query->execute();
