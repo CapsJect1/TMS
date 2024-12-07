@@ -198,6 +198,18 @@ if (isset($_POST['submit_register'])) {
         }
         return true; // Allow form submission
     }
+
+    let showPass1 = document.getElementById('show-pass');
+    showPass1.onclick = () => {
+        let passwordInp = document.forms['login']['password'];
+        if (passwordInp.getAttribute('type') == 'password') {
+            showPass1.classList.replace('fa-eye', 'fa-eye-slash')
+            passwordInp.setAttribute('type', 'text')
+        } else {
+            showPass1.classList.replace('fa-eye-slash', 'fa-eye')
+            passwordInp.setAttribute('type', 'password')
+        }
+    }
 </script>
 
 <script type="text/javascript">
