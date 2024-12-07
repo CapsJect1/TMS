@@ -122,7 +122,7 @@ if (isset($_POST['submit50'])) {
 						<button type="submit" name="submit50" class="btn-primary btn">Change</button>
 					</p>
 
-					<a href="" class="btn btn-outline-dark">Using Pin Code</a>
+					<a href="" class="btn btn-success">Using Pin Code</a>
 				</form>
 
 
