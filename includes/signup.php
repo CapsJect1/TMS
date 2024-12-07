@@ -7,7 +7,7 @@ require "./phpmailer/src/Exception.php";
 require "./phpmailer/src/PHPMailer.php";
 require "./phpmailer/src/SMTP.php";
 
-error_reporting(0);
+// error_reporting(E_ALL);
 
 if (isset($_POST['submit_register'])) {
 
