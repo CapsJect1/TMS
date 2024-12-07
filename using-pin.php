@@ -12,7 +12,7 @@ if (isset($_POST['submit50'])) {
 	$query->execute();
 	$results = $query->fetchAll(PDO::FETCH_OBJ);
 	if ($query->rowCount() > 0) {
-		if (password_verify($pin, $results['UserPin'])) {
+		if (password_verify($pin, $results->UserPin)) {
             $con = "UPDATE tblusers set Password=:newpassword where EmailId=:email";
             $chngpwd1 = $dbh->prepare($con);
             $chngpwd1->bindParam(':email', $email, PDO::PARAM_STR);
