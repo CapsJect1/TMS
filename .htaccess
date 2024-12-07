@@ -1,6 +1,22 @@
 # Enable the RewriteEngine
 RewriteEngine On
 
+# Redirect all HTTP requests to HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+# Enable HTTP Strict Transport Security (HSTS)
+Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+
+# Set X-Frame-Options to prevent clickjacking
+Header always set X-Frame-Options "DENY"
+
+# Set Referrer-Policy
+Header always set Referrer-Policy "no-referrer"
+
+# Set Permissions-Policy
+Header always set Permissions-Policy "geolocation=(self), microphone=(), camera=()"
+
 # Redirect requests to the root URL to index.php
 RewriteRule ^$ index.php [L]
 
@@ -8,9 +24,8 @@ RewriteRule ^$ index.php [L]
 RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^([^/]+)/?$ $1.php [L]
 
-# Redirect requests with .php extension to the clean URL
-RewriteCond %{THE_REQUEST} \s([^.]+)\.php[\s?] [NC]
-RewriteRule ^ %1 [R=301,L]
+# Redirect from /admin/index to /admin/
+RewriteRule ^admin/index/?$ /admin/ [R=303,L]
 
 # Redirect from /admin/index to /admin/
 RewriteRule ^admin/index/?$ /admin/ [R=303,L]
