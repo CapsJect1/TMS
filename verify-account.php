@@ -16,6 +16,8 @@ use PHPMailer\PHPMailer\SMTP;
 
 error_reporting(E_ALL);
 
+echo "hello world";
+
 require "./phpmailer/src/Exception.php";
 require "./phpmailer/src/PHPMailer.php";
 require "./phpmailer/src/SMTP.php";
