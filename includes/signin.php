@@ -19,7 +19,8 @@ if (isset($_POST['signin'])) {
                 timer: 1500,
                 showConfirmButton: false
             });
-            </script>";            
+            </script>";
+            echo "<script>window.location.href = 'index.php';</script>";            
         }
 
     }
@@ -43,11 +44,9 @@ if (isset($_POST['signin'])) {
                 icon: 'error',
                 timer: 1500,
                 showConfirmButton: false
-            }).then(function(){
-                        window.location.href = "index.php"
-                    });
+            });
             </script>";
-        exit;
+            echo "<script>window.location.href = 'index.php';</script>";
     }
 
     // Continue with your existing login logic
@@ -82,11 +81,9 @@ if (isset($_POST['signin'])) {
                         icon: 'error',
                         timer: 1500,
                         showConfirmButton: false
-                    }).then(function(){
-                        window.location.href = "index.php"
                     });
                     </script>";
-                    
+                    echo "<script>window.location.href = 'index.php';</script>";
             }
         } else {
             echo "<script>
@@ -96,9 +93,7 @@ if (isset($_POST['signin'])) {
                 icon: 'error',
                 timer: 1500,
                 showConfirmButton: false
-            }).then(function(){
-                        window.location.href = "index.php"
-                    });
+            });
             </script>";
             if (!isset($_SESSION['ERROR_LOGIN'])) {
                 $_SESSION['ERROR_LOGIN'] = [
@@ -108,6 +103,7 @@ if (isset($_POST['signin'])) {
             }else{
                 $_SESSION['ERROR_LOGIN']['count'] += $_SESSION['ERROR_LOGIN'];
             }
+            echo "<script>window.location.href = 'index.php';</script>";
 
         }
 
@@ -120,9 +116,7 @@ if (isset($_POST['signin'])) {
                 icon: 'error',
                 timer: 1500,
                 showConfirmButton: false
-            }).then(function(){
-                        window.location.href = "index.php"
-                    });
+            });
             </script>";
     }
 }
