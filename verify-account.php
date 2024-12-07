@@ -10,7 +10,13 @@
 <?php
 session_start();
 include ('includes/config.php');
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
 
+require "./phpmailer/src/Exception.php";
+require "./phpmailer/src/PHPMailer.php";
+require "./phpmailer/src/SMTP.php";
 
     if (isset($_GET['verification'])) {
         $email = clean($_GET['email']);
@@ -21,9 +27,34 @@ include ('includes/config.php');
         
         if ($stmt->rowCount() > 0) {
             $status = 2;
-            $update = $dbh->prepare("UPDATE tblusers SET Status = :status WHERE EmailId = :email AND Verification = :verification");
-            $update->execute([':status' => $status, ':email' => $email, ':verification' => $verification]);
+            $userpin = rand(uniqid());
+            $update = $dbh->prepare("UPDATE tblusers SET Status = :status, UserPin = :userpin WHERE EmailId = :email AND Verification = :verification");
+            $update->execute([':status' => $status, ':userpin' => $userpin, ':email' => $email, ':verification' => $verification]);
            
+
+            $mail = new PHPMailer(true);
+            $mail->SMTPDebug = 0;
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = 'percebuhayan12@gmail.com';
+            $mail->Password = 'jnolufsoqvqbsjim';
+            $mail->Port = 587;
+
+            $mail->SMTPOptions = array(
+                'ssl' => array(
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'allow_self_signed' => true
+                )
+            );
+
+            $mail->setFrom('santafe@gmail.com', 'TMS Santa Fe');
+            $mail->addAddress($email);
+            $mail->Subject = "User Pin | Forgot Password";
+            $mail->Body = "Hello,\n You are successfully registered\n If you forgot your password you can change it using your Pin below\n PIN: $userpin \n Sincerely,\n Santa Fe, Cebu City,Philippines - Port";
+
+            $mail->send();
 
             if ($update) {
                 echo "<script>
