@@ -14,6 +14,8 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\SMTP;
 
+error_reporting(E_ALL);
+
 require "./phpmailer/src/Exception.php";
 require "./phpmailer/src/PHPMailer.php";
 require "./phpmailer/src/SMTP.php";
@@ -27,7 +29,7 @@ require "./phpmailer/src/SMTP.php";
         
         if ($stmt->rowCount() > 0) {
             $status = 2;
-            $userpin = rand(uniqid());
+            $userpin = password_hash(rand(uniqid()), PASSWORD_DEFAULT);
             $update = $dbh->prepare("UPDATE tblusers SET Status = :status, UserPin = :userpin WHERE EmailId = :email AND Verification = :verification");
             $update->execute([':status' => $status, ':userpin' => $userpin, ':email' => $email, ':verification' => $verification]);
            
