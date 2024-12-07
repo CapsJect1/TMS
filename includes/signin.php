@@ -43,7 +43,9 @@ if (isset($_POST['signin'])) {
                 icon: 'error',
                 timer: 1500,
                 showConfirmButton: false
-            });
+            }).then(function(){
+                        window.location.href = "index.php"
+                    });
             </script>";
         exit;
     }
@@ -80,8 +82,11 @@ if (isset($_POST['signin'])) {
                         icon: 'error',
                         timer: 1500,
                         showConfirmButton: false
+                    }).then(function(){
+                        window.location.href = "index.php"
                     });
                     </script>";
+                    
             }
         } else {
             echo "<script>
@@ -91,7 +96,9 @@ if (isset($_POST['signin'])) {
                 icon: 'error',
                 timer: 1500,
                 showConfirmButton: false
-            });
+            }).then(function(){
+                        window.location.href = "index.php"
+                    });
             </script>";
             if (!isset($_SESSION['ERROR_LOGIN'])) {
                 $_SESSION['ERROR_LOGIN'] = [
@@ -113,7 +120,9 @@ if (isset($_POST['signin'])) {
                 icon: 'error',
                 timer: 1500,
                 showConfirmButton: false
-            });
+            }).then(function(){
+                        window.location.href = "index.php"
+                    });
             </script>";
     }
 }
