@@ -4,24 +4,24 @@ error_reporting(0);
 include('includes/config.php');
 if (isset($_POST['submit50'])) {
 	$email = $_POST['email'];
-	$mobile = $_POST['mobile'];
+	$pin = $_POST['pin'];
 	$newpassword = password_hash($_POST['newpassword'], PASSWORD_DEFAULT);
-	$sql = "SELECT EmailId FROM tblusers WHERE EmailId=:email and MobileNumber=:mobile";
+	$sql = "SELECT EmailId FROM tblusers WHERE EmailId=:email and UserPin=:pin";
 	$query = $dbh->prepare($sql);
 	$query->bindParam(':email', $email, PDO::PARAM_STR);
-	$query->bindParam(':mobile', $mobile, PDO::PARAM_STR);
+	$query->bindParam(':pin', $pin, PDO::PARAM_STR);
 	$query->execute();
 	$results = $query->fetchAll(PDO::FETCH_OBJ);
 	if ($query->rowCount() > 0) {
-		$con = "UPDATE tblusers set Password=:newpassword where EmailId=:email and MobileNumber=:mobile";
+		$con = "UPDATE tblusers set Password=:newpassword where EmailId=:email and UserPin=:pin";
 		$chngpwd1 = $dbh->prepare($con);
 		$chngpwd1->bindParam(':email', $email, PDO::PARAM_STR);
-		$chngpwd1->bindParam(':mobile', $mobile, PDO::PARAM_STR);
+		$chngpwd1->bindParam(':pin', $pin, PDO::PARAM_STR);
 		$chngpwd1->bindParam(':newpassword', $newpassword, PDO::PARAM_STR);
 		$chngpwd1->execute();
 		// $msg = "Your Password succesfully changed";
 	} else {
-		$error = "Email id or Mobile no is invalid";
+		$error = "Email id or PIN is invalid";
 	}
 }
 
