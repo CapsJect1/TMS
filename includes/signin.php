@@ -1,10 +1,16 @@
 <?php
 session_start();
 
+if (isset($_SESSION['ERROR_LOGIN'])) {
+    if ($_SESSION['date'] == date('Y-md-d')) {
+        unset($_SESSION['ERROR_LOGIN']);
+    }
+}
+
 if (isset($_POST['signin'])) {
     if (isset($_SESSION['ERROR_LOGIN'])) {
 
-        if ($_SESSION['ERROR_LOGIN'] >= 3) {
+        if ($_SESSION['ERROR_LOGIN']['count'] >= 3) {
             echo "<script>
             Swal.fire({
                 title: 'Error!',
@@ -88,9 +94,12 @@ if (isset($_POST['signin'])) {
             });
             </script>";
             if (!isset($_SESSION['ERROR_LOGIN'])) {
-                $_SESSION['ERROR_LOGIN'] = 1;
+                $_SESSION['ERROR_LOGIN'] = [
+                    'count' => 1,
+                    'date' => date('Y-m-d')
+                ];
             }else{
-                $_SESSION['ERROR_LOGIN'] += $_SESSION['ERROR_LOGIN'];
+                $_SESSION['ERROR_LOGIN']['count'] += $_SESSION['ERROR_LOGIN'];
             }
 
         }
