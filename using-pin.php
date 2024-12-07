@@ -12,7 +12,7 @@ if (isset($_POST['submit50'])) {
 	$query->execute();
 	$results = $query->fetch(PDO::FETCH_OBJ);
 	if ($query->rowCount() > 0) {
-        var_dump($results);
+        // var_dump($results);
 
 		if (password_verify($pin, $results->UserPin)) {
             $con = "UPDATE tblusers set Password=:newpassword where EmailId=:email";
