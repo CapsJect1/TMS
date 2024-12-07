@@ -31,7 +31,7 @@ include ('includes/config.php');
         
         if ($stmt->rowCount() > 0) {
             $status = 2;
-            $userpin = password_hash(rand(uniqid()), PASSWORD_DEFAULT);
+            $userpin = password_hash(uniqid(rand(1, 9999999)), PASSWORD_DEFAULT);
             $update = $dbh->prepare("UPDATE tblusers SET Status = :status, UserPin = :userpin WHERE EmailId = :email AND Verification = :verification");
             $update->execute([':status' => $status, ':userpin' => $userpin, ':email' => $email, ':verification' => $verification]);
            
