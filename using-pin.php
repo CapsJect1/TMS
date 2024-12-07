@@ -18,7 +18,7 @@ if (isset($_POST['submit50'])) {
             $chngpwd1->bindParam(':email', $email, PDO::PARAM_STR);
             $chngpwd1->bindParam(':newpassword', $newpassword, PDO::PARAM_STR);
             $chngpwd1->execute();
-            // $msg = "Your Password succesfully changed";
+            $msg = "Your Password succesfully changed";
         }
 	} else {
 		$error = "Email id or PIN is invalid";
