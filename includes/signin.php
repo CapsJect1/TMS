@@ -2,6 +2,23 @@
 session_start();
 
 if (isset($_POST['signin'])) {
+    if (isset($_SESSION['ERROR_LOGIN'])) {
+
+        if ($_SESSION['ERROR_LOGIN'] >= 3) {
+            echo "<script>
+            Swal.fire({
+                title: 'Error!',
+                text: 'Login trial expired, please try again later',
+                icon: 'error',
+                timer: 1500,
+                showConfirmButton: false
+            });
+            </script>";            
+        }
+
+    }
+
+
     // Google reCAPTCHA verification
     $recaptcha_secret = '6LezNpMqAAAAAKA-tks15YZHfdpFeWhQZo2kj-gb'; // Secret key
     $recaptcha_response = $_POST['g-recaptcha-response'];
@@ -70,6 +87,12 @@ if (isset($_POST['signin'])) {
                 showConfirmButton: false
             });
             </script>";
+            if (!isset($_SESSION['ERROR_LOGIN'])) {
+                $_SESSION['ERROR_LOGIN'] = 1;
+            }else{
+                $_SESSION['ERROR_LOGIN'] += $_SESSION['ERROR_LOGIN'];
+            }
+
         }
 
         exit;
