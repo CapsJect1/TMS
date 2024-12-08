@@ -36,7 +36,7 @@
 				<li class="tol">Welcome :</li>
 				<li class="sig"><?php echo htmlentities($_SESSION['login']); ?></li>
 				<li class="sigi"><a href="logout.php">/ Logout</a></li>
-			</ul>
+			</ul> 
 			<div class="clearfix"></div>
 		</div>
 	</div><?php } else { ?>
