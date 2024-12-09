@@ -95,14 +95,7 @@ if (isset($_POST['login'])) {
 		color: #38AF05 !important;
 
 	}
-	.bg {
-		background-color: #38AF05 !important;
 	
-	}
-	svg {
-		background-color: #38AF05 !important;
-
-	}
 	.btn-primary1 {
 		background-color: #38AF05 !important;
 		color: white;
