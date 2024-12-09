@@ -1,223 +1,177 @@
 <?php
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\SMTP;
+session_start();
 
-require "./phpmailer/src/Exception.php";
-require "./phpmailer/src/PHPMailer.php";
-require "./phpmailer/src/SMTP.php";
-
-// error_reporting(E_ALL);
-
-if (isset($_POST['submit_register'])) {
-
-    $password = $_POST['password'];
-
-    // Server-side password validation
-    $errors = [];
-
-    // Check password length
-    if (strlen($password) < 8) {
-        $errors[] = "Password must be at least 8 characters long.";
+if (isset($_SESSION['ERROR_LOGIN'])) {
+    if ($_SESSION['date'] == date('Y-md-d')) {
+        unset($_SESSION['ERROR_LOGIN']);
     }
+}
 
-    // Check for at least one uppercase letter
-    if (!preg_match("/[A-Z]/", $password)) {
-        $errors[] = "Password must contain at least one uppercase letter.";
-    }
+if (isset($_POST['signin'])) {
+    if (isset($_SESSION['ERROR_LOGIN'])) {
 
-    // Check for at least one lowercase letter
-    if (!preg_match("/[a-z]/", $password)) {
-        $errors[] = "Password must contain at least one lowercase letter.";
-    }
-
-    // Check for at least one number
-    if (!preg_match("/[0-9]/", $password)) {
-        $errors[] = "Password must contain at least one number.";
-    }
-
-    // Check for at least one special character
-    if (!preg_match("/[!@#$%^&*(),.?\":{}|<>]/", $password)) {
-        $errors[] = "Password must contain at least one special character.";
-    }
-
-    // If there are errors, show them and prevent registration
-    if (!empty($errors)) {
-        $errorMessages = implode("<br>", $errors);
-    } else {
-        // No errors, proceed with registration
-        $verification = uniqid() . rand(100, 999999999);
-        $fname = $_POST['fname'];
-        $lname = $_POST['lname'];
-        $full = $fname . ' ' . $lname;
-        $mnumber = $_POST['mobilenumber'];
-        $email = $_POST['email'];
-        // Hash the password
-        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-
-        // Insert the user into the database
-        $sql = "INSERT INTO tblusers(FullName, fname, lname, MobileNumber, EmailId, Password, Verification) 
-                VALUES(:full, :fname, :lname, :mnumber, :email, :password, :verification)";
-        $query = $dbh->prepare($sql);
-        $query->bindParam(':full', $full, PDO::PARAM_STR);
-        $query->bindParam(':fname', $fname, PDO::PARAM_STR);
-        $query->bindParam(':lname', $lname, PDO::PARAM_STR);
-        $query->bindParam(':mnumber', $mnumber, PDO::PARAM_STR);
-        $query->bindParam(':email', $email, PDO::PARAM_STR);
-        $query->bindParam(':password', $passwordHash, PDO::PARAM_STR);
-        $query->bindParam(':verification', $verification, PDO::PARAM_STR);
-        $query->execute();
-
-        $lastInsertId = $dbh->lastInsertId();
-
-        if ($lastInsertId) {
-            // Successful registration, send verification email
-            $_SESSION['msg'] = "You are successfully registered. Please verify your account first to login.";
-
-            $mail = new PHPMailer(true);
-            $mail->SMTPDebug = 0;
-            $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
-            $mail->SMTPAuth = true;
-            $mail->Username = 'percebuhayan12@gmail.com';
-            $mail->Password = 'jnolufsoqvqbsjim';
-            $mail->Port = 587;
-
-            $mail->SMTPOptions = array(
-                'ssl' => array(
-                    'verify_peer' => false,
-                    'verify_peer_name' => false,
-                    'allow_self_signed' => true
-                )
-            );
-
-            $mail->setFrom('santafe@gmail.com', 'TMS Santa Fe');
-            $mail->addAddress($email);
-            $mail->Subject = "Email Account Verification";
-            $mail->Body = "Click this link to verify account: https://santafeport.com/verify-account.php?verification=" . $verification . "&email=" . $email;
-
-            $mail->send();
-            echo "<script>window.location.href = 'thankyou.php';</script>";
-        } else {
-            $_SESSION['msg'] = "Something went wrong. Please try again.";
-            echo "<script>window.location.href = 'thankyou.php';</script>";
+        if ($_SESSION['ERROR_LOGIN']['count'] >= 3) {
+            echo "<script>
+            Swal.fire({
+                title: 'Error!',
+                text: 'Login trial expired, please try again later',
+                icon: 'error',
+                timer: 1500,
+                showConfirmButton: false
+            });
+            </script>";
+            echo "<script>window.location.href = 'index.php';</script>";            
         }
+
+    }
+
+
+    // Google reCAPTCHA verification
+    $recaptcha_secret = '6LezNpMqAAAAAKA-tks15YZHfdpFeWhQZo2kj-gb'; // Secret key
+    $recaptcha_response = $_POST['g-recaptcha-response'];
+
+    // Make request to verify reCAPTCHA response
+    $recaptcha_verify_url = "https://www.google.com/recaptcha/api/siteverify";
+    $recaptcha_verify_response = file_get_contents($recaptcha_verify_url . "?secret=" . $recaptcha_secret . "&response=" . $recaptcha_response);
+    $recaptcha_result = json_decode($recaptcha_verify_response);
+
+    // If reCAPTCHA verification failed, show an error
+    if (!$recaptcha_result->success) {
+        echo "<script>
+            Swal.fire({
+                title: 'Error!',
+                text: 'Please complete the reCAPTCHA verification.',
+                icon: 'error',
+                timer: 1500,
+                showConfirmButton: false
+            });
+            </script>";
+            echo "<script>window.location.href = 'index.php';</script>";
+    }
+
+    // Continue with your existing login logic
+    $email = htmlspecialchars(stripslashes(trim($_POST['email'])));
+    $password = htmlspecialchars(stripslashes(trim($_POST['password'])));
+    $status = 2;
+
+    // SQL query to fetch user details based on email and password
+    $sql = "SELECT id, FullName, EmailId, fname, lname, Password, Status FROM tblusers WHERE EmailId=:email AND Status = :stat";
+    $query = $dbh->prepare($sql);
+    $query->bindParam(':email', $email, PDO::PARAM_STR);
+    $query->bindParam(':stat', $status, PDO::PARAM_INT);
+    $query->execute();
+    $user = $query->fetch(PDO::FETCH_ASSOC);
+
+    if ($query->rowCount() > 0) {
+        if ($user['Status'] == 2) {
+            // Set session variables upon successful login
+            if (password_verify($password, $user['Password'])) {
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['user_name'] = $user['FullName'];
+                $_SESSION['login'] = $user['EmailId'];
+                $_SESSION['fname'] = $user['fname'];
+                $_SESSION['lname'] = $user['lname'];
+                // Redirect to a dashboard or home page after successful login
+                echo "<script>window.location.href = 'package-list.php';</script>";
+            } else {
+                echo "<script>
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Incorrect email or password',
+                        icon: 'error',
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+                    </script>";
+                    echo "<script>window.location.href = 'index.php';</script>";
+            }
+        } else {
+            echo "<script>
+            Swal.fire({
+                title: 'Error!',
+                text: 'Please confirm your account first',
+                icon: 'error',
+                timer: 1500,
+                showConfirmButton: false
+            });
+            </script>";
+            if (!isset($_SESSION['ERROR_LOGIN'])) {
+                $_SESSION['ERROR_LOGIN'] = [
+                    'count' => 1,
+                    'date' => date('Y-m-d')
+                ];
+            }else{
+                $_SESSION['ERROR_LOGIN']['count'] += $_SESSION['ERROR_LOGIN'];
+            }
+            echo "<script>window.location.href = 'index.php';</script>";
+
+        }
+
+        exit;
+    } else {
+        echo "<script>
+            Swal.fire({
+                title: 'Error!',
+                text: 'Please confirm your account first',
+                icon: 'error',
+                timer: 1500,
+                showConfirmButton: false
+            });
+            </script>";
     }
 }
 ?>
 
-<!-- HTML Form for Registration -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<!-- HTML Form for Login -->
+<div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
+        <div class="modal-content modal-info">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
             </div>
-            <section>
-                <div class="modal-body modal-spa">
-                    <div class="login-grids"> 
-                        <div class="login">
-                            <div class="login-right">
-                                <form method="post" id="register_account" onsubmit="return validateForm()">
-                                    <h3>Create your account</h3>
-                                  <div id="password-errors" class="alert alert-danger" style="display: none;"></div>
-                                    <input type="text" placeholder="First Name" name="fname" id="fname" autocomplete="off" required>
-                                    <input type="text" placeholder="Last Name" name="lname" id="lname" autocomplete="off" required>
-                                    <input type="text" placeholder="Mobile number" maxlength="11" name="mobilenumber" autocomplete="off" required>
-                                    <input type="text" placeholder="Email id" name="email" id="email" autocomplete="off" required>
-                                    
-                                   
-                                  
+            <div class="modal-body modal-spa">
+                <div class="login-grids">
+                    <div class="login">
+                        <div class="login-right">
+                            <form method="post" name="login">
+                                <h3>Sign in with your account</h3>
+                                <input type="text" name="email" id="email" placeholder="Enter your Email" required="">
+                                <div style="position: relative;">
+                                    <input type="password" name="password" id="password" placeholder="Password" value=""
+                                        required="">
+                                    <i class="fa fa-eye" id="show-pass2" style="position: absolute; top: 0; right: 0; margin: 35px 10px 0 0;"></i>
+                                </div>
+                                <h4><a href="forgot-password.php">Forgot password</a></h4>
 
-                                    <div style="position: relative;">
-                                        <input type="password" name="password" id="password" placeholder="Password" value="" minlength="8" required>
-                                        <i class="fa fa-eye" id="show-pass" style="position: absolute; top: 0; right: 0; margin: 35px 10px 0 0;"></i>
-                                    </div>
-    <br>
-                                    <div id="html_element"></div>
+                                <!-- Google reCAPTCHA widget -->
+                                <div class="g-recaptcha" data-sitekey="6LezNpMqAAAAAJo_vbJQ6Lo10T2GxhtxeROWoB8p"></div>
 
-                                    <input type="submit" name="submit_register" value="CREATE ACCOUNT">
-                                </form>
-                            </div>
+                                <input type="submit" name="signin" value="SIGN IN">
+                            </form>
                         </div>
-                        <p>By logging in you agree to our <a href="page.php?type=terms">Terms and Conditions</a> and <a href="page.php?type=privacy">Privacy Policy</a></p>
+                        <div class="clearfix"></div>
                     </div>
+                    <p>By logging in you agree to our <a href="page.php?type=terms">Terms and Conditions</a> and <a
+                            href="page.php?type=privacy">Privacy Policy</a></p>
                 </div>
-            </section>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-    // Password validation function (Client-side)
-    function validateForm() {
-        var password = document.getElementById('password').value;
-        var errorMessages = [];
-        var regexUppercase = /[A-Z]/;
-        var regexLowercase = /[a-z]/;
-        var regexNumbers = /[0-9]/;
-        var regexSpecialChars = /[!@#$%^&*(),.?":{}|<>]/;
-
-        // First and Last Name validation: Check for numbers
-        var fname = document.getElementById('fname').value;
-        var lname = document.getElementById('lname').value;
-
-        var regexName = /^[A-Za-z]+$/;
-
-        if (!regexName.test(fname)) {
-            errorMessages.push('First Name cannot contain numbers.');
-        }
-        if (!regexName.test(lname)) {
-            errorMessages.push('Last Name cannot contain numbers.');
-        }
-
-        if (password.length < 8) {
-            errorMessages.push('Password must be at least 8 characters long.');
-        }
-        if (!regexUppercase.test(password)) {
-            errorMessages.push('Password must contain at least one uppercase letter.');
-        }
-        if (!regexLowercase.test(password)) {
-            errorMessages.push('Password must contain at least one lowercase letter.');
-        }
-        if (!regexNumbers.test(password)) {
-            errorMessages.push('Password must contain at least one number.');
-        }
-        if (!regexSpecialChars.test(password)) {
-            errorMessages.push('Password must contain at least one special character.');
-        }
-
-        if (errorMessages.length > 0) {
-            // Display errors in a Bootstrap alert
-            document.getElementById('password-errors').innerHTML = errorMessages.join('<br>');
-            document.getElementById('password-errors').style.display = 'block';
-            return false; // Prevent form submission
-        } else {
-            // Hide any previous errors if password is valid
-            document.getElementById('password-errors').style.display = 'none';
-        }
-        return true; // Allow form submission
-    }
-
-    let showPass1 = document.getElementById('show-pass');
-    showPass1.onclick = () => {
-        let passwordInp = document.forms['register_account']['password'];
+    let showPass2 = document.getElementById('show-pass2');
+    showPass2.onclick = () => {
+        let passwordInp = document.forms['login']['password'];
         if (passwordInp.getAttribute('type') == 'password') {
-            showPass1.classList.replace('fa-eye', 'fa-eye-slash')
+            showPass2.classList.replace('fa-eye', 'fa-eye-slash')
             passwordInp.setAttribute('type', 'text')
         } else {
-            showPass1.classList.replace('fa-eye-slash', 'fa-eye')
+            showPass2.classList.replace('fa-eye-slash', 'fa-eye')
             passwordInp.setAttribute('type', 'password')
         }
     }
 </script>
 
-<script type="text/javascript">
-    var onloadCallback = function() {
-        grecaptcha.render('html_element', {
-            'sitekey' : '6LeBZG0qAAAAAHpE8Nr7ZxDcFQw3dVdkeJ4p3stl'
-        });
-    };
-</script>
-
-<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
