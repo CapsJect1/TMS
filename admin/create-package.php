@@ -19,48 +19,48 @@ if (strlen($_SESSION['alogin']) == 0) {
                             <label for="packagename">Room or Resort</label>
                             <input type="text" class="form-control my-2" name="packagename" id="packagename"
                                 placeholder="Create room or resort" required>
-                            <div class="error text-danger" id="packagenameError"></div>
+                            <div class="feedback" id="packagenameFeedback"></div>
                         </div>
 
                         <div class="form-group">
                             <label for="packagetype">Package Type</label>
                             <input type="text" class="form-control my-2" name="packagetype" id="packagetype"
                                 placeholder="Package Type (e.g., Family Package / Couple Package)" required>
-                            <div class="error text-danger" id="packagetypeError"></div>
+                            <div class="feedback" id="packagetypeFeedback"></div>
                         </div>
 
                         <div class="form-group">
                             <label for="packagelocation">Package Location</label>
                             <input type="text" class="form-control my-2" name="packagelocation" id="packagelocation"
                                 placeholder="Package Location" required>
-                            <div class="error text-danger" id="packagelocationError"></div>
+                            <div class="feedback" id="packagelocationFeedback"></div>
                         </div>
 
                         <div class="form-group">
                             <label for="packageprice">Package Price in PHP</label>
                             <input type="text" class="form-control my-2" name="packageprice" id="packageprice"
                                 placeholder="Package Price in PHP" required>
-                            <div class="error text-danger" id="packagepriceError"></div>
+                            <div class="feedback" id="packagepriceFeedback"></div>
                         </div>
 
                         <div class="form-group">
                             <label for="packagefeatures">Package Features</label>
                             <input type="text" class="form-control my-2" name="packagefeatures" id="packagefeatures"
                                 placeholder="Package Features (e.g., Free Pickup-Drop Facility)" required>
-                            <div class="error text-danger" id="packagefeaturesError"></div>
+                            <div class="feedback" id="packagefeaturesFeedback"></div>
                         </div>
 
                         <div class="form-group">
                             <label for="packagedetails">Package Details</label>
                             <textarea class="form-control my-2" rows="5" cols="50" name="packagedetails" id="packagedetails"
                                 placeholder="Package Details" required></textarea>
-                            <div class="error text-danger" id="packagedetailsError"></div>
+                            <div class="feedback" id="packagedetailsFeedback"></div>
                         </div>
 
                         <div class="form-group">
                             <label for="packageimage">Package Image</label>
                             <input type="file" name="packageimage" class="form-control my-2" id="packageimage" required>
-                            <div class="error text-danger" id="packageimageError"></div>
+                            <div class="feedback" id="packageimageFeedback"></div>
                         </div>
 
                         <div class="mt-3">
@@ -73,9 +73,62 @@ if (strlen($_SESSION['alogin']) == 0) {
         </div>
     </div>
 
-    <?php
-    require 'includes/footer.php';
+    <script>
+        // Validate inputs dynamically
+        const validationRules = {
+            textOnly: /^[a-zA-Z\s]+$/,
+            numericOnly: /^\d+$/,
+            imageOnly: /\.(jpe?g|png|gif)$/i
+        };
 
+        const inputs = {
+            packagename: { rule: 'textOnly', feedbackId: 'packagenameFeedback' },
+            packagetype: { rule: 'textOnly', feedbackId: 'packagetypeFeedback' },
+            packagelocation: { rule: 'textOnly', feedbackId: 'packagelocationFeedback' },
+            packageprice: { rule: 'numericOnly', feedbackId: 'packagepriceFeedback' },
+            packagefeatures: { rule: 'textOnly', feedbackId: 'packagefeaturesFeedback' },
+            packageimage: { rule: 'imageOnly', feedbackId: 'packageimageFeedback', isFile: true }
+        };
+
+        Object.keys(inputs).forEach(key => {
+            const input = document.getElementById(key);
+            const feedbackElement = document.getElementById(inputs[key].feedbackId);
+
+            input.addEventListener('input', function () {
+                const value = inputs[key].isFile ? input.files[0]?.name : input.value;
+
+                if (!validationRules[inputs[key].rule].test(value)) {
+                    feedbackElement.textContent = "Invalid input!";
+                    feedbackElement.style.color = "red";
+                } else {
+                    feedbackElement.textContent = "Valid input!";
+                    feedbackElement.style.color = "green";
+                }
+            });
+        });
+
+        // Prevent form submission if there are invalid inputs
+        const form = document.getElementById('packageForm');
+        form.addEventListener('submit', function (e) {
+            let isValid = true;
+
+            Object.keys(inputs).forEach(key => {
+                const input = document.getElementById(key);
+                const value = inputs[key].isFile ? input.files[0]?.name : input.value;
+                const feedbackElement = document.getElementById(inputs[key].feedbackId);
+
+                if (!validationRules[inputs[key].rule].test(value)) {
+                    feedbackElement.textContent = "Invalid input!";
+                    feedbackElement.style.color = "red";
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) e.preventDefault();
+        });
+    </script>
+
+    <?php
     if (isset($_POST['submit'])) {
         $pname = $_POST['packagename'];
         $ptype = $_POST['packagetype'];
@@ -90,23 +143,7 @@ if (strlen($_SESSION['alogin']) == 0) {
         $file_extension = pathinfo($pimage, PATHINFO_EXTENSION);
 
         if (!in_array(strtolower($file_extension), $allowed_extensions)) {
-            echo "<script>document.getElementById('packageimageError').innerText = 'Only image files (JPG, PNG, GIF) are allowed.';</script>";
-            exit;
-        }
-
-        // Validate text fields
-        $textFields = [$pname, $ptype, $plocation, $pfeatures];
-        foreach ($textFields as $key => $field) {
-            if (!preg_match("/^[a-zA-Z\s]+$/", $field)) {
-                $fieldErrors = ["packagenameError", "packagetypeError", "packagelocationError", "packagefeaturesError"];
-                echo "<script>document.getElementById('{$fieldErrors[$key]}').innerText = 'Only letters and spaces allowed.';</script>";
-                exit;
-            }
-        }
-
-        // Validate package price
-        if (!preg_match("/^\d+$/", $pprice)) {
-            echo "<script>document.getElementById('packagepriceError').innerText = 'Package Price must be a valid number.';</script>";
+            echo "<script>alert('Only image files (JPG, PNG, GIF) are allowed.');</script>";
             exit;
         }
 
@@ -122,31 +159,15 @@ if (strlen($_SESSION['alogin']) == 0) {
         $query->bindParam(':pdetails', $pdetails, PDO::PARAM_STR);
         $query->bindParam(':pimage', $pimage, PDO::PARAM_STR);
         $query->execute();
-        $lastInsertId = $dbh->lastInsertId();
 
-        if ($lastInsertId) {
-            echo "<script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Package added successfully!',
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                });
-            </script>";
-        } else {
-            echo "<script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Something went wrong. Please try again.',
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                });
-            </script>";
-        }
+        echo "<script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Package created successfully!',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        </script>";
     }
     require 'includes/layout-foot.php';
 }
