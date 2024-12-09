@@ -75,15 +75,14 @@ if (isset($_POST['login'])) {
 			window.scrollTo(0, 1);
 		}
 	</script>
-	<style>
-		.container {
-			height: 100vh;
-		}
-	</style>
+	
 </head>
 
 <style>
-	body {
+	.container {
+			height: 100vh;
+		}
+			body {
 		background: url(../images/santa1.jpg)no-repeat;
 		background-size: cover;
 		-webkit-background-size: cover;
@@ -92,7 +91,24 @@ if (isset($_POST['login'])) {
 		-moz-background-size: cover;
 		min-height: 700px;
 	}
+	.text-primary {
+		color: #38AF05 !important;
+
+	}
+	.bg {
+		background-color: #38AF05 !important;
+	
+	}
+	svg {
+		background-color: #38AF05 !important;
+
+	}
+	.btn-primary1 {
+		background-color: #38AF05 !important;
+		color: white;
+	}
 </style>
+
 
 
 
