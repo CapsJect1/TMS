@@ -1,122 +1,3 @@
-<?php
-session_start();
-
-if (isset($_SESSION['ERROR_LOGIN'])) {
-    if ($_SESSION['ERROR_LOGIN']['date'] == date('Y-m-d')) {
-        unset($_SESSION['ERROR_LOGIN']);
-    }
-}
-
-if (isset($_POST['signin'])) {
-    $email = htmlspecialchars(stripslashes(trim($_POST['email'])));
-    $password = htmlspecialchars(stripslashes(trim($_POST['password'])));
-    $status = 2;
-
-    // Google reCAPTCHA verification
-    $recaptcha_secret = 'your_recaptcha_secret';
-    $recaptcha_response = $_POST['g-recaptcha-response'];
-    $recaptcha_verify_url = "https://www.google.com/recaptcha/api/siteverify";
-    $recaptcha_verify_response = file_get_contents($recaptcha_verify_url . "?secret=" . $recaptcha_secret . "&response=" . $recaptcha_response);
-    $recaptcha_result = json_decode($recaptcha_verify_response);
-
-    if (!$recaptcha_result->success) {
-        echo "<script>
-            Swal.fire({
-                title: 'Error!',
-                text: 'Please complete the reCAPTCHA verification.',
-                icon: 'error',
-                timer: 1500,
-                showConfirmButton: false
-            });
-            </script>";
-            echo "<script>window.location.href = 'index.php';</script>";
-    }
-
-    // Check credentials from the database
-    $sql = "SELECT id, FullName, EmailId, fname, lname, Password, Status FROM tblusers WHERE EmailId=:email AND Status = :stat";
-    $query = $dbh->prepare($sql);
-    $query->bindParam(':email', $email, PDO::PARAM_STR);
-    $query->bindParam(':stat', $status, PDO::PARAM_INT);
-    $query->execute();
-    $user = $query->fetch(PDO::FETCH_ASSOC);
-
-    if ($query->rowCount() > 0) {
-        if ($user['Status'] == 2) {
-            // Track login attempts using JavaScript
-            echo "<script>
-            let email = '{$email}';
-            let loginAttempts = localStorage.getItem(email + '_attempts');
-            let lastAttemptDate = localStorage.getItem(email + '_lastAttemptDate');
-            
-            // If attempts are more than 3 or if 24 hours have passed, reset attempts
-            if (loginAttempts >= 3 && lastAttemptDate && new Date().getTime() - new Date(lastAttemptDate).getTime() < 86400000) {
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Login trial expired, please try again later',
-                    icon: 'error',
-                    timer: 1500,
-                    showConfirmButton: false
-                });
-                setTimeout(function() {
-                    window.location.href = 'index.php';
-                }, 1500);
-            } else {
-                // Check password
-                let password = '{$password}';
-                if (password_verify(password, '{$user['Password']}')) {
-                    localStorage.setItem(email + '_attempts', 0); // Reset attempts on success
-                    sessionStorage.setItem('user_id', '{$user['id']}');
-                    sessionStorage.setItem('user_name', '{$user['FullName']}');
-                    sessionStorage.setItem('login', '{$user['EmailId']}');
-                    sessionStorage.setItem('fname', '{$user['fname']}');
-                    sessionStorage.setItem('lname', '{$user['lname']}');
-                    window.location.href = 'package-list.php'; // Redirect on success
-                } else {
-                    // Decrease attempt count if password is incorrect
-                    let attempts = loginAttempts ? parseInt(loginAttempts) : 0;
-                    attempts++;
-                    localStorage.setItem(email + '_attempts', attempts);
-                    localStorage.setItem(email + '_lastAttemptDate', new Date().toISOString());
-
-                    Swal.fire({
-                        title: 'Error!',
-                        text: 'Incorrect email or password',
-                        icon: 'error',
-                        timer: 1500,
-                        showConfirmButton: false
-                    });
-                    setTimeout(function() {
-                        window.location.href = 'index.php';
-                    }, 1500);
-                }
-            }
-            </script>";
-        } else {
-            echo "<script>
-            Swal.fire({
-                title: 'Error!',
-                text: 'Please confirm your account first',
-                icon: 'error',
-                timer: 1500,
-                showConfirmButton: false
-            });
-            </script>";
-            echo "<script>window.location.href = 'index.php';</script>";
-        }
-    } else {
-        echo "<script>
-            Swal.fire({
-                title: 'Error!',
-                text: 'Email not found or unverified',
-                icon: 'error',
-                timer: 1500,
-                showConfirmButton: false
-            });
-            </script>";
-    }
-}
-?>
-
 <!-- HTML Form for Login -->
 <div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -140,7 +21,7 @@ if (isset($_POST['signin'])) {
                                 <h4><a href="forgot-password.php">Forgot password</a></h4>
 
                                 <!-- Google reCAPTCHA widget -->
-                                <div class="g-recaptcha" data-sitekey="6LezNpMqAAAAAJo_vbJQ6Lo10T2GxhtxeROWoB8p"></div>
+                                <div class="g-recaptcha" data-sitekey="your_recaptcha_site_key"></div>
 
                                 <input type="submit" name="signin" value="SIGN IN">
                             </form>
@@ -156,17 +37,61 @@ if (isset($_POST['signin'])) {
 </div>
 
 <script>
-    let showPass2 = document.getElementById('show-pass2');
-    showPass2.onclick = () => {
-        let passwordInp = document.forms['login']['password'];
-        if (passwordInp.getAttribute('type') == 'password') {
-            showPass2.classList.replace('fa-eye', 'fa-eye-slash')
-            passwordInp.setAttribute('type', 'text')
+    // Check if there are stored attempts and reset date
+    const storedAttempts = localStorage.getItem('login_attempts');
+    const storedDate = localStorage.getItem('login_date');
+    const currentDate = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
+
+    let attempts = storedAttempts ? parseInt(storedAttempts) : 0;
+    let lastLoginDate = storedDate || currentDate;
+
+    // Reset attempts if the date has changed
+    if (currentDate !== lastLoginDate) {
+        attempts = 0;
+        localStorage.setItem('login_date', currentDate);
+    }
+
+    // Show SweetAlert based on attempts
+    function showAttemptsMessage() {
+        if (attempts >= 3) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Your attempts are used up. Please try again tomorrow.',
+                icon: 'error',
+                showConfirmButton: true
+            });
+            return false; // Prevent form submission if attempts are exhausted
         } else {
-            showPass2.classList.replace('fa-eye-slash', 'fa-eye')
-            passwordInp.setAttribute('type', 'password')
+            Swal.fire({
+                title: 'Login Attempt',
+                text: `You have ${3 - attempts} attempts left.`,
+                icon: 'info',
+                showConfirmButton: true
+            });
+            return true; // Allow form submission
         }
+    }
+
+    // Event listener for form submission
+    document.forms['login'].addEventListener('submit', function (event) {
+        if (!showAttemptsMessage()) {
+            event.preventDefault(); // Prevent form submission if attempts are exhausted
+        }
+    });
+
+    // Handle login failure
+    function handleLoginFailure() {
+        attempts += 1;
+        localStorage.setItem('login_attempts', attempts);
+        showAttemptsMessage();
+    }
+
+    // Handle login success (reset attempts)
+    function handleLoginSuccess() {
+        localStorage.setItem('login_attempts', 0); // Reset attempts on successful login
+        window.location.href = 'package-list.php'; // Redirect to another page
     }
 </script>
 
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
