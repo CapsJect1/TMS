@@ -15,7 +15,48 @@ if (strlen($_SESSION['alogin']) == 0) {
                     <h4>Create Package</h4>
                     <hr>
                     <form class="form-horizontal" name="package" method="post" enctype="multipart/form-data" id="packageForm">
-                        <!-- Other fields -->
+                        <div class="form-group">
+                            <label for="packagename">Room or Resort</label>
+                            <input type="text" class="form-control my-2" name="packagename" id="packagename"
+                                placeholder="Create room or resort" required>
+                            <div class="error text-danger" id="packagenameError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="packagetype">Package Type</label>
+                            <input type="text" class="form-control my-2" name="packagetype" id="packagetype"
+                                placeholder="Package Type (e.g., Family Package / Couple Package)" required>
+                            <div class="error text-danger" id="packagetypeError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="packagelocation">Package Location</label>
+                            <input type="text" class="form-control my-2" name="packagelocation" id="packagelocation"
+                                placeholder="Package Location" required>
+                            <div class="error text-danger" id="packagelocationError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="packageprice">Package Price in PHP</label>
+                            <input type="text" class="form-control my-2" name="packageprice" id="packageprice"
+                                placeholder="Package Price in PHP" required>
+                            <div class="error text-danger" id="packagepriceError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="packagefeatures">Package Features</label>
+                            <input type="text" class="form-control my-2" name="packagefeatures" id="packagefeatures"
+                                placeholder="Package Features (e.g., Free Pickup-Drop Facility)" required>
+                            <div class="error text-danger" id="packagefeaturesError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="packagedetails">Package Details</label>
+                            <textarea class="form-control my-2" rows="5" cols="50" name="packagedetails" id="packagedetails"
+                                placeholder="Package Details" required></textarea>
+                            <div class="error text-danger" id="packagedetailsError"></div>
+                        </div>
+
                         <div class="form-group">
                             <label for="packageimage">Package Image</label>
                             <input type="file" name="packageimage" class="form-control my-2" id="packageimage" required>
@@ -43,14 +84,19 @@ if (strlen($_SESSION['alogin']) == 0) {
         $pfeatures = $_POST['packagefeatures'];
         $pdetails = $_POST['packagedetails'];
         $pimage = $_FILES["packageimage"]["name"];
-        $imageType = mime_content_type($_FILES["packageimage"]["tmp_name"]);
 
-        // Validate image type
-        $allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
-        if (!in_array($imageType, $allowedImageTypes)) {
-            echo "<script>
-                document.getElementById('packageimageError').innerText = 'Invalid file type. Please upload a valid image (JPEG, PNG, GIF).';
-            </script>";
+        // Validate text fields
+        $textFields = [$pname, $ptype, $plocation, $pfeatures];
+        foreach ($textFields as $field) {
+            if (!preg_match("/^[a-zA-Z\s]+$/", $field)) {
+                echo "<script>document.getElementById('{$field}Error').innerText = 'Only letters and spaces allowed.';</script>";
+                exit;
+            }
+        }
+
+        // Validate package price
+        if (!preg_match("/^\d+$/", $pprice)) {
+            echo "<script>document.getElementById('packagepriceError').innerText = 'Package Price must be a valid number.';</script>";
             exit;
         }
 
@@ -108,20 +154,6 @@ if (strlen($_SESSION['alogin']) == 0) {
             error.innerText = 'Only letters and spaces are allowed.';
         } else {
             error.innerText = '';
-        }
-    });
-
-    document.getElementById('packageimage').addEventListener('change', function (e) {
-        const file = e.target.files[0];
-        const error = document.getElementById('packageimageError');
-        if (file) {
-            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
-            if (!allowedTypes.includes(file.type)) {
-                error.innerText = 'Invalid file type. Please upload a valid image (JPEG, PNG, GIF).';
-                e.target.value = ''; // Clear the input
-            } else {
-                error.innerText = '';
-            }
         }
     });
 </script>
