@@ -2,29 +2,27 @@
 session_start();
 
 if (isset($_SESSION['ERROR_LOGIN'])) {
-    if ($_SESSION['date'] == date('Y-md-d')) {
-        unset($_SESSION['ERROR_LOGIN']);
+    if ($_SESSION['date'] != date('Y-m-d')) {
+        // Reset the count if it's a new day
+        $_SESSION['ERROR_LOGIN'] = ['count' => 0, 'date' => date('Y-m-d')];
     }
 }
 
 if (isset($_POST['signin'])) {
-    if (isset($_SESSION['ERROR_LOGIN'])) {
-
-        if ($_SESSION['ERROR_LOGIN']['count'] >= 3) {
-            echo "<script>
+    // Check if the user has exceeded the login attempt limit
+    if (isset($_SESSION['ERROR_LOGIN']) && $_SESSION['ERROR_LOGIN']['count'] >= 3) {
+        echo "<script>
             Swal.fire({
                 title: 'Error!',
-                text: 'Login trial expired, please try again later',
+                text: 'Login trials expired, please try again later.',
                 icon: 'error',
                 timer: 1500,
                 showConfirmButton: false
             });
             </script>";
-            echo "<script>window.location.href = 'index.php';</script>";            
-        }
-
+        echo "<script>window.location.href = 'index.php';</script>";
+        exit;
     }
-
 
     // Google reCAPTCHA verification
     $recaptcha_secret = '6LezNpMqAAAAAKA-tks15YZHfdpFeWhQZo2kj-gb'; // Secret key
@@ -46,7 +44,8 @@ if (isset($_POST['signin'])) {
                 showConfirmButton: false
             });
             </script>";
-            echo "<script>window.location.href = 'index.php';</script>";
+        echo "<script>window.location.href = 'index.php';</script>";
+        exit;
     }
 
     // Continue with your existing login logic
@@ -74,6 +73,13 @@ if (isset($_POST['signin'])) {
                 // Redirect to a dashboard or home page after successful login
                 echo "<script>window.location.href = 'package-list.php';</script>";
             } else {
+                // Increment login attempt count on failure
+                if (!isset($_SESSION['ERROR_LOGIN'])) {
+                    $_SESSION['ERROR_LOGIN'] = ['count' => 1, 'date' => date('Y-m-d')];
+                } else {
+                    $_SESSION['ERROR_LOGIN']['count'] += 1;
+                }
+
                 echo "<script>
                     Swal.fire({
                         title: 'Error!',
@@ -83,7 +89,7 @@ if (isset($_POST['signin'])) {
                         showConfirmButton: false
                     });
                     </script>";
-                    echo "<script>window.location.href = 'index.php';</script>";
+                echo "<script>window.location.href = 'index.php';</script>";
             }
         } else {
             echo "<script>
@@ -95,24 +101,12 @@ if (isset($_POST['signin'])) {
                 showConfirmButton: false
             });
             </script>";
-            if (!isset($_SESSION['ERROR_LOGIN'])) {
-                $_SESSION['ERROR_LOGIN'] = [
-                    'count' => 1,
-                    'date' => date('Y-m-d')
-                ];
-            }else{
-                $_SESSION['ERROR_LOGIN']['count'] += $_SESSION['ERROR_LOGIN'];
-            }
-            echo "<script>window.location.href = 'index.php';</script>";
-
         }
-
-        exit;
     } else {
         echo "<script>
             Swal.fire({
                 title: 'Error!',
-                text: 'Please confirm your account first',
+                text: 'Account not found',
                 icon: 'error',
                 timer: 1500,
                 showConfirmButton: false
