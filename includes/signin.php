@@ -2,40 +2,23 @@
 session_start();
 
 if (isset($_SESSION['ERROR_LOGIN'])) {
-    if ($_SESSION['date'] == date('Y-md-d')) {
+    if ($_SESSION['ERROR_LOGIN']['date'] == date('Y-m-d')) {
         unset($_SESSION['ERROR_LOGIN']);
     }
 }
 
 if (isset($_POST['signin'])) {
-    if (isset($_SESSION['ERROR_LOGIN'])) {
-
-        if ($_SESSION['ERROR_LOGIN']['count'] >= 3) {
-            echo "<script>
-            Swal.fire({
-                title: 'Error!',
-                text: 'Login trial expired, please try again later',
-                icon: 'error',
-                timer: 1500,
-                showConfirmButton: false
-            });
-            </script>";
-            echo "<script>window.location.href = 'index.php';</script>";            
-        }
-
-    }
-
+    $email = htmlspecialchars(stripslashes(trim($_POST['email'])));
+    $password = htmlspecialchars(stripslashes(trim($_POST['password'])));
+    $status = 2;
 
     // Google reCAPTCHA verification
-    $recaptcha_secret = '6LezNpMqAAAAAKA-tks15YZHfdpFeWhQZo2kj-gb'; // Secret key
+    $recaptcha_secret = 'your_recaptcha_secret';
     $recaptcha_response = $_POST['g-recaptcha-response'];
-
-    // Make request to verify reCAPTCHA response
     $recaptcha_verify_url = "https://www.google.com/recaptcha/api/siteverify";
     $recaptcha_verify_response = file_get_contents($recaptcha_verify_url . "?secret=" . $recaptcha_secret . "&response=" . $recaptcha_response);
     $recaptcha_result = json_decode($recaptcha_verify_response);
 
-    // If reCAPTCHA verification failed, show an error
     if (!$recaptcha_result->success) {
         echo "<script>
             Swal.fire({
@@ -49,12 +32,7 @@ if (isset($_POST['signin'])) {
             echo "<script>window.location.href = 'index.php';</script>";
     }
 
-    // Continue with your existing login logic
-    $email = htmlspecialchars(stripslashes(trim($_POST['email'])));
-    $password = htmlspecialchars(stripslashes(trim($_POST['password'])));
-    $status = 2;
-
-    // SQL query to fetch user details based on email and password
+    // Check credentials from the database
     $sql = "SELECT id, FullName, EmailId, fname, lname, Password, Status FROM tblusers WHERE EmailId=:email AND Status = :stat";
     $query = $dbh->prepare($sql);
     $query->bindParam(':email', $email, PDO::PARAM_STR);
@@ -64,17 +42,42 @@ if (isset($_POST['signin'])) {
 
     if ($query->rowCount() > 0) {
         if ($user['Status'] == 2) {
-            // Set session variables upon successful login
-            if (password_verify($password, $user['Password'])) {
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['user_name'] = $user['FullName'];
-                $_SESSION['login'] = $user['EmailId'];
-                $_SESSION['fname'] = $user['fname'];
-                $_SESSION['lname'] = $user['lname'];
-                // Redirect to a dashboard or home page after successful login
-                echo "<script>window.location.href = 'package-list.php';</script>";
+            // Track login attempts using JavaScript
+            echo "<script>
+            let email = '{$email}';
+            let loginAttempts = localStorage.getItem(email + '_attempts');
+            let lastAttemptDate = localStorage.getItem(email + '_lastAttemptDate');
+            
+            // If attempts are more than 3 or if 24 hours have passed, reset attempts
+            if (loginAttempts >= 3 && lastAttemptDate && new Date().getTime() - new Date(lastAttemptDate).getTime() < 86400000) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Login trial expired, please try again later',
+                    icon: 'error',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+                setTimeout(function() {
+                    window.location.href = 'index.php';
+                }, 1500);
             } else {
-                echo "<script>
+                // Check password
+                let password = '{$password}';
+                if (password_verify(password, '{$user['Password']}')) {
+                    localStorage.setItem(email + '_attempts', 0); // Reset attempts on success
+                    sessionStorage.setItem('user_id', '{$user['id']}');
+                    sessionStorage.setItem('user_name', '{$user['FullName']}');
+                    sessionStorage.setItem('login', '{$user['EmailId']}');
+                    sessionStorage.setItem('fname', '{$user['fname']}');
+                    sessionStorage.setItem('lname', '{$user['lname']}');
+                    window.location.href = 'package-list.php'; // Redirect on success
+                } else {
+                    // Decrease attempt count if password is incorrect
+                    let attempts = loginAttempts ? parseInt(loginAttempts) : 0;
+                    attempts++;
+                    localStorage.setItem(email + '_attempts', attempts);
+                    localStorage.setItem(email + '_lastAttemptDate', new Date().toISOString());
+
                     Swal.fire({
                         title: 'Error!',
                         text: 'Incorrect email or password',
@@ -82,9 +85,12 @@ if (isset($_POST['signin'])) {
                         timer: 1500,
                         showConfirmButton: false
                     });
-                    </script>";
-                    echo "<script>window.location.href = 'index.php';</script>";
+                    setTimeout(function() {
+                        window.location.href = 'index.php';
+                    }, 1500);
+                }
             }
+            </script>";
         } else {
             echo "<script>
             Swal.fire({
@@ -95,24 +101,13 @@ if (isset($_POST['signin'])) {
                 showConfirmButton: false
             });
             </script>";
-            if (!isset($_SESSION['ERROR_LOGIN'])) {
-                $_SESSION['ERROR_LOGIN'] = [
-                    'count' => 1,
-                    'date' => date('Y-m-d')
-                ];
-            }else{
-                $_SESSION['ERROR_LOGIN']['count'] += $_SESSION['ERROR_LOGIN'];
-            }
             echo "<script>window.location.href = 'index.php';</script>";
-
         }
-
-        exit;
     } else {
         echo "<script>
             Swal.fire({
                 title: 'Error!',
-                text: 'Please confirm your account first',
+                text: 'Email not found or unverified',
                 icon: 'error',
                 timer: 1500,
                 showConfirmButton: false
