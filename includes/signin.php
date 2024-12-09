@@ -120,9 +120,7 @@ if (isset($_POST['signin'])) {
             </script>";
     }
 }
-?>
-
-<!-- HTML Form for Login -->
+?><!-- HTML Form for Login -->
 <div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content modal-info">
@@ -134,7 +132,7 @@ if (isset($_POST['signin'])) {
                 <div class="login-grids">
                     <div class="login">
                         <div class="login-right">
-                            <form method="post" name="login">
+                            <form method="post" name="login" id="loginForm">
                                 <h3>Sign in with your account</h3>
                                 <input type="text" name="email" id="email" placeholder="Enter your Email" required="">
                                 <div style="position: relative;">
@@ -161,6 +159,7 @@ if (isset($_POST['signin'])) {
 </div>
 
 <script>
+    // Show/hide password logic
     let showPass2 = document.getElementById('show-pass2');
     showPass2.onclick = () => {
         let passwordInp = document.forms['login']['password'];
@@ -172,6 +171,60 @@ if (isset($_POST['signin'])) {
             passwordInp.setAttribute('type', 'password')
         }
     }
+
+    // Login attempt logic
+    document.forms['login'].onsubmit = function (e) {
+        e.preventDefault(); // Prevent the form from submitting
+
+        const email = document.getElementById('email').value.trim();
+        const today = new Date().toISOString().split('T')[0]; // Get current date (YYYY-MM-DD)
+
+        // Retrieve login data from localStorage
+        let loginData = JSON.parse(localStorage.getItem('loginAttempts')) || {};
+
+        // Check if the email exists in localStorage
+        if (loginData[email]) {
+            if (loginData[email].date === today) {
+                if (loginData[email].count >= 3) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'You have reached the maximum login attempts. Try again tomorrow.',
+                        icon: 'error',
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+                    return false; // Stop submission
+                }
+            } else {
+                // Reset count if date has changed
+                loginData[email] = { count: 0, date: today };
+            }
+        } else {
+            // Initialize login data for the new email
+            loginData[email] = { count: 0, date: today };
+        }
+
+        // Increment login attempt count
+        loginData[email].count += 1;
+
+        // Update localStorage
+        localStorage.setItem('loginAttempts', JSON.stringify(loginData));
+
+        if (loginData[email].count >= 3) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'You have reached the maximum login attempts. Try again tomorrow.',
+                icon: 'error',
+                timer: 1500,
+                showConfirmButton: false
+            });
+            return false; // Stop submission
+        }
+
+        // If allowed, submit the form
+        e.target.submit();
+    };
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
