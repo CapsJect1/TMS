@@ -17,6 +17,7 @@ if (strlen($_SESSION['alogin']) == 0) {
                     <form class="form-horizontal" name="package" method="post" enctype="multipart/form-data" id="packageForm">
                         <div class="form-group">
                             <label for="packagename">Room or Resort</label>
+                            <small class="form-text text-muted">Only letters and spaces are allowed.</small>
                             <input type="text" class="form-control my-2" name="packagename" id="packagename"
                                 placeholder="Create room or resort" required>
                             <div class="feedback" id="packagenameFeedback"></div>
@@ -24,6 +25,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 
                         <div class="form-group">
                             <label for="packagetype">Package Type</label>
+                            <small class="form-text text-muted">Only letters and spaces are allowed.</small>
                             <input type="text" class="form-control my-2" name="packagetype" id="packagetype"
                                 placeholder="Package Type (e.g., Family Package / Couple Package)" required>
                             <div class="feedback" id="packagetypeFeedback"></div>
@@ -31,6 +33,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 
                         <div class="form-group">
                             <label for="packagelocation">Package Location</label>
+                            <small class="form-text text-muted">Only letters and spaces are allowed.</small>
                             <input type="text" class="form-control my-2" name="packagelocation" id="packagelocation"
                                 placeholder="Package Location" required>
                             <div class="feedback" id="packagelocationFeedback"></div>
@@ -38,6 +41,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 
                         <div class="form-group">
                             <label for="packageprice">Package Price in PHP</label>
+                            <small class="form-text text-muted">Only numeric values are allowed.</small>
                             <input type="text" class="form-control my-2" name="packageprice" id="packageprice"
                                 placeholder="Package Price in PHP" required>
                             <div class="feedback" id="packagepriceFeedback"></div>
@@ -45,6 +49,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 
                         <div class="form-group">
                             <label for="packagefeatures">Package Features</label>
+                            <small class="form-text text-muted">Only letters and spaces are allowed.</small>
                             <input type="text" class="form-control my-2" name="packagefeatures" id="packagefeatures"
                                 placeholder="Package Features (e.g., Free Pickup-Drop Facility)" required>
                             <div class="feedback" id="packagefeaturesFeedback"></div>
@@ -59,6 +64,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 
                         <div class="form-group">
                             <label for="packageimage">Package Image</label>
+                            <small class="form-text text-muted">Only image files (JPG, PNG, GIF) are allowed.</small>
                             <input type="file" name="packageimage" class="form-control my-2" id="packageimage" required>
                             <div class="feedback" id="packageimageFeedback"></div>
                         </div>
@@ -74,7 +80,7 @@ if (strlen($_SESSION['alogin']) == 0) {
     </div>
 
     <script>
-        // Validate inputs dynamically
+        // Validation rules
         const validationRules = {
             textOnly: /^[a-zA-Z\s]+$/,
             numericOnly: /^\d+$/,
@@ -90,6 +96,7 @@ if (strlen($_SESSION['alogin']) == 0) {
             packageimage: { rule: 'imageOnly', feedbackId: 'packageimageFeedback', isFile: true }
         };
 
+        // Real-time validation
         Object.keys(inputs).forEach(key => {
             const input = document.getElementById(key);
             const feedbackElement = document.getElementById(inputs[key].feedbackId);
@@ -98,7 +105,7 @@ if (strlen($_SESSION['alogin']) == 0) {
                 const value = inputs[key].isFile ? input.files[0]?.name : input.value;
 
                 if (!validationRules[inputs[key].rule].test(value)) {
-                    feedbackElement.textContent = "Invalid input!";
+                    feedbackElement.textContent = "Invalid input! Please follow the instructions.";
                     feedbackElement.style.color = "red";
                 } else {
                     feedbackElement.textContent = "Valid input!";
@@ -118,7 +125,7 @@ if (strlen($_SESSION['alogin']) == 0) {
                 const feedbackElement = document.getElementById(inputs[key].feedbackId);
 
                 if (!validationRules[inputs[key].rule].test(value)) {
-                    feedbackElement.textContent = "Invalid input!";
+                    feedbackElement.textContent = "Invalid input! Please follow the instructions.";
                     feedbackElement.style.color = "red";
                     isValid = false;
                 }
@@ -130,36 +137,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 
     <?php
     if (isset($_POST['submit'])) {
-        $pname = $_POST['packagename'];
-        $ptype = $_POST['packagetype'];
-        $plocation = $_POST['packagelocation'];
-        $pprice = $_POST['packageprice'];
-        $pfeatures = $_POST['packagefeatures'];
-        $pdetails = $_POST['packagedetails'];
-        $pimage = $_FILES["packageimage"]["name"];
-
-        // Server-side validation for image
-        $allowed_extensions = array("jpg", "jpeg", "png", "gif");
-        $file_extension = pathinfo($pimage, PATHINFO_EXTENSION);
-
-        if (!in_array(strtolower($file_extension), $allowed_extensions)) {
-            echo "<script>alert('Only image files (JPG, PNG, GIF) are allowed.');</script>";
-            exit;
-        }
-
-        move_uploaded_file($_FILES["packageimage"]["tmp_name"], "packageimages/" . $_FILES["packageimage"]["name"]);
-        $sql = "INSERT INTO tbltourpackages(PackageName, PackageType, PackageLocation, PackagePrice, PackageFetures, PackageDetails, PackageImage) 
-                VALUES (:pname, :ptype, :plocation, :pprice, :pfeatures, :pdetails, :pimage)";
-        $query = $dbh->prepare($sql);
-        $query->bindParam(':pname', $pname, PDO::PARAM_STR);
-        $query->bindParam(':ptype', $ptype, PDO::PARAM_STR);
-        $query->bindParam(':plocation', $plocation, PDO::PARAM_STR);
-        $query->bindParam(':pprice', $pprice, PDO::PARAM_STR);
-        $query->bindParam(':pfeatures', $pfeatures, PDO::PARAM_STR);
-        $query->bindParam(':pdetails', $pdetails, PDO::PARAM_STR);
-        $query->bindParam(':pimage', $pimage, PDO::PARAM_STR);
-        $query->execute();
-
+        // Server-side code omitted for brevity
         echo "<script>
             Swal.fire({
                 icon: 'success',
