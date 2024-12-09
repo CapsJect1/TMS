@@ -1,3 +1,31 @@
+<?php
+session_start();
+
+// Google reCAPTCHA verification
+$recaptcha_secret = '6LezNpMqAAAAAKA-tks15YZHfdpFeWhQZo2kj-gb'; // Secret key
+$recaptcha_response = $_POST['g-recaptcha-response'];
+
+if (isset($_POST['signin'])) {
+    // Google reCAPTCHA verification
+    $recaptcha_verify_url = "https://www.google.com/recaptcha/api/siteverify";
+    $recaptcha_verify_response = file_get_contents($recaptcha_verify_url . "?secret=" . $recaptcha_secret . "&response=" . $recaptcha_response);
+    $recaptcha_result = json_decode($recaptcha_verify_response);
+
+    if (!$recaptcha_result->success) {
+        echo "<script>
+            Swal.fire({
+                title: 'Error!',
+                text: 'Please complete the reCAPTCHA verification.',
+                icon: 'error',
+                showConfirmButton: true
+            });
+        </script>";
+        echo "<script>window.location.href = 'index.php';</script>";
+        exit;
+    }
+}
+?>
+
 <!-- HTML Form for Login -->
 <div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -21,9 +49,9 @@
                                 <h4><a href="forgot-password.php">Forgot password</a></h4>
 
                                 <!-- Google reCAPTCHA widget -->
-                                <div class="g-recaptcha" data-sitekey="your_recaptcha_site_key"></div>
+                                <div class="g-recaptcha" data-sitekey="6LezNpMqAAAAAJo_vbJQ6Lo10T2GxhtxeROWoB8p"></div>
 
-                                <input type="submit" name="signin" value="SIGN IN">
+                                <input type="submit" name="signin" value="SIGN IN" onclick="checkLoginAttempts(); return false;">
                             </form>
                         </div>
                         <div class="clearfix"></div>
@@ -37,61 +65,71 @@
 </div>
 
 <script>
-    // Check if there are stored attempts and reset date
-    const storedAttempts = localStorage.getItem('login_attempts');
-    const storedDate = localStorage.getItem('login_date');
-    const currentDate = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
-
-    let attempts = storedAttempts ? parseInt(storedAttempts) : 0;
-    let lastLoginDate = storedDate || currentDate;
-
-    // Reset attempts if the date has changed
-    if (currentDate !== lastLoginDate) {
-        attempts = 0;
-        localStorage.setItem('login_date', currentDate);
+    // Show and hide password
+    let showPass2 = document.getElementById('show-pass2');
+    showPass2.onclick = () => {
+        let passwordInp = document.forms['login']['password'];
+        if (passwordInp.getAttribute('type') == 'password') {
+            showPass2.classList.replace('fa-eye', 'fa-eye-slash');
+            passwordInp.setAttribute('type', 'text');
+        } else {
+            showPass2.classList.replace('fa-eye-slash', 'fa-eye');
+            passwordInp.setAttribute('type', 'password');
+        }
     }
 
-    // Show SweetAlert based on attempts
-    function showAttemptsMessage() {
-        if (attempts >= 3) {
+    // Check login attempts using localStorage
+    function checkLoginAttempts() {
+        const email = document.getElementById("email").value;
+        let attemptsData = JSON.parse(localStorage.getItem(email));
+
+        if (!attemptsData) {
+            // If no attempts recorded, initialize the data
+            attemptsData = { attempts: 0, lastAttempt: new Date().toISOString() };
+            localStorage.setItem(email, JSON.stringify(attemptsData));
+        }
+
+        const today = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
+        const lastAttemptDate = new Date(attemptsData.lastAttempt).toISOString().split('T')[0];
+
+        // Reset attempts if it's a new day
+        if (today !== lastAttemptDate) {
+            attemptsData.attempts = 0;
+            attemptsData.lastAttempt = new Date().toISOString();
+            localStorage.setItem(email, JSON.stringify(attemptsData));
+        }
+
+        // Check if attempts exceeded
+        if (attemptsData.attempts >= 3) {
             Swal.fire({
                 title: 'Error!',
-                text: 'Your attempts are used up. Please try again tomorrow.',
+                text: 'Login trial expired, please try again tomorrow.',
                 icon: 'error',
                 showConfirmButton: true
             });
-            return false; // Prevent form submission if attempts are exhausted
+            return;
+        }
+
+        // Simulate password check (replace this with actual password verification logic)
+        const password = document.getElementById("password").value;
+        const correctPassword = "your_correct_password"; // Replace with actual password check
+
+        if (password === correctPassword) {
+            // Successful login
+            window.location.href = 'package-list.php';
         } else {
+            // Incorrect password, increment attempts
+            attemptsData.attempts += 1;
+            localStorage.setItem(email, JSON.stringify(attemptsData));
+
             Swal.fire({
-                title: 'Login Attempt',
-                text: `You have ${3 - attempts} attempts left.`,
-                icon: 'info',
+                title: 'Error!',
+                text: 'Incorrect email or password',
+                icon: 'error',
                 showConfirmButton: true
             });
-            return true; // Allow form submission
         }
-    }
-
-    // Event listener for form submission
-    document.forms['login'].addEventListener('submit', function (event) {
-        if (!showAttemptsMessage()) {
-            event.preventDefault(); // Prevent form submission if attempts are exhausted
-        }
-    });
-
-    // Handle login failure
-    function handleLoginFailure() {
-        attempts += 1;
-        localStorage.setItem('login_attempts', attempts);
-        showAttemptsMessage();
-    }
-
-    // Handle login success (reset attempts)
-    function handleLoginSuccess() {
-        localStorage.setItem('login_attempts', 0); // Reset attempts on successful login
-        window.location.href = 'package-list.php'; // Redirect to another page
     }
 </script>
 
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
