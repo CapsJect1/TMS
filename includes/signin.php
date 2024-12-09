@@ -2,25 +2,65 @@
 session_start();
 
 // Google reCAPTCHA verification
-$recaptcha_secret = '6LezNpMqAAAAAKA-tks15YZHfdpFeWhQZo2kj-gb'; // Secret key
-$recaptcha_response = $_POST['g-recaptcha-response'];
-
 if (isset($_POST['signin'])) {
-    // Google reCAPTCHA verification
-    $recaptcha_verify_url = "https://www.google.com/recaptcha/api/siteverify";
-    $recaptcha_verify_response = file_get_contents($recaptcha_verify_url . "?secret=" . $recaptcha_secret . "&response=" . $recaptcha_response);
-    $recaptcha_result = json_decode($recaptcha_verify_response);
+    $email = htmlspecialchars(stripslashes(trim($_POST['email'])));
+    $password = htmlspecialchars(stripslashes(trim($_POST['password'])));
 
-    if (!$recaptcha_result->success) {
+    // SQL query to fetch user details based on email
+    $status = 2;
+    $sql = "SELECT id, FullName, EmailId, fname, lname, Password, Status FROM tblusers WHERE EmailId=:email AND Status = :stat";
+    $query = $dbh->prepare($sql);
+    $query->bindParam(':email', $email, PDO::PARAM_STR);
+    $query->bindParam(':stat', $status, PDO::PARAM_INT);
+    $query->execute();
+    $user = $query->fetch(PDO::FETCH_ASSOC);
+
+    if ($query->rowCount() > 0) {
+        if ($user['Status'] == 2) {
+            // If password is correct
+            if (password_verify($password, $user['Password'])) {
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['user_name'] = $user['FullName'];
+                $_SESSION['login'] = $user['EmailId'];
+                $_SESSION['fname'] = $user['fname'];
+                $_SESSION['lname'] = $user['lname'];
+
+                // Redirect after successful login
+                echo "<script>window.location.href = 'package-list.php';</script>";
+                exit;
+            } else {
+                // Decrease the attempt count on incorrect password
+                echo "<script>
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Incorrect email or password',
+                        icon: 'error',
+                        showConfirmButton: true
+                    });
+                </script>";
+                echo "<script>window.location.href = 'index.php';</script>";
+                exit;
+            }
+        } else {
+            echo "<script>
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Please confirm your account first',
+                    icon: 'error',
+                    showConfirmButton: true
+                });
+            </script>";
+            exit;
+        }
+    } else {
         echo "<script>
             Swal.fire({
                 title: 'Error!',
-                text: 'Please complete the reCAPTCHA verification.',
+                text: 'Email not found',
                 icon: 'error',
                 showConfirmButton: true
             });
         </script>";
-        echo "<script>window.location.href = 'index.php';</script>";
         exit;
     }
 }
@@ -51,7 +91,7 @@ if (isset($_POST['signin'])) {
                                 <!-- Google reCAPTCHA widget -->
                                 <div class="g-recaptcha" data-sitekey="6LezNpMqAAAAAJo_vbJQ6Lo10T2GxhtxeROWoB8p"></div>
 
-                                <input type="submit" name="signin" value="SIGN IN" onclick="checkLoginAttempts(); return false;">
+                                <input type="submit" name="signin" value="SIGN IN">
                             </form>
                         </div>
                         <div class="clearfix"></div>
@@ -65,63 +105,47 @@ if (isset($_POST['signin'])) {
 </div>
 
 <script>
-    // Show and hide password
-    let showPass2 = document.getElementById('show-pass2');
-    showPass2.onclick = () => {
-        let passwordInp = document.forms['login']['password'];
-        if (passwordInp.getAttribute('type') == 'password') {
-            showPass2.classList.replace('fa-eye', 'fa-eye-slash');
-            passwordInp.setAttribute('type', 'text');
-        } else {
-            showPass2.classList.replace('fa-eye-slash', 'fa-eye');
-            passwordInp.setAttribute('type', 'password');
-        }
+// Local storage for tracking login attempts
+const maxAttempts = 3;
+let attempts = JSON.parse(localStorage.getItem('loginAttempts')) || {};
+
+document.forms['login'].onsubmit = (e) => {
+    e.preventDefault(); // Prevent form submission for validation
+
+    const email = document.getElementById('email').value;
+
+    // Check if the email has exceeded the attempts limit
+    if (attempts[email] && attempts[email] >= maxAttempts) {
+        Swal.fire({
+            title: 'Error!',
+            text: 'You have exceeded the maximum number of login attempts. Please try again tomorrow.',
+            icon: 'error',
+            showConfirmButton: true
+        });
+        return;
     }
 
-    // Check login attempts using localStorage
-    function checkLoginAttempts() {
-        const email = document.getElementById("email").value;
-        let attemptsData = JSON.parse(localStorage.getItem(email));
+    // Perform login validation here
+    // Simulate a failed login for demonstration (this should be replaced by actual backend validation)
+    let isValidLogin = false; // Set this to true if the login is valid
 
-        if (!attemptsData) {
-            // If no attempts recorded, initialize the data
-            attemptsData = { attempts: 0, lastAttempt: new Date().toISOString() };
-            localStorage.setItem(email, JSON.stringify(attemptsData));
-        }
+    if (isValidLogin) {
+        // Reset attempts on successful login
+        localStorage.removeItem('loginAttempts');
+        window.location.href = 'package-list.php'; // Redirect to another page after success
+    } else {
+        // Increment the attempt count on failure
+        attempts[email] = attempts[email] ? attempts[email] + 1 : 1;
+        localStorage.setItem('loginAttempts', JSON.stringify(attempts));
 
-        const today = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
-        const lastAttemptDate = new Date(attemptsData.lastAttempt).toISOString().split('T')[0];
-
-        // Reset attempts if it's a new day
-        if (today !== lastAttemptDate) {
-            attemptsData.attempts = 0;
-            attemptsData.lastAttempt = new Date().toISOString();
-            localStorage.setItem(email, JSON.stringify(attemptsData));
-        }
-
-        // Check if attempts exceeded
-        if (attemptsData.attempts >= 3) {
+        if (attempts[email] >= maxAttempts) {
             Swal.fire({
                 title: 'Error!',
-                text: 'Login trial expired, please try again tomorrow.',
+                text: 'Incorrect email or password. You have reached the maximum number of attempts.',
                 icon: 'error',
                 showConfirmButton: true
             });
-            return;
-        }
-
-        // Simulate password check (replace this with actual password verification logic)
-        const password = document.getElementById("password").value;
-        const correctPassword = "your_correct_password"; // Replace with actual password check
-
-        if (password === correctPassword) {
-            // Successful login
-            window.location.href = 'package-list.php';
         } else {
-            // Incorrect password, increment attempts
-            attemptsData.attempts += 1;
-            localStorage.setItem(email, JSON.stringify(attemptsData));
-
             Swal.fire({
                 title: 'Error!',
                 text: 'Incorrect email or password',
@@ -130,6 +154,20 @@ if (isset($_POST['signin'])) {
             });
         }
     }
+};
+
+// Toggle password visibility
+let showPass2 = document.getElementById('show-pass2');
+showPass2.onclick = () => {
+    let passwordInp = document.forms['login']['password'];
+    if (passwordInp.getAttribute('type') == 'password') {
+        showPass2.classList.replace('fa-eye', 'fa-eye-slash')
+        passwordInp.setAttribute('type', 'text')
+    } else {
+        showPass2.classList.replace('fa-eye-slash', 'fa-eye')
+        passwordInp.setAttribute('type', 'password')
+    }
+}
 </script>
 
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
