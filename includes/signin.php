@@ -15,7 +15,9 @@ if (isset($_POST['signin'])) {
             title: 'Error!',
             text: 'Login trial expired, please try again later',
             icon: 'error',
-            showConfirmButton: true
+            showConfirmButton: true,
+            timer: 60000, // 1 minute timer
+            timerProgressBar: true
         });
         </script>";
         echo "<script>window.location.href = 'index.php';</script>";            
@@ -37,7 +39,9 @@ if (isset($_POST['signin'])) {
                 title: 'Error!',
                 text: 'Please complete the reCAPTCHA verification.',
                 icon: 'error',
-                showConfirmButton: true
+                showConfirmButton: true,
+                timer: 60000, // 1 minute timer
+                timerProgressBar: true
             });
             </script>";
         echo "<script>window.location.href = 'index.php';</script>";
@@ -66,7 +70,9 @@ if (isset($_POST['signin'])) {
                         title: 'Error!',
                         text: 'Account locked. Try again in " . ceil($time_left / 60) . " minutes.',
                         icon: 'error',
-                        showConfirmButton: true
+                        showConfirmButton: true,
+                        timer: 60000, // 1 minute timer
+                        timerProgressBar: true
                     });
                     </script>";
                 echo "<script>window.location.href = 'index.php';</script>";
@@ -110,7 +116,9 @@ if (isset($_POST['signin'])) {
                             title: 'Error!',
                             text: 'Too many failed attempts. Please try again in 24 hours.',
                             icon: 'error',
-                            showConfirmButton: true
+                            showConfirmButton: true,
+                            timer: 60000, // 1 minute timer
+                            timerProgressBar: true
                         });
                         </script>";
                 } else {
@@ -119,7 +127,9 @@ if (isset($_POST['signin'])) {
                             title: 'Error!',
                             text: 'Incorrect email or password',
                             icon: 'error',
-                            showConfirmButton: true
+                            showConfirmButton: true,
+                            timer: 60000, // 1 minute timer
+                            timerProgressBar: true
                         });
                         </script>";
                 }
@@ -131,7 +141,9 @@ if (isset($_POST['signin'])) {
                 title: 'Error!',
                 text: 'Please confirm your account first',
                 icon: 'error',
-                showConfirmButton: true
+                showConfirmButton: true,
+                timer: 60000, // 1 minute timer
+                timerProgressBar: true
             });
             </script>";
             echo "<script>window.location.href = 'index.php';</script>";
@@ -142,7 +154,9 @@ if (isset($_POST['signin'])) {
                 title: 'Error!',
                 text: 'Email not registered',
                 icon: 'error',
-                showConfirmButton: true
+                showConfirmButton: true,
+                timer: 60000, // 1 minute timer
+                timerProgressBar: true
             });
             </script>";
         echo "<script>window.location.href = 'index.php';</script>";
