@@ -112,59 +112,40 @@ if (isset($_POST['login'])) {
 
 
 
-<div class="container d-flex justify-content-center align-items-center">
-	<div class="col-7">
-		<div class="card">
-			<div class="card-header text-center bg-primary p-5">
-				<h2>Sign In</h2>
+<div class="container justify-content-center align-items-center d-flex ">
+	<div class="shadow p-4">
+    <form method="post" name="login" style="max-width: 600px; width: 100%;">
+		<a  href="../index.php" class="bg">
+			<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
+				<path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1"/>
+			  </svg>
+		</a>
+		<h1 class="mb-4 text-primary text-center">
+			Sign in
+		</h1>
+        <input type="text" class="form-control mb-3" name="username"  placeholder="Enter username">
+		<div class="password-agileits">
+			<div style="position: relative;">
+				<input type="password" name="password" id="password" class="form-control" placeholder="Password" value=""
+					required="">
+				<i class="fa fa-eye" id="show-pass" style="position: absolute; top: 0; right: 0; margin: 10px 10px 0 0;"></i>
 			</div>
-
-
-			<div class="card-body">
-
-				<form method="post" name="login">
-					<div class="username">
-						<!-- <span class="username">Username:</span> -->
-						<input type="text" name="username" class="form-control" placeholder="Enter username"
-							required>
-						<div class="clearfix"></div>
-					</div>
-
-
-
-					<br>
-					<div class="password-agileits">
-						<!-- <span class="username">Password:</span> -->
-						<div style="position: relative;">
-							<input type="password" name="password" id="password" class="form-control" placeholder="Password" value=""
-								required="">
-							<i class="fa fa-eye" id="show-pass" style="position: absolute; top: 0; right: 0; margin: 10px 10px 0 0;"></i>
-						</div>
-						<div class="clearfix"></div>
-					</div>
-
-
-					<a href="forgot-password.php" class="btn btn-link">Forgot Password</a>
-
-					<div class="row">
-						<div class="col-6">
-							<input type="submit" class="btn btn-primary mt-2 form-control" name="login"
-								value="Sign In">
-
-						</div>
-						<div class="col-6">
-							<a href="../index.php" class="btn btn-secondary mt-2 form-control">Back</a>
-
-						</div>
-					</div>
-
-
-
-
-				</form>
-			</div>
+			<div class="clearfix"></div>
 		</div>
+
+		<div class="row">
+		<div class="col-12">
+			<a href="forgot-password.php" class="btn ">Forgot Password</a>
+		</div>	
+
+		<div class="col-12">
+			<input type="submit" class="btn btn-primary1 mt-2 form-control" name="login"
+			value="Sign In">
+		</div>
+		</div>
+    </form>
 	</div>
+
 </div>
 <script>
 	let showPass = document.getElementById('show-pass');
