@@ -85,21 +85,11 @@ if (strlen($_SESSION['alogin']) == 0) {
         $pdetails = $_POST['packagedetails'];
         $pimage = $_FILES["packageimage"]["name"];
 
-        // Server-side validation for image
-        $allowed_extensions = array("jpg", "jpeg", "png", "gif");
-        $file_extension = pathinfo($pimage, PATHINFO_EXTENSION);
-
-        if (!in_array(strtolower($file_extension), $allowed_extensions)) {
-            echo "<script>document.getElementById('packageimageError').innerText = 'Only image files (JPG, PNG, GIF) are allowed.';</script>";
-            exit;
-        }
-
         // Validate text fields
         $textFields = [$pname, $ptype, $plocation, $pfeatures];
-        foreach ($textFields as $key => $field) {
+        foreach ($textFields as $field) {
             if (!preg_match("/^[a-zA-Z\s]+$/", $field)) {
-                $fieldErrors = ["packagenameError", "packagetypeError", "packagelocationError", "packagefeaturesError"];
-                echo "<script>document.getElementById('{$fieldErrors[$key]}').innerText = 'Only letters and spaces allowed.';</script>";
+                echo "<script>document.getElementById('{$field}Error').innerText = 'Only letters and spaces allowed.';</script>";
                 exit;
             }
         }
@@ -126,24 +116,24 @@ if (strlen($_SESSION['alogin']) == 0) {
 
         if ($lastInsertId) {
             echo "<script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Package added successfully!',
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Package added successfully',
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(() => {
+                    window.location.href = 'create-package.php';
                 });
             </script>";
         } else {
             echo "<script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Something went wrong. Please try again.',
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'error',
+                    title: 'Something went wrong. Please try again.',
+                    showConfirmButton: false,
+                    timer: 1500
                 });
             </script>";
         }
@@ -151,3 +141,19 @@ if (strlen($_SESSION['alogin']) == 0) {
     require 'includes/layout-foot.php';
 }
 ?>
+
+<script>
+    document.getElementById('packageForm').addEventListener('input', function (e) {
+        const id = e.target.id;
+        const value = e.target.value;
+        const error = document.getElementById(`${id}Error`);
+
+        if (id === 'packageprice' && !/^\d*$/.test(value)) {
+            error.innerText = 'Only numbers are allowed.';
+        } else if (['packagename', 'packagetype', 'packagelocation', 'packagefeatures'].includes(id) && !/^[a-zA-Z\s]*$/.test(value)) {
+            error.innerText = 'Only letters and spaces are allowed.';
+        } else {
+            error.innerText = '';
+        }
+    });
+</script>
