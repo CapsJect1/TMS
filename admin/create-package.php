@@ -14,33 +14,54 @@ if (strlen($_SESSION['alogin']) == 0) {
                 <div class="card-body">
                     <h4>Create Package</h4>
                     <hr>
-                    <form class="form-horizontal" name="package" method="post" enctype="multipart/form-data">
-                        <label for="focusedinput" class="col-sm-2 control-label">Room or Resort</label>
-                        <input type="text" class="form-control my-2" name="packagename" id="packagename"
-                            placeholder="Create room or resort" required>
+                    <form class="form-horizontal" name="package" method="post" enctype="multipart/form-data" id="packageForm">
+                        <div class="form-group">
+                            <label for="packagename">Room or Resort</label>
+                            <input type="text" class="form-control my-2" name="packagename" id="packagename"
+                                placeholder="Create room or resort" required>
+                            <div class="error text-danger" id="packagenameError"></div>
+                        </div>
 
-                        <label for="focusedinput" class="col-sm-2 control-label">Package Type</label>
-                        <input type="text" class="form-control my-2" name="packagetype" id="packagetype"
-                            placeholder="Package Type (e.g., Family Package / Couple Package)" required>
+                        <div class="form-group">
+                            <label for="packagetype">Package Type</label>
+                            <input type="text" class="form-control my-2" name="packagetype" id="packagetype"
+                                placeholder="Package Type (e.g., Family Package / Couple Package)" required>
+                            <div class="error text-danger" id="packagetypeError"></div>
+                        </div>
 
-                        <label for="focusedinput" class="col-sm-2 control-label">Package Location</label>
-                        <input type="text" class="form-control my-2" name="packagelocation" id="packagelocation"
-                            placeholder="Package Location" required>
+                        <div class="form-group">
+                            <label for="packagelocation">Package Location</label>
+                            <input type="text" class="form-control my-2" name="packagelocation" id="packagelocation"
+                                placeholder="Package Location" required>
+                            <div class="error text-danger" id="packagelocationError"></div>
+                        </div>
 
-                        <label for="focusedinput" class="col-sm-2 control-label">Package Price in PHP</label>
-                        <input type="text" class="form-control my-2" name="packageprice" id="packageprice"
-                            placeholder="Package Price in PHP" required>
+                        <div class="form-group">
+                            <label for="packageprice">Package Price in PHP</label>
+                            <input type="text" class="form-control my-2" name="packageprice" id="packageprice"
+                                placeholder="Package Price in PHP" required>
+                            <div class="error text-danger" id="packagepriceError"></div>
+                        </div>
 
-                        <label for="focusedinput" class="col-sm-2 control-label">Package Features</label>
-                        <input type="text" class="form-control my-2" name="packagefeatures" id="packagefeatures"
-                            placeholder="Package Features (e.g., Free Pickup-Drop Facility)" required>
+                        <div class="form-group">
+                            <label for="packagefeatures">Package Features</label>
+                            <input type="text" class="form-control my-2" name="packagefeatures" id="packagefeatures"
+                                placeholder="Package Features (e.g., Free Pickup-Drop Facility)" required>
+                            <div class="error text-danger" id="packagefeaturesError"></div>
+                        </div>
 
-                        <label for="focusedinput" class="col-sm-2 control-label">Package Details</label>
-                        <textarea class="form-control my-2" rows="5" cols="50" name="packagedetails" id="packagedetails"
-                            placeholder="Package Details" required></textarea>
+                        <div class="form-group">
+                            <label for="packagedetails">Package Details</label>
+                            <textarea class="form-control my-2" rows="5" cols="50" name="packagedetails" id="packagedetails"
+                                placeholder="Package Details" required></textarea>
+                            <div class="error text-danger" id="packagedetailsError"></div>
+                        </div>
 
-                        <label for="focusedinput" class="col-sm-2 control-label">Package Image</label>
-                        <input type="file" name="packageimage" class="form-control my-2" id="packageimage" required>
+                        <div class="form-group">
+                            <label for="packageimage">Package Image</label>
+                            <input type="file" name="packageimage" class="form-control my-2" id="packageimage" required>
+                            <div class="error text-danger" id="packageimageError"></div>
+                        </div>
 
                         <div class="mt-3">
                             <button type="submit" name="submit" class="btn btn-primary">Create</button>
@@ -68,18 +89,17 @@ if (strlen($_SESSION['alogin']) == 0) {
         $textFields = [$pname, $ptype, $plocation, $pfeatures];
         foreach ($textFields as $field) {
             if (!preg_match("/^[a-zA-Z\s]+$/", $field)) {
-                echo "<script>alert('Text fields can only contain letters and spaces.');</script>";
+                echo "<script>document.getElementById('{$field}Error').innerText = 'Only letters and spaces allowed.';</script>";
                 exit;
             }
         }
 
         // Validate package price
         if (!preg_match("/^\d+$/", $pprice)) {
-            echo "<script>alert('Package Price must be a valid number.');</script>";
+            echo "<script>document.getElementById('packagepriceError').innerText = 'Package Price must be a valid number.';</script>";
             exit;
         }
 
-        // Move image and insert into database
         move_uploaded_file($_FILES["packageimage"]["tmp_name"], "packageimages/" . $_FILES["packageimage"]["name"]);
         $sql = "INSERT INTO tbltourpackages(PackageName, PackageType, PackageLocation, PackagePrice, PackageFetures, PackageDetails, PackageImage) 
                 VALUES (:pname, :ptype, :plocation, :pprice, :pfeatures, :pdetails, :pimage)";
@@ -103,7 +123,7 @@ if (strlen($_SESSION['alogin']) == 0) {
                     showConfirmButton: false,
                     timer: 1500
                 }).then(() => {
-                    window.location.href = 'create-package.php'
+                    window.location.href = 'create-package.php';
                 });
             </script>";
         } else {
@@ -123,32 +143,17 @@ if (strlen($_SESSION['alogin']) == 0) {
 ?>
 
 <script>
-    document.querySelector("form[name='package']").addEventListener("submit", function (e) {
-        let isValid = true;
-        const textFields = ['packagename', 'packagetype', 'packagelocation', 'packagefeatures'];
-        const numberField = document.getElementById("packageprice");
+    document.getElementById('packageForm').addEventListener('input', function (e) {
+        const id = e.target.id;
+        const value = e.target.value;
+        const error = document.getElementById(`${id}Error`);
 
-        // Validate text fields
-        textFields.forEach(function (id) {
-            const input = document.getElementById(id);
-            if (!/^[a-zA-Z\s]+$/.test(input.value)) {
-                alert(`Please enter only text in the ${id.replace("package", "package ")} field.`);
-                isValid = false;
-                e.preventDefault();
-                input.focus();
-                return;
-            }
-        });
-
-        // Validate package price
-        if (!/^\d+$/.test(numberField.value)) {
-            alert("Please enter a valid number in the Package Price field.");
-            isValid = false;
-            e.preventDefault();
-            numberField.focus();
-            return;
+        if (id === 'packageprice' && !/^\d*$/.test(value)) {
+            error.innerText = 'Only numbers are allowed.';
+        } else if (['packagename', 'packagetype', 'packagelocation', 'packagefeatures'].includes(id) && !/^[a-zA-Z\s]*$/.test(value)) {
+            error.innerText = 'Only letters and spaces are allowed.';
+        } else {
+            error.innerText = '';
         }
-
-        return isValid;
     });
 </script>
