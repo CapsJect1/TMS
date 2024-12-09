@@ -117,7 +117,7 @@ if (isset($_POST['login'])) {
 
 <div class="container justify-content-center align-items-center d-flex ">
 	<div class="">
-   <div class="card p-2">
+   <div class="card p-3">
 	<form method="post" name="login" style="max-width: 600px; width: 100%;">
 		<a  href="../index.php" class="bg">
 			<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
