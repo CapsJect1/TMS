@@ -2,54 +2,14 @@
 session_start();
 
 if (isset($_SESSION['ERROR_LOGIN'])) {
-    if ($_SESSION['date'] == date('Y-md-d')) {
-        unset($_SESSION['ERROR_LOGIN']);
+    // Reset attempts if a new day
+    if ($_SESSION['ERROR_LOGIN']['date'] != date('Y-m-d')) {
+        $_SESSION['ERROR_LOGIN']['count'] = 0;
     }
 }
 
 if (isset($_POST['signin'])) {
-    if (isset($_SESSION['ERROR_LOGIN'])) {
-
-        if ($_SESSION['ERROR_LOGIN']['count'] >= 3) {
-            echo "<script>
-            Swal.fire({
-                title: 'Error!',
-                text: 'Login trial expired, please try again later',
-                icon: 'error',
-                timer: 1500,
-                showConfirmButton: false
-            });
-            </script>";
-            echo "<script>window.location.href = 'index.php';</script>";            
-        }
-
-    }
-
-
-    // Google reCAPTCHA verification
-    $recaptcha_secret = '6LezNpMqAAAAAKA-tks15YZHfdpFeWhQZo2kj-gb'; // Secret key
-    $recaptcha_response = $_POST['g-recaptcha-response'];
-
-    // Make request to verify reCAPTCHA response
-    $recaptcha_verify_url = "https://www.google.com/recaptcha/api/siteverify";
-    $recaptcha_verify_response = file_get_contents($recaptcha_verify_url . "?secret=" . $recaptcha_secret . "&response=" . $recaptcha_response);
-    $recaptcha_result = json_decode($recaptcha_verify_response);
-
-    // If reCAPTCHA verification failed, show an error
-    if (!$recaptcha_result->success) {
-        echo "<script>
-            Swal.fire({
-                title: 'Error!',
-                text: 'Please complete the reCAPTCHA verification.',
-                icon: 'error',
-                timer: 1500,
-                showConfirmButton: false
-            });
-            </script>";
-            echo "<script>window.location.href = 'index.php';</script>";
-    }
-
-    // Continue with your existing login logic
+    // Get the email and password from the form
     $email = htmlspecialchars(stripslashes(trim($_POST['email'])));
     $password = htmlspecialchars(stripslashes(trim($_POST['password'])));
     $status = 2;
@@ -64,16 +24,64 @@ if (isset($_POST['signin'])) {
 
     if ($query->rowCount() > 0) {
         if ($user['Status'] == 2) {
-            // Set session variables upon successful login
+            // Check if the user exceeded the allowed login attempts
+            if (isset($_SESSION['ERROR_LOGIN']) && $_SESSION['ERROR_LOGIN']['count'] >= 3) {
+                echo "<script>
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Login trial expired, please try again later',
+                    icon: 'error',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+                </script>";
+                echo "<script>window.location.href = 'index.php';</script>";
+                exit;
+            }
+
+            // Google reCAPTCHA verification
+            $recaptcha_secret = '6LezNpMqAAAAAKA-tks15YZHfdpFeWhQZo2kj-gb';
+            $recaptcha_response = $_POST['g-recaptcha-response'];
+            $recaptcha_verify_url = "https://www.google.com/recaptcha/api/siteverify";
+            $recaptcha_verify_response = file_get_contents($recaptcha_verify_url . "?secret=" . $recaptcha_secret . "&response=" . $recaptcha_response);
+            $recaptcha_result = json_decode($recaptcha_verify_response);
+
+            if (!$recaptcha_result->success) {
+                echo "<script>
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Please complete the reCAPTCHA verification.',
+                    icon: 'error',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+                </script>";
+                echo "<script>window.location.href = 'index.php';</script>";
+                exit;
+            }
+
+            // Validate password
             if (password_verify($password, $user['Password'])) {
+                // Reset login attempts on successful login
+                $_SESSION['ERROR_LOGIN']['count'] = 0;
+                $_SESSION['ERROR_LOGIN']['date'] = date('Y-m-d');
+
+                // Set session variables and redirect to the dashboard
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user_name'] = $user['FullName'];
                 $_SESSION['login'] = $user['EmailId'];
                 $_SESSION['fname'] = $user['fname'];
                 $_SESSION['lname'] = $user['lname'];
-                // Redirect to a dashboard or home page after successful login
+
                 echo "<script>window.location.href = 'package-list.php';</script>";
             } else {
+                // Increment login attempts on incorrect password
+                if (!isset($_SESSION['ERROR_LOGIN'])) {
+                    $_SESSION['ERROR_LOGIN'] = ['count' => 1, 'date' => date('Y-m-d')];
+                } else {
+                    $_SESSION['ERROR_LOGIN']['count'] += 1;
+                }
+
                 echo "<script>
                     Swal.fire({
                         title: 'Error!',
@@ -82,8 +90,8 @@ if (isset($_POST['signin'])) {
                         timer: 1500,
                         showConfirmButton: false
                     });
-                    </script>";
-                    echo "<script>window.location.href = 'index.php';</script>";
+                </script>";
+                echo "<script>window.location.href = 'index.php';</script>";
             }
         } else {
             echo "<script>
@@ -95,24 +103,13 @@ if (isset($_POST['signin'])) {
                 showConfirmButton: false
             });
             </script>";
-            if (!isset($_SESSION['ERROR_LOGIN'])) {
-                $_SESSION['ERROR_LOGIN'] = [
-                    'count' => 1,
-                    'date' => date('Y-m-d')
-                ];
-            }else{
-                $_SESSION['ERROR_LOGIN']['count'] += $_SESSION['ERROR_LOGIN'];
-            }
             echo "<script>window.location.href = 'index.php';</script>";
-
         }
-
-        exit;
     } else {
         echo "<script>
             Swal.fire({
                 title: 'Error!',
-                text: 'Please confirm your account first',
+                text: 'Email not registered',
                 icon: 'error',
                 timer: 1500,
                 showConfirmButton: false
@@ -161,19 +158,49 @@ if (isset($_POST['signin'])) {
 </div>
 
 <script>
+    // Check the login attempt count stored in localStorage
+    let loginAttempts = localStorage.getItem('login_attempts') || 0;
+
+    // Update the login attempt count in the session
+    if (loginAttempts >= 3) {
+        Swal.fire({
+            title: 'Error!',
+            text: 'You have exceeded the maximum login attempts. Please try again later.',
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 1500
+        });
+        document.querySelector('form').style.display = 'none'; // Hide the login form
+    }
+
+    // On form submit (before actual validation)
+    document.forms['login'].onsubmit = function(e) {
+        if (loginAttempts >= 3) {
+            e.preventDefault();  // Prevent form submission
+            Swal.fire({
+                title: 'Error!',
+                text: 'You have exceeded the maximum login attempts. Please try again later.',
+                icon: 'error',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        } else {
+            // Increase the count on each failed login attempt
+            localStorage.setItem('login_attempts', ++loginAttempts);
+        }
+    }
+
     let showPass2 = document.getElementById('show-pass2');
     showPass2.onclick = () => {
         let passwordInp = document.forms['login']['password'];
         if (passwordInp.getAttribute('type') == 'password') {
-            showPass2.classList.replace('fa-eye', 'fa-eye-slash')
-            passwordInp.setAttribute('type', 'text')
+            showPass2.classList.replace('fa-eye', 'fa-eye-slash');
+            passwordInp.setAttribute('type', 'text');
         } else {
-            showPass2.classList.replace('fa-eye-slash', 'fa-eye')
-            passwordInp.setAttribute('type', 'password')
+            showPass2.classList.replace('fa-eye-slash', 'fa-eye');
+            passwordInp.setAttribute('type', 'password');
         }
     }
 </script>
 
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
-
