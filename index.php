@@ -3,6 +3,11 @@ session_start();
 
 
 include ('includes/config.php');
+if (isset($_SESSION['ERROR_LOGIN'])) {
+    if ($_SESSION['date'] == date('Y-m-d')) {
+        unset($_SESSION['ERROR_LOGIN']);
+    }
+}
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -48,6 +53,16 @@ include ('includes/config.php');
 
 <body>
 	<?php include ('includes/header.php'); ?>
+<!-- Alert message if there is an error -->
+<?php if (isset($_SESSION['ERROR_LOGIN'])): ?>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <?php echo $_SESSION['ERROR_LOGIN']['message']; ?>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+<?php endif; ?>
+
 	<div class="banner" style="position: relative;">
 		<div style="width: 100%; position: absolute; top: 2%; left:0; padding: 0 40px;">
 		<img src="./images/IMG_20240714_153433.jpg" style="height: 100px; width: 100%;">
