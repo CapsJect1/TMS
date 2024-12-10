@@ -56,7 +56,7 @@
 							<ul class="dropdown-menu drp-mnu">
 								<li> <a href="profile.php"><i class="fa fa-lock"></i> Profile</a> </li>
 								<li> <a href="change-password.php"><i class="fa fa-lock"></i> Setting</a> </li>
-								<li> <a href="logout.php"><i class="fa fa-sign-out"></i> Logout</a> </li>
+								<li> <a href="./logout.php"><i class="fa fa-sign-out"></i> Logout</a> </li>
 							</ul>
 						</li>
 					</ul>
