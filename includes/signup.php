@@ -1,6 +1,7 @@
 <?php
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
 
 require "./phpmailer/src/Exception.php";
 require "./phpmailer/src/PHPMailer.php";
@@ -9,78 +10,79 @@ require "./phpmailer/src/SMTP.php";
 error_reporting(E_ALL);
 
 if (isset($_POST['submit_register'])) {
+    $verification = uniqid() . rand(100, 999999999);
     $fname = $_POST['fname'];
     $lname = $_POST['lname'];
+    $full = $fname . ' ' . $lname;
+    $mnumber = $_POST['mobilenumber'];
+    $email = $_POST['email'];
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    
+    $sql = "INSERT INTO tblusers(FullName,fname,lname,MobileNumber,EmailId,Password,Verification) 
+            VALUES(:full, :fname, :lname, :mnumber, :email, :password, :verification)";
+    $query = $dbh->prepare($sql);
+    $query->bindParam(':full', $full, PDO::PARAM_STR);
+    $query->bindParam(':fname', $fname, PDO::PARAM_STR);
+    $query->bindParam(':lname', $lname, PDO::PARAM_STR);
+    $query->bindParam(':mnumber', $mnumber, PDO::PARAM_STR);
+    $query->bindParam(':email', $email, PDO::PARAM_STR);
+    $query->bindParam(':password', $password, PDO::PARAM_STR);
+    $query->bindParam(':verification', $verification, PDO::PARAM_STR);
+    $query->execute();
+    $lastInsertId = $dbh->lastInsertId();
 
-    // Backend validation for names
-    if (!preg_match("/^[A-Za-z\s]+$/", $fname) || !preg_match("/^[A-Za-z\s]+$/", $lname)) {
-        echo "<script>alert('First and last name should not contain numbers.');</script>";
-    } else {
-        $verification = uniqid() . rand(100, 999999999);
-        $full = $fname . ' ' . $lname;
-        $mnumber = $_POST['mobilenumber'];
-        $email = $_POST['email'];
-        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-
-        // Database query
-        $sql = "INSERT INTO tblusers (FullName, fname, lname, MobileNumber, EmailId, Password, Verification) 
-                VALUES (:full, :fname, :lname, :mnumber, :email, :password, :verification)";
-        $query = $dbh->prepare($sql);
-        $query->bindParam(':full', $full, PDO::PARAM_STR);
-        $query->bindParam(':fname', $fname, PDO::PARAM_STR);
-        $query->bindParam(':lname', $lname, PDO::PARAM_STR);
-        $query->bindParam(':mnumber', $mnumber, PDO::PARAM_STR);
-        $query->bindParam(':email', $email, PDO::PARAM_STR);
-        $query->bindParam(':password', $password, PDO::PARAM_STR);
-        $query->bindParam(':verification', $verification, PDO::PARAM_STR);
-
-        $query->execute();
-        $lastInsertId = $dbh->lastInsertId();
-
+    if (strlen($_POST['password']) > 7) {
         if ($lastInsertId) {
-            // Send email
+            $_SESSION['msg'] = "You are successfully registered. Please verify your account first to login.";
+
             $mail = new PHPMailer(true);
             $mail->SMTPDebug = 0;
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'your-email@gmail.com';
-            $mail->Password = 'your-email-password';
+            $mail->Username = 'percebuhayan12@gmail.com';
+            $mail->Password = 'jnolufsoqvqbsjim';
             $mail->Port = 587;
-
-            $mail->setFrom('noreply@yourdomain.com', 'Your App Name');
+            $mail->SMTPOptions = [
+                'ssl' => [
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'allow_self_signed' => true
+                ]
+            ];
+            $mail->setFrom('santafe@gmail.com', 'TMS Santa Fe');
             $mail->addAddress($email);
             $mail->Subject = "Email Account Verification";
-            $mail->Body = "Click this link to verify your account: https://yourdomain.com/verify-account.php?verification=$verification&email=$email";
-
+            $mail->Body = "Click this link to verify account: https://santafeport.com/verify-account.php?verification=" . $verification . "&email=" . $email;
             $mail->send();
-
-            // SweetAlert Success
-            echo "<script>
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Registration Successful!',
-                        text: 'You have successfully registered. Please verify your email to log in.',
-                        confirmButtonText: 'OK'
-                    }).then(() => {
-                        window.location.href = 'thankyou.php';
-                    });
-                  </script>";
+            
+            echo "<script>window.location.href = 'thankyou.php';</script>";
         } else {
-            echo "<script>
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Registration Failed',
-                        text: 'Something went wrong. Please try again.',
-                        confirmButtonText: 'OK'
-                    });
-                  </script>";
+            $_SESSION['msg'] = "Something went wrong. Please try again.";
+            echo "<script>window.location.href = 'thankyou.php';</script>";
         }
     }
 }
 ?>
 
-<!-- Frontend Form -->
+<!--Javascript for check email availabilty-->
+<script>
+	function checkAvailability() {
+
+		$("#loaderIcon").show();
+		jQuery.ajax({
+			url: "check_availability.php",
+			data: 'emailid=' + $("#email").val(),
+			type: "POST",
+			success: function(data) {
+				$("#user-availability-status").html(data);
+				$("#loaderIcon").hide();
+			},
+			error: function() {}
+		});
+	}
+</script>
+
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -94,20 +96,21 @@ if (isset($_POST['submit_register'])) {
                     <div class="login-grids">
                         <div class="login">
                             <div class="login-right">
-                                <form method="post">
+                                <form method="post" id="register-form">
                                     <h3>Create your account</h3>
-                                    <input type="text" placeholder="First Name" name="fname" autocomplete="off" required="" onkeyup="validateNames()">
-                                    <input type="text" placeholder="Last Name" name="lname" autocomplete="off" required="" onkeyup="validateNames()">
-                                    <span id="name-validation-message" style="color: red; font-size: 12px;"></span>
-                                    <input type="text" placeholder="Mobile number" onkeyup="this.value=this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')" maxlength="11" name="mobilenumber" autocomplete="off" required="">
-                                    <input type="text" placeholder="Email id" name="email" id="email" onBlur="checkAvailability()" autocomplete="off" required="">
+                                    <input type="text" value="" placeholder="First Name" id="fname" name="fname" autocomplete="off" required="" oninput="validateName()">
+                                    <span id="fname-error" style="color:red;font-size:12px;"></span>
+                                    <input type="text" value="" placeholder="Last Name" id="lname" name="lname" autocomplete="off" required="" oninput="validateName()">
+                                    <span id="lname-error" style="color:red;font-size:12px;"></span>
+                                    <input type="text" value="" placeholder="Mobile number" onkeyup="this.value=this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')" maxlength="11" name="mobilenumber" autocomplete="off" required="">
+                                    <input type="text" value="" placeholder="Email id" name="email" id="email" onBlur="checkAvailability()" autocomplete="off" required="">
                                     <span id="user-availability-status" style="font-size:12px;"></span>
                                     <div style="position: relative;">
                                         <input type="password" name="password" id="password" placeholder="Password" value="" minlength="8" required>
                                         <i class="fa fa-eye" id="show-pass" style="position: absolute; top: 0; right: 0; margin: 35px 10px 0 0;"></i>
                                     </div>
                                     <div id="html_element"></div>
-                                    <input type="submit" name="submit_register" id="submit" value="CREATE ACCOUNT">
+                                    <input type="submit" name="submit_register" id="submit" value="CREATE ACCOUNT" disabled>
                                 </form>
                             </div>
                             <div class="clearfix"></div>
@@ -120,50 +123,58 @@ if (isset($_POST['submit_register'])) {
     </div>
 </div>
 
-<!-- SweetAlert Script -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<!-- JavaScript for Validation -->
 <script>
-    function validateNames() {
-        const fname = document.querySelector('input[name="fname"]').value;
-        const lname = document.querySelector('input[name="lname"]').value;
-        const submitButton = document.getElementById('submit');
-        const nameValidationMessage = document.getElementById('name-validation-message');
+function validateName() {
+    const fname = document.getElementById('fname').value;
+    const lname = document.getElementById('lname').value;
+    const fnameError = document.getElementById('fname-error');
+    const lnameError = document.getElementById('lname-error');
+    const submitButton = document.getElementById('submit');
+    let valid = true;
 
-        const namePattern = /^[A-Za-z\s]+$/; // Allows letters and spaces only
-
-        if (!namePattern.test(fname) || !namePattern.test(lname)) {
-            nameValidationMessage.textContent = "First and last name should not contain numbers.";
-            submitButton.disabled = true;
-        } else {
-            nameValidationMessage.textContent = "";
-            submitButton.disabled = false;
-        }
+    if (/\d/.test(fname)) {
+        fnameError.textContent = 'First name should not contain numbers.';
+        valid = false;
+    } else {
+        fnameError.textContent = '';
     }
 
-    function checkAvailability() {
-        $("#loaderIcon").show();
-        jQuery.ajax({
-            url: "check_availability.php",
-            data: 'emailid=' + $("#email").val(),
-            type: "POST",
-            success: function(data) {
-                $("#user-availability-status").html(data);
-                $("#loaderIcon").hide();
-            },
-            error: function() {}
-        });
+    if (/\d/.test(lname)) {
+        lnameError.textContent = 'Last name should not contain numbers.';
+        valid = false;
+    } else {
+        lnameError.textContent = '';
     }
+
+    submitButton.disabled = !valid;
+}
 </script>
 
-<!-- reCAPTCHA -->
+
 <script type="text/javascript">
-    var onloadCallback = function() {
+      var onloadCallback = function() {
         grecaptcha.render('html_element', {
-            'sitekey': '6LezNpMqAAAAAJo_vbJQ6Lo10T2GxhtxeROWoB8p'
+          'sitekey' : '6LeBZG0qAAAAAHpE8Nr7ZxDcFQw3dVdkeJ4p3stl'
         });
-    };
+      };
+    </script>
+
+
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+        async defer>
+    </script>
+
+<script>
+	// let showPass = document.getElementById('show-pass');
+    // showPass.onclick = () => {
+    //     let passwordInp = document.forms['signup']['password'];
+    //     if (passwordInp.getAttribute('type') == 'password') {
+    //         showPass.classList.replace('fa-eye', 'fa-eye-slash')
+            
+    //         passwordInp.setAttribute('type', 'text')
+    //     }else{
+    //         showPass.classList.replace('fa-eye-slash', 'fa-eye')
+    //         passwordInp.setAttribute('type', 'password')
+    //     }
+    // }
 </script>
-<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
-    
