@@ -17,7 +17,7 @@ if (isset($_POST['signin'])) {
             icon: 'error',
             showConfirmButton: true,
             allowOutsideClick: false, // Prevent closing by clicking outside
-            allowEscapeKey: false,   // Prevent closing by pressing escape key
+            allowEscapeKey: false,    // Prevent closing by pressing escape key
         });
         </script>";
         echo "<script>window.location.href = 'index.php';</script>";            
@@ -40,8 +40,8 @@ if (isset($_POST['signin'])) {
                 text: 'Please complete the reCAPTCHA verification.',
                 icon: 'error',
                 showConfirmButton: true,
-                allowOutsideClick: false,
-                allowEscapeKey: false,
+                allowOutsideClick: false, // Prevent closing by clicking outside
+                allowEscapeKey: false,    // Prevent closing by pressing escape key
             });
             </script>";
         echo "<script>window.location.href = 'index.php';</script>";
@@ -71,8 +71,8 @@ if (isset($_POST['signin'])) {
                         text: 'Account locked. Try again in " . ceil($time_left / 60) . " minutes.',
                         icon: 'error',
                         showConfirmButton: true,
-                        allowOutsideClick: false,
-                        allowEscapeKey: false,
+                        allowOutsideClick: false, // Prevent closing by clicking outside
+                        allowEscapeKey: false,    // Prevent closing by pressing escape key
                     });
                     </script>";
                 echo "<script>window.location.href = 'index.php';</script>";
@@ -117,10 +117,10 @@ if (isset($_POST['signin'])) {
                             text: 'Too many failed attempts. Please try again in 5 minutes.',
                             icon: 'error',
                             showConfirmButton: true,
-                            allowOutsideClick: false,
-                            allowEscapeKey: false,
+                            allowOutsideClick: false, // Prevent closing by clicking outside
+                            allowEscapeKey: false,    // Prevent closing by pressing escape key
                         });
-                    </script>";
+                        </script>";
                 } else {
                     echo "<script>
                         Swal.fire({
@@ -128,10 +128,10 @@ if (isset($_POST['signin'])) {
                             text: 'Incorrect email or password',
                             icon: 'error',
                             showConfirmButton: true,
-                            allowOutsideClick: false,
-                            allowEscapeKey: false,
+                            allowOutsideClick: false, // Prevent closing by clicking outside
+                            allowEscapeKey: false,    // Prevent closing by pressing escape key
                         });
-                    </script>";
+                        </script>";
                 }
                 echo "<script>window.location.href = 'index.php';</script>";
             }
@@ -142,8 +142,8 @@ if (isset($_POST['signin'])) {
                 text: 'Please confirm your account first',
                 icon: 'error',
                 showConfirmButton: true,
-                allowOutsideClick: false,
-                allowEscapeKey: false,
+                allowOutsideClick: false, // Prevent closing by clicking outside
+                allowEscapeKey: false,    // Prevent closing by pressing escape key
             });
             </script>";
             echo "<script>window.location.href = 'index.php';</script>";
@@ -155,14 +155,15 @@ if (isset($_POST['signin'])) {
                 text: 'Email not registered',
                 icon: 'error',
                 showConfirmButton: true,
-                allowOutsideClick: false,
-                allowEscapeKey: false,
+                allowOutsideClick: false, // Prevent closing by clicking outside
+                allowEscapeKey: false,    // Prevent closing by pressing escape key
             });
             </script>";
         echo "<script>window.location.href = 'index.php';</script>";
     }
 }
 ?>
+
 
 <!-- HTML Form for Login -->
 <div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
