@@ -40,7 +40,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 		<div class="card-body">
 			<div class="agile-tables">
 
-				<h2 class="mb-3">Manage <?php echo $_GET['uname']; ?>'s Bookings</h2>
+<!-- 				<h2 class="mb-3">Manage <?php echo $_GET['uname']; ?>'s Bookings</h2> -->
 				<hr>
 				<div class="table-responsive my-5">
 				<table id="table">
