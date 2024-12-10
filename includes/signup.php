@@ -125,6 +125,7 @@ if (isset($_POST['submit_register'])) {
 				    <input type="password" name="password" id="password" placeholder="Password" value="" minlength="8" required>
 				    <i class="fa fa-eye" id="show-pass" style="position: absolute; top: 0; right: 0; margin: 35px 10px 0 0; cursor: pointer;"></i>
 				</div>
+					</br>
                                     <div id="html_element"></div>
                                     <input type="submit" name="submit_register" id="submit" value="CREATE ACCOUNT" disabled>
                                 </form>
