@@ -1,3 +1,12 @@
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([^\.]+)$ $1.php [NC,L]
+
+
+
+
+
 
 # Enable HTTP Strict Transport Security (HSTS)
 Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
