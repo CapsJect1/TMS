@@ -141,7 +141,7 @@ if (isset($_POST['submit_register'])) {
 <script type="text/javascript">
     var onloadCallback = function() {
         grecaptcha.render('html_element', {
-            'sitekey': 'your-site-key'
+            'sitekey': '6LezNpMqAAAAAJo_vbJQ6Lo10T2GxhtxeROWoB8p'
         });
     };
 </script>
