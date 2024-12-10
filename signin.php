@@ -1,5 +1,6 @@
 <?php
 session_start();
+include ('includes/config.php');
 
 // Enable error reporting for debugging
 error_reporting(E_ALL);
