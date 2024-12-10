@@ -104,7 +104,7 @@ if (isset($_POST['signin'])) {
 
                 // Lock account if attempts exceed 3
                 if ($user['login_attempts'] + 1 >= 3) {
-                    $lock_time = date('Y-m-d H:i:s', strtotime('+24 hours'));
+                    $lock_time = date('Y-m-d H:i:s', strtotime('+5 minutes')); // Lock for 5 minutes
                     $sql_lock = "UPDATE tblusers SET lock_time = :lock_time WHERE EmailId = :email";
                     $lock_query = $dbh->prepare($sql_lock);
                     $lock_query->bindParam(':lock_time', $lock_time, PDO::PARAM_STR);
@@ -114,7 +114,7 @@ if (isset($_POST['signin'])) {
                     echo "<script>
                         Swal.fire({
                             title: 'Error!',
-                            text: 'Too many failed attempts. Please try again in 24 hours.',
+                            text: 'Too many failed attempts. Please try again in 5 minutes.',
                             icon: 'error',
                             showConfirmButton: true,
                             timer: 60000, // 1 minute timer
@@ -163,6 +163,7 @@ if (isset($_POST['signin'])) {
     }
 }
 ?>
+
 
 <!-- HTML Form for Login -->
 <div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
