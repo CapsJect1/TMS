@@ -163,6 +163,7 @@ if (isset($_POST['signin'])) {
     }
 }
 ?>
+
 <!DOCTYPE HTML>
 <html lang="en">
 
@@ -170,62 +171,79 @@ if (isset($_POST['signin'])) {
     <title>TMS | Tourism Management System</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="application/javascript">
+        addEventListener("load", function () { setTimeout(hideURLbar, 0); }, false);
 
-    <link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
-    <link href="css/style.css" rel='stylesheet' type='text/css' />
-    <link href='//fonts.googleapis.com/css?family=Open+Sans:400,700,600' rel='stylesheet' type='text/css'>
-    <link href='//fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
-    <link href="css/font-awesome.css" rel="stylesheet">
-    <script src="js/jquery-1.12.0.min.js"></script>
-    <script src="js/sweet_alert.js"></script>
-    <script src="js/bootstrap.bundle.min.js"></script>
-    <script>
-        let showPass2 = document.getElementById('show-pass2');
-        showPass2.onclick = () => {
-            let passwordInp = document.forms['login']['password'];
-            if (passwordInp.getAttribute('type') == 'password') {
-                showPass2.classList.replace('fa-eye', 'fa-eye-slash')
-                passwordInp.setAttribute('type', 'text')
-            } else {
-                showPass2.classList.replace('fa-eye-slash', 'fa-eye')
-                passwordInp.setAttribute('type', 'password')
-            }
+        function hideURLbar() {
+            window.scrollTo(0, 1);
         }
+
+        // Disable right-click context menu
+        document.addEventListener('contextmenu', function (e) {
+            e.preventDefault();  // Prevent the default context menu
+        });
     </script>
+
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    
+    <!-- SweetAlert CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Google reCAPTCHA CDN -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+    <!-- Custom CSS -->
+    <link href="css/style.css" rel='stylesheet' type='text/css' />
+    <link href="css/font-awesome.css" rel="stylesheet">
 </head>
 
 <body>
-    <div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content modal-info">
-                <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+<!-- Static Login Form -->
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-5">
+                <div class="card-header">
+                    <h5 class="card-title text-center">Sign In</h5>
                 </div>
-                <div class="modal-body modal-spa">
-                    <div class="login-grids">
-                        <div class="login">
-                            <div class="login-right">
-                                <form method="post" name="login">
-                                    <h3>Sign in with your account</h3>
-                                    <input type="text" name="email" id="email" placeholder="Enter your Email" required="">
-                                    <div style="position: relative;">
-                                        <input type="password" name="password" id="password" placeholder="Password" value="" required="">
-                                        <i class="fa fa-eye" id="show-pass2" style="position: absolute; top: 0; right: 0; margin: 35px 10px 0 0;"></i>
-                                    </div>
-                                    <h4><a href="forgot-password.php">Forgot password</a></h4>
-                                    <!-- Google reCAPTCHA widget -->
-                                    <div class="g-recaptcha" data-sitekey="6LezNpMqAAAAAJo_vbJQ6Lo10T2GxhtxeROWoB8p"></div>
-                                    <input type="submit" name="signin" value="SIGN IN">
-                                </form>
-                            </div>
+                <div class="card-body">
+                    <form method="post" name="login">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" name="email" id="email" class="form-control" placeholder="Enter your Email" required>
                         </div>
-                    </div>
-                    <p>By logging in you agree to our <a href="page.php?type=terms">Terms and Conditions</a> and <a href="page.php?type=privacy">Privacy Policy</a></p>
+                        <div class="mb-3" style="position: relative;">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" name="password" id="password" class="form-control" placeholder="Password" required>
+                            <i class="fa fa-eye" id="show-pass2" style="position: absolute; top: 0; right: 0; margin: 35px 10px 0 0;"></i>
+                        </div>
+                        <div class="g-recaptcha mb-3" data-sitekey="6LezNpMqAAAAAJo_vbJQ6Lo10T2GxhtxeROWoB8p"></div>
+                        <button type="submit" name="signin" class="btn btn-primary w-100">Sign In</button>
+                        <p class="mt-3">Forgot your password? <a href="forgot-password.php">Click here</a></p>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-</body>
+</div>
 
+<script>
+    let showPass2 = document.getElementById('show-pass2');
+    showPass2.onclick = () => {
+        let passwordInp = document.forms['login']['password'];
+        if (passwordInp.getAttribute('type') == 'password') {
+            showPass2.classList.replace('fa-eye', 'fa-eye-slash');
+            passwordInp.setAttribute('type', 'text');
+        } else {
+            showPass2.classList.replace('fa-eye-slash', 'fa-eye');
+            passwordInp.setAttribute('type', 'password');
+        }
+    }
+</script>
+
+</body>
 </html>
