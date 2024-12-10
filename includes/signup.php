@@ -55,9 +55,26 @@ if (isset($_POST['submit_register'])) {
 
             $mail->send();
 
-            echo "<script>window.location.href = 'thankyou.php';</script>";
+            // SweetAlert Success
+            echo "<script>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Registration Successful!',
+                        text: 'You have successfully registered. Please verify your email to log in.',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        window.location.href = 'thankyou.php';
+                    });
+                  </script>";
         } else {
-            echo "<script>alert('Something went wrong. Please try again.');</script>";
+            echo "<script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Registration Failed',
+                        text: 'Something went wrong. Please try again.',
+                        confirmButtonText: 'OK'
+                    });
+                  </script>";
         }
     }
 }
@@ -103,6 +120,9 @@ if (isset($_POST['submit_register'])) {
     </div>
 </div>
 
+<!-- SweetAlert Script -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <!-- JavaScript for Validation -->
 <script>
     function validateNames() {
@@ -146,3 +166,4 @@ if (isset($_POST['submit_register'])) {
     };
 </script>
 <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
+    
