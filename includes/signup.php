@@ -121,10 +121,10 @@ if (isset($_POST['submit_register'])) {
                                     <input type="text" value="" placeholder="Mobile number" onkeyup="this.value=this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')" maxlength="11" name="mobilenumber" autocomplete="off" required="">
                                     <input type="text" value="" placeholder="Email id" name="email" id="email" onBlur="checkAvailability()" autocomplete="off" required="">
                                     <span id="user-availability-status" style="font-size:12px;"></span>
-                                    <div style="position: relative;">
-                                        <input type="password" name="password" id="password" placeholder="Password" value="" minlength="8" required>
-                                        <i class="fa fa-eye" id="show-pass" style="position: absolute; top: 0; right: 0; margin: 35px 10px 0 0;"></i>
-                                    </div>
+                                  <div style="position: relative;">
+				    <input type="password" name="password" id="password" placeholder="Password" value="" minlength="8" required>
+				    <i class="fa fa-eye" id="show-pass" style="position: absolute; top: 0; right: 0; margin: 35px 10px 0 0; cursor: pointer;"></i>
+				</div>
                                     <div id="html_element"></div>
                                     <input type="submit" name="submit_register" id="submit" value="CREATE ACCOUNT" disabled>
                                 </form>
@@ -173,6 +173,24 @@ function validateName() {
           'sitekey' : '6LeBZG0qAAAAAHpE8Nr7ZxDcFQw3dVdkeJ4p3stl'
         });
       };
+
+
+	  const showPass = document.getElementById('show-pass');
+    const passwordField = document.getElementById('password');
+
+    showPass.addEventListener('click', () => {
+        const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordField.setAttribute('type', type);
+
+        // Toggle the eye icon
+        if (type === 'password') {
+            showPass.classList.remove('fa-eye-slash');
+            showPass.classList.add('fa-eye');
+        } else {
+            showPass.classList.remove('fa-eye');
+            showPass.classList.add('fa-eye-slash');
+        }
+    });
     </script>
 
 
