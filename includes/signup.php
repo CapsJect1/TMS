@@ -13,11 +13,27 @@ if (isset($_POST['submit_register'])) {
     $verification = uniqid() . rand(100, 999999999);
     $fname = $_POST['fname'];
     $lname = $_POST['lname'];
-    $full = $fname . ' ' . $lname;
     $mnumber = $_POST['mobilenumber'];
     $email = $_POST['email'];
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-    
+    $password = $_POST['password'];
+
+    // Server-side validation for names
+    if (preg_match('/\d/', $fname)) {
+        die("First name should not contain numbers.");
+    }
+
+    if (preg_match('/\d/', $lname)) {
+        die("Last name should not contain numbers.");
+    }
+
+    if (strlen($password) < 8) {
+        die("Password must be at least 8 characters long.");
+    }
+
+    $full = $fname . ' ' . $lname;
+    $password = password_hash($password, PASSWORD_DEFAULT);
+
+    // Insert into the database
     $sql = "INSERT INTO tblusers(FullName,fname,lname,MobileNumber,EmailId,Password,Verification) 
             VALUES(:full, :fname, :lname, :mnumber, :email, :password, :verification)";
     $query = $dbh->prepare($sql);
@@ -29,41 +45,41 @@ if (isset($_POST['submit_register'])) {
     $query->bindParam(':password', $password, PDO::PARAM_STR);
     $query->bindParam(':verification', $verification, PDO::PARAM_STR);
     $query->execute();
+
     $lastInsertId = $dbh->lastInsertId();
+    if ($lastInsertId) {
+        $_SESSION['msg'] = "You are successfully registered. Please verify your account first to login.";
 
-    if (strlen($_POST['password']) > 7) {
-        if ($lastInsertId) {
-            $_SESSION['msg'] = "You are successfully registered. Please verify your account first to login.";
+        // Send verification email
+        $mail = new PHPMailer(true);
+        $mail->SMTPDebug = 0;
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'percebuhayan12@gmail.com';
+        $mail->Password = 'jnolufsoqvqbsjim';
+        $mail->Port = 587;
+        $mail->SMTPOptions = [
+            'ssl' => [
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true
+            ]
+        ];
+        $mail->setFrom('santafe@gmail.com', 'TMS Santa Fe');
+        $mail->addAddress($email);
+        $mail->Subject = "Email Account Verification";
+        $mail->Body = "Click this link to verify account: https://santafeport.com/verify-account.php?verification=" . $verification . "&email=" . $email;
+        $mail->send();
 
-            $mail = new PHPMailer(true);
-            $mail->SMTPDebug = 0;
-            $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
-            $mail->SMTPAuth = true;
-            $mail->Username = 'percebuhayan12@gmail.com';
-            $mail->Password = 'jnolufsoqvqbsjim';
-            $mail->Port = 587;
-            $mail->SMTPOptions = [
-                'ssl' => [
-                    'verify_peer' => false,
-                    'verify_peer_name' => false,
-                    'allow_self_signed' => true
-                ]
-            ];
-            $mail->setFrom('santafe@gmail.com', 'TMS Santa Fe');
-            $mail->addAddress($email);
-            $mail->Subject = "Email Account Verification";
-            $mail->Body = "Click this link to verify account: https://santafeport.com/verify-account.php?verification=" . $verification . "&email=" . $email;
-            $mail->send();
-            
-            echo "<script>window.location.href = 'thankyou.php';</script>";
-        } else {
-            $_SESSION['msg'] = "Something went wrong. Please try again.";
-            echo "<script>window.location.href = 'thankyou.php';</script>";
-        }
+        echo "<script>window.location.href = 'thankyou.php';</script>";
+    } else {
+        $_SESSION['msg'] = "Something went wrong. Please try again.";
+        echo "<script>window.location.href = 'thankyou.php';</script>";
     }
 }
 ?>
+
 
 <!--Javascript for check email availabilty-->
 <script>
