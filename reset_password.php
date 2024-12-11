@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php echo $success; ?>
             </div>
             <div class="text-center">
-                <a href="login.php" class="btn btn-primary w-100 mt-2">Go to Login</a>
+                <a href="index.php" class="btn btn-primary w-100 mt-2">Go to Login</a>
             </div>
         <?php else: ?>
             <form method="POST" action="">
