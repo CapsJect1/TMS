@@ -65,11 +65,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+    <style>
+        .cards {
+            height: 100vh;
+        }
+    </style>
 <body>
-    <div class="container mt-5">
+    <div class="cards container mt-5">
         <div class="justify-content-center d-flex">
             <div class="shadow p-4">
-                 <form method="POST" action="" style="max-width:400px; width:100%;";>
+                 <form method="POST" action="" style="max-width:500px; width:100%;";>
+                     <h2 class="text-center">
+                         FORGOT PASSWORD
+                     </h2>
                             <div class="mb-3">
                                 <label for="EmailId" class="form-label">Enter your Email ID</label>
                                 <input 
