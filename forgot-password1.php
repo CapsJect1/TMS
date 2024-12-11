@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="card">
                     <div class="card-body">
                         <h3 class="text-center mb-4">Forgot Password</h3>
-                        <form action="forgot_password1.php" method="POST">
+                        <form action="forgot-password1.php" method="POST">
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email Address</label>
                                 <input type="email" class="form-control" id="email" name="email" placeholder="Enter your registered email" required>
