@@ -67,10 +67,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
     <style>
         .cards {
-            height: 100vh;
+            height: 150vh;
         }
         .btn-primary {
             background-color: #3AAF08 !important; 
+            border: none !important;
         }
     </style>
 <body>
