@@ -287,7 +287,7 @@ if (isset($_POST['submit'])) {
 
             <div>
                 <input type="checkbox" required class="form-check-input" style="margin-bottom: 20px;" name="agreement">
-                I agree to the privacy and policy. <a href="http://localhost/santafe/page.php?type=privacy" style="color: blue !important ; text-decoration: underline;" target="_blank">Privacy and Policy</a>
+                I agree to the privacy and policy. <a href="https://santafeport.com/page.php?type=privacy" style="color: blue !important ; text-decoration: underline;" target="_blank">Privacy and Policy</a>
             </div>
 
             <div>
