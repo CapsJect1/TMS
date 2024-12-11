@@ -42,35 +42,95 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reset Password</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f8f9fa;
+        }
+        .card {
+            width: 100%;
+            max-width: 400px;
+            border: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background-color: #3AAF08 !important;
+            border: none !important;
+        }
+        .alert {
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
 <body>
-    <h2>Reset Password</h2>
+    <div class="card p-4">
+        <h2 class="text-center mb-4">Reset Password</h2>
 
-    <?php if (isset($error)): ?>
-        <p style="color: red;"><?php echo $error; ?></p>
-    <?php endif; ?>
+        <?php if (isset($error)): ?>
+            <div class="alert alert-danger text-center">
+                <?php echo $error; ?>
+            </div>
+        <?php endif; ?>
 
-    <?php if (isset($success)): ?>
-        <p style="color: green;"><?php echo $success; ?></p>
-        <a href="login.php">Go to Login</a>
-    <?php else: ?>
-        <form method="POST" action="">
-            <label for="otp">Enter OTP:</label>
-            <input type="text" id="otp" name="otp" required>
+        <?php if (isset($success)): ?>
+            <div class="alert alert-success text-center">
+                <?php echo $success; ?>
+            </div>
+            <div class="text-center">
+                <a href="login.php" class="btn btn-primary w-100 mt-2">Go to Login</a>
+            </div>
+        <?php else: ?>
+            <form method="POST" action="">
+                <div class="mb-3">
+                    <label for="otp" class="form-label">Enter OTP</label>
+                    <input 
+                        type="text" 
+                        id="otp" 
+                        name="otp" 
+                        class="form-control" 
+                        placeholder="Enter OTP" 
+                        required>
+                </div>
 
-            <label for="password">New Password:</label>
-            <input type="password" id="password" name="password" required>
+                <div class="mb-3">
+                    <label for="password" class="form-label">New Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        class="form-control" 
+                        placeholder="Enter new password" 
+                        required>
+                </div>
 
-            <label for="confirm_password">Confirm New Password:</label>
-            <input type="password" id="confirm_password" name="confirm_password" required>
+                <div class="mb-3">
+                    <label for="confirm_password" class="form-label">Confirm New Password</label>
+                    <input 
+                        type="password" 
+                        id="confirm_password" 
+                        name="confirm_password" 
+                        class="form-control" 
+                        placeholder="Confirm new password" 
+                        required>
+                </div>
 
-            <button type="submit">Reset Password</button>
-        </form>
-    <?php endif; ?>
+                <button type="submit" class="btn btn-primary w-100">Reset Password</button>
+            </form>
+        <?php endif; ?>
+    </div>
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
