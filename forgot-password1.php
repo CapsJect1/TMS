@@ -81,7 +81,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </br>
     
     <div class=" container mt-5">
-        <div class="cards justify-content-center d-flex">
+       <div class="cards">
+            <div class="cards justify-content-center d-flex">
             <div class="shadow p-4">
                  <form method="POST" action="" style="max-width:500px; width:100%;";>
                      <h2 class="text-center">
@@ -102,6 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
                        
        </div>  
+       </div>
     </div>
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
