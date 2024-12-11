@@ -95,6 +95,7 @@ if (isset($_POST['submit50'])) {
 		.btn-primary {
 			 background-color: #3AAF08 !important;	
 			border: none !important;
+			color: white;
 		}
 	</style>
 </head>
