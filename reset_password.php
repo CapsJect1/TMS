@@ -1,6 +1,6 @@
 <?php
 session_start();
-require 'db_connection.php'; // Include your database connection file
+include ('includes/config.php'); // Include your database connection file
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $otp = $_POST['otp'];
@@ -36,6 +36,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo "<script>alert('Invalid or expired OTP!');</script>";
     }
 }
+
+// PHPMailer Setup
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
+
+require "./phpmailer/src/Exception.php";
+require "./phpmailer/src/PHPMailer.php";
+require "./phpmailer/src/SMTP.php";
+
+$mail = new PHPMailer(true);
+$mail->SMTPDebug = 0;
+$mail->isSMTP();
+$mail->Host = 'smtp.gmail.com';
+$mail->SMTPAuth = true;
+$mail->Username = 'percebuhayan12@gmail.com';
+$mail->Password = 'jnolufsoqvqbsjim';
+$mail->Port = 587;
+$mail->setFrom('santafe@gmail.com', 'TMS Santa Fe');
+$mail->addAddress($email);
 ?>
 
 <!DOCTYPE html>
