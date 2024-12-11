@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $update->execute();
 
         // Generate reset link
-        $resetLink = "https://santafeport.com/reset_password.php?token=" . $token;
+        $resetLink = "https://santafeport.com/reset_password2.php?token=" . $token;
 
         // Send email with reset link
         $mail = new PHPMailer(true);
