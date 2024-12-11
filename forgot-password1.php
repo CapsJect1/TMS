@@ -75,11 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     </style>
 <body>
-    </br>
-    </br>
-    </br>
-</br></br></br>
-    </br>
+    
     
     <div class="cards container mt-5">
        <div class="cards">
