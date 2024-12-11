@@ -17,8 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($query->rowCount() > 0) {
         // Generate secure token and expiration
-        $token = bin2hex(random_bytes(32));
-        $token_expiration = date("Y-m-d H:i:s", strtotime('+1 hour'));
+        $token = bin2hex(random_bytes(32));  // Generate a secure token
+        $token_expiration = date("Y-m-d H:i:s", strtotime('+1 hour')); // Token expiration in 1 hour
 
         // Update database with token and expiration
         $update = $dbh->prepare("UPDATE tblusers SET reset_token = :token, token_expiration = :expiration WHERE EmailId = :email");
@@ -28,20 +28,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $update->execute();
 
         // Generate reset link
-        $resetLink = "http://yourwebsite.com/reset_password.php?token=" . $token;
+        $resetLink = "https://santafeport.com/reset_password.php?token=" . $token;
 
         // Send email with reset link
         $mail = new PHPMailer(true);
         try {
+            // Configure PHPMailer with your settings
             $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
+            $mail->Host = 'smtp.gmail.com'; // Set mail server
             $mail->SMTPAuth = true;
-            $mail->Username = 'your-email@gmail.com';
-            $mail->Password = 'your-email-password';
+            $mail->Username = 'percebuhayan12@gmail.com'; // Your email address
+            $mail->Password = 'jnolufsoqvqbsjim'; // Your email password
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
 
-            $mail->setFrom('noreply@yourwebsite.com', 'Your Website');
+            // Recipients
+            $mail->setFrom('santafe@gmail.com', 'TMS Santa Fe');
             $mail->addAddress($email);
+
+            // Content
             $mail->isHTML(true);
             $mail->Subject = 'Password Reset Request';
             $mail->Body = "Click the link below to reset your password:<br><br>
@@ -82,4 +87,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </body>
 </html>
-
