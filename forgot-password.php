@@ -79,6 +79,19 @@ if (isset($_POST['submit50'])) {
 			-webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1);
 			box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1);
 		}
+		 .custom-link {
+            background-color: #3AAF08;
+            color: white;
+            text-decoration: none;
+            padding: 15px 25px;
+            border-radius: 5px;
+            font-size: 18px;
+            display: inline-block;
+        }
+        .custom-link:hover {
+            background-color: #339b06;
+            color: white;
+        }
 	</style>
 </head>
 
@@ -96,7 +109,7 @@ if (isset($_POST['submit50'])) {
 		<div class="privacy">
 			<div class="container">
 				<h3 class="wow fadeInDown animated animated" data-wow-delay=".5s" style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInDown;">Recover Password</h3>
-				<form name="chngpwd" method="post" onSubmit="return valid();">
+<!-- 				<form name="chngpwd" method="post" onSubmit="return valid();">
 					<?php if ($error) { ?><div class="errorWrap"><strong>ERROR</strong>:<?php echo htmlentities($error); ?> </div><?php } else if ($msg) { ?><div class="succWrap"><strong>SUCCESS</strong>:<?php echo htmlentities($msg); ?> </div><?php } ?>
 					<p style="width: 350px;">
 
@@ -123,8 +136,16 @@ if (isset($_POST['submit50'])) {
 					</p>
 
 					<a href="using-pin.php" class="btn btn-success">Using Pin Code</a>
-				</form>
-
+				</form> -->
+			    <h1>Choose an Action</h1>
+			        <div class="mt-4">
+			            <!-- Link 1: Send Email Link -->
+			            <a href="#" class="custom-link" onclick="sendEmailLink()">Send Email Link</a>
+			        </div>
+			        <div class="mt-4">
+			            <!-- Link 2: Send OTP -->
+			            <a href="#" class="custom-link" onclick="sendOTP()">Send OTP</a>
+			        </div>
 
 			</div>
 		</div>
