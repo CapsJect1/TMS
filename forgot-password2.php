@@ -3,9 +3,11 @@ session_start();
 include('includes/config.php');
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
 
 require "phpmailer/src/Exception.php";
 require "phpmailer/src/PHPMailer.php";
+require "phpmailer/src/SMTP.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['EmailId'];
@@ -16,74 +18,97 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $query->execute();
 
     if ($query->rowCount() > 0) {
-        // Generate secure token and expiration
-        $token = bin2hex(random_bytes(32));  // Generate a secure token
+        // Generate reset token and its expiration
+        $reset_token = bin2hex(random_bytes(32)); // Generate a random token
         $token_expiration = date("Y-m-d H:i:s", strtotime('+1 hour')); // Token expiration in 1 hour
 
-        // Update database with token and expiration
-        $update = $dbh->prepare("UPDATE tblusers SET reset_token = :token, token_expiration = :expiration WHERE EmailId = :email");
-        $update->bindParam(':token', $token, PDO::PARAM_STR);
-        $update->bindParam(':expiration', $token_expiration, PDO::PARAM_STR);
+        // Update database with reset token and expiration
+        $update = $dbh->prepare("UPDATE tblusers SET reset_token = :reset_token, token_expiration = :token_expiration WHERE EmailId = :email");
+        $update->bindParam(':reset_token', $reset_token, PDO::PARAM_STR);
+        $update->bindParam(':token_expiration', $token_expiration, PDO::PARAM_STR);
         $update->bindParam(':email', $email, PDO::PARAM_STR);
         $update->execute();
 
-        // Generate reset link
-        $resetLink = "https://santafeport.com/reset_password2.php?token=" . $token;
-
-        // Send email with reset link
+        // Send password reset link via email
         $mail = new PHPMailer(true);
         try {
-            // Configure PHPMailer with your settings
             $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com'; // Set mail server
+            $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'percebuhayan12@gmail.com'; // Your email address
-            $mail->Password = 'jnolufsoqvqbsjim'; // Your email password
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Username = 'percebuhayan12@gmail.com'; // Your Gmail email address
+            $mail->Password = 'jnolufsoqvqbsjim'; // Your Gmail app password
             $mail->Port = 587;
-
-            // Recipients
             $mail->setFrom('santafe@gmail.com', 'TMS Santa Fe');
             $mail->addAddress($email);
-
-            // Content
             $mail->isHTML(true);
             $mail->Subject = 'Password Reset Request';
-            $mail->Body = "Click the link below to reset your password:<br><br>
-                          <a href='$resetLink'>$resetLink</a><br><br>
-                          This link is valid for 1 hour.";
+            $reset_link = "https://santafeport.com/reset_password2.php?token=$reset_token";
+            $mail->Body = "Click on the following link to reset your password: <a href='$reset_link'>$reset_link</a><br>This link will expire in 1 hour.";
 
             $mail->send();
 
-            echo "Password reset link has been sent to your email.";
+            $_SESSION['email'] = $email;
+            header("Location: reset_password.php");
+            exit();
         } catch (Exception $e) {
-            echo "Mailer Error: {$mail->ErrorInfo}";
+            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
     } else {
         echo "Email not found in our records.";
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forgot Password</title>
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f8f9fa;
+        }
+        .card {
+            width: 100%;
+            max-width: 400px;
+            border: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background-color: #3AAF08 !important;
+            border: none !important;
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <div class="card p-4 mx-auto" style="max-width: 400px;">
-            <h2 class="text-center">Forgot Password</h2>
-            <form method="POST" action="">
-                <div class="mb-3">
-                    <label for="EmailId" class="form-label">Enter your Email</label>
-                    <input type="email" id="EmailId" name="EmailId" class="form-control" placeholder="Enter your email" required>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Send Reset Link</button>
-            </form>
+    <div class="card p-4">
+        <h2 class="text-center mb-4">Forgot Password</h2>
+        <form method="POST" action="">
+            <div class="mb-3">
+                <label for="EmailId" class="form-label">Enter your Email ID</label>
+                <input 
+                    type="email" 
+                    id="EmailId" 
+                    name="EmailId" 
+                    class="form-control" 
+                    placeholder="Enter your email" 
+                    required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Send Reset Link</button>
+        </form>
+        <div class="text-center mt-3">
+            <small class="text-muted">We will send a reset link to your registered email.</small>
         </div>
     </div>
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
