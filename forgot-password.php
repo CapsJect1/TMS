@@ -92,6 +92,10 @@ if (isset($_POST['submit50'])) {
             background-color: #339b06;
             color: white;
         }
+		.btn-primary {
+			 background-color: #3AAF08 !important;	
+			border: none !important;
+		}
 	</style>
 </head>
 
@@ -140,11 +144,11 @@ if (isset($_POST['submit50'])) {
 			    <h1>Choose an Action</h1>
 			        <div class="mt-4">
 			            <!-- Link 1: Send Email Link -->
-			            <a href="#" class="custom-link" onclick="sendEmailLink()">Send Email Link</a>
+			            <a href="forgot-password2.php" class="btn btn-primary"">Send Email Link</a>
 			        </div>
 			        <div class="mt-4">
 			            <!-- Link 2: Send OTP -->
-			            <a href="#" class="custom-link" onclick="sendOTP()">Send OTP</a>
+			            <a href="forgot-password1.php" class="btn btn-primary"">Send OTP</a>
 			        </div>
 
 			</div>
