@@ -80,9 +80,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     </br>
     
-    <div class=" container mt-5">
+    <div class="cards container mt-5">
        <div class="cards">
-            <div class="cards justify-content-center d-flex">
+            <div class=" justify-content-center d-flex">
             <div class="shadow p-4">
                  <form method="POST" action="" style="max-width:500px; width:100%;";>
                      <h2 class="text-center">
