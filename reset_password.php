@@ -1,101 +1,76 @@
 <?php
 session_start();
-include ('includes/config.php'); // Include your database connection file
+include('includes/config.php');
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $otp = $_POST['otp'];
-    $new_password = $_POST['new_password'];
-    $confirm_password = $_POST['confirm_password'];
-
-    // Check if the OTP is valid
-    $stmt = $conn->prepare("SELECT * FROM otp_verification WHERE email = ? AND otp = ? AND expiration_time > NOW()");
-    $stmt->bind_param("ss", $_SESSION['email'], $otp);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-        // Check if passwords match
-        if ($new_password === $confirm_password) {
-            $hashed_password = password_hash($new_password, PASSWORD_BCRYPT);
-
-            // Update the password in the users table
-            $stmt = $conn->prepare("UPDATE users SET Password = ? WHERE EmailId = ?");
-            $stmt->bind_param("ss", $hashed_password, $_SESSION['email']);
-            $stmt->execute();
-
-            // Remove the OTP from otp_verification table
-            $stmt = $conn->prepare("DELETE FROM otp_verification WHERE email = ?");
-            $stmt->bind_param("s", $_SESSION['email']);
-            $stmt->execute();
-
-            echo "<script>alert('Password reset successful!'); window.location.href = 'login.php';</script>";
-        } else {
-            echo "<script>alert('Passwords do not match!');</script>";
-        }
-    } else {
-        echo "<script>alert('Invalid or expired OTP!');</script>";
-    }
+if (!isset($_SESSION['email'])) {
+    // Redirect to forgot-password1.php if email is not set
+    header("Location: forgot-password1.php");
+    exit();
 }
 
-// PHPMailer Setup
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\SMTP;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = $_SESSION['email'];
+    $otp = $_POST['otp'];
+    $newPassword = $_POST['password'];
+    $confirmPassword = $_POST['confirm_password'];
 
-require "./phpmailer/src/Exception.php";
-require "./phpmailer/src/PHPMailer.php";
-require "./phpmailer/src/SMTP.php";
+    // Check if passwords match
+    if ($newPassword !== $confirmPassword) {
+        $error = "Passwords do not match!";
+    } else {
+        // Verify OTP and its expiration
+        $query = $dbh->prepare("SELECT otp, otp_expiration FROM tblusers WHERE EmailId = :email");
+        $query->bindParam(':email', $email, PDO::PARAM_STR);
+        $query->execute();
+        $result = $query->fetch(PDO::FETCH_ASSOC);
 
-$mail = new PHPMailer(true);
-$mail->SMTPDebug = 0;
-$mail->isSMTP();
-$mail->Host = 'smtp.gmail.com';
-$mail->SMTPAuth = true;
-$mail->Username = 'percebuhayan12@gmail.com';
-$mail->Password = 'jnolufsoqvqbsjim';
-$mail->Port = 587;
-$mail->setFrom('santafe@gmail.com', 'TMS Santa Fe');
-$mail->addAddress($email);
+        if ($result && $result['otp'] === $otp && strtotime($result['otp_expiration']) > time()) {
+            // Hash the new password
+            $hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
+
+            // Update the password and clear OTP fields
+            $update = $dbh->prepare("UPDATE tblusers SET Password = :password, otp = NULL, otp_expiration = NULL WHERE EmailId = :email");
+            $update->bindParam(':password', $hashedPassword, PDO::PARAM_STR);
+            $update->bindParam(':email', $email, PDO::PARAM_STR);
+            $update->execute();
+
+            $success = "Password has been reset successfully!";
+            session_destroy(); // Clear session after successful password reset
+        } else {
+            $error = "Invalid OTP or OTP has expired.";
+        }
+    }
+}
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reset Password</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container py-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h3 class="text-center mb-4">Reset Password</h3>
-                        <form action="reset_password.php" method="POST">
-                            <div class="mb-3">
-                                <label for="otp" class="form-label">OTP</label>
-                                <input type="text" class="form-control" id="otp" name="otp" placeholder="Enter the OTP" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="new_password" class="form-label">New Password</label>
-                                <input type="password" class="form-control" id="new_password" name="new_password" placeholder="Enter your new password" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="confirm_password" class="form-label">Confirm Password</label>
-                                <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm your new password" required>
-                            </div>
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-success">Reset Password</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <h2>Reset Password</h2>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <?php if (isset($error)): ?>
+        <p style="color: red;"><?php echo $error; ?></p>
+    <?php endif; ?>
+
+    <?php if (isset($success)): ?>
+        <p style="color: green;"><?php echo $success; ?></p>
+        <a href="login.php">Go to Login</a>
+    <?php else: ?>
+        <form method="POST" action="">
+            <label for="otp">Enter OTP:</label>
+            <input type="text" id="otp" name="otp" required>
+
+            <label for="password">New Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <label for="confirm_password">Confirm New Password:</label>
+            <input type="password" id="confirm_password" name="confirm_password" required>
+
+            <button type="submit">Reset Password</button>
+        </form>
+    <?php endif; ?>
 </body>
 </html>
