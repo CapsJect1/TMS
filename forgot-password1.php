@@ -64,46 +64,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Forgot Password</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
     <style>
-        .cards {
-            height: 150vh;
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f8f9fa;
+        }
+        .card {
+            width: 100%;
+            max-width: 400px;
+            border: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         .btn-primary {
-            background-color: #3AAF08 !important; 
+            background-color: #3AAF08 !important;
             border: none !important;
         }
     </style>
+</head>
 <body>
-    
-    
-    <div class="cards container mt-5">
-       <div class="cards">
-            <div class=" justify-content-center d-flex">
-            <div class="shadow p-4">
-                 <form method="POST" action="" style="max-width:500px; width:100%;";>
-                     <h2 class="text-center">
-                         FORGOT PASSWORD
-                     </h2>
-                            <div class="mb-3">
-                                <label for="EmailId" class="form-label">Enter your Email ID</label>
-                                <input 
-                                    type="email" 
-                                    id="EmailId" 
-                                    name="EmailId" 
-                                    class="form-control" 
-                                    placeholder="Enter your email" 
-                                    required>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Send OTP</button>
-                        </form>
+    <div class="card p-4">
+        <h2 class="text-center mb-4">Forgot Password</h2>
+        <form method="POST" action="">
+            <div class="mb-3">
+                <label for="EmailId" class="form-label">Enter your Email ID</label>
+                <input 
+                    type="email" 
+                    id="EmailId" 
+                    name="EmailId" 
+                    class="form-control" 
+                    placeholder="Enter your email" 
+                    required>
             </div>
-                       
-       </div>  
-       </div>
+            <button type="submit" class="btn btn-primary w-100">Send OTP</button>
+        </form>
+        <div class="text-center mt-3">
+            <small class="text-muted">We will send an OTP to your registered email.</small>
+        </div>
     </div>
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
 
