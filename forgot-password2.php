@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $mail->send();
 
             $_SESSION['email'] = $email;
-            header("Location: reset_password.php");
+            header("Location: reset_password2.php");
             exit();
         } catch (Exception $e) {
             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
