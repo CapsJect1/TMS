@@ -143,14 +143,22 @@ if (isset($_POST['submit50'])) {
 					<a href="using-pin.php" class="btn btn-success">Using Pin Code</a>
 				</form> -->
 			    <h1>Choose an Action</h1>
-			        <div class="mt-4">
-			            <!-- Link 1: Send Email Link -->
-			            <a href="forgot-password2.php" class="btn btn-primary"">Send Email Link</a>
-			        </div>
-			        <div class="mt-4">
-			            <!-- Link 2: Send OTP -->
-			            <a href="forgot-password1.php" class="btn btn-primary"">Send OTP</a>
-			        </div>
+				<div class="row">
+					<div class="col-lg-6">
+						 <div class="mt-4">
+					            <!-- Link 1: Send Email Link -->
+					            <a href="forgot-password2.php" class="btn btn-primary"">Send Email Link</a>
+					        </div>
+					</div>
+					<div class="col-lg-6">
+						  <div class="mt-4">
+					            <!-- Link 2: Send OTP -->
+					            <a href="forgot-password1.php" class="btn btn-primary"">Send OTP</a>
+					        </div>
+					</div>
+				</div>
+			       
+			      
 
 			</div>
 		</div>
