@@ -67,13 +67,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card shadow">
-                    <div class="card-header text-center bg-primary text-white">
-                        <h4>Forgot Password</h4>
-                    </div>
-                    <div class="card-body">
+        <div class="row justify-content-center d-flex">
+    
                         <form method="POST" action="">
                             <div class="mb-3">
                                 <label for="EmailId" class="form-label">Enter your Email ID</label>
@@ -87,13 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                             <button type="submit" class="btn btn-primary w-100">Send OTP</button>
                         </form>
-                    </div>
-                    <div class="card-footer text-center">
-                        <small class="text-muted">We will send an OTP to your registered email.</small>
-                    </div>
-                </div>
-            </div>
-        </div>
+                 </div>  
     </div>
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
