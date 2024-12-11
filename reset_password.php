@@ -72,6 +72,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .alert {
             font-size: 0.9rem;
         }
+        .password-toggle {
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -106,24 +109,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="mb-3">
                     <label for="password" class="form-label">New Password</label>
-                    <input 
-                        type="password" 
-                        id="password" 
-                        name="password" 
-                        class="form-control" 
-                        placeholder="Enter new password" 
-                        required>
+                    <div class="input-group">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            class="form-control" 
+                            placeholder="Enter new password" 
+                            required>
+                        <span class="input-group-text password-toggle" onclick="togglePasswordVisibility('password')">👁️</span>
+                    </div>
                 </div>
 
                 <div class="mb-3">
                     <label for="confirm_password" class="form-label">Confirm New Password</label>
-                    <input 
-                        type="password" 
-                        id="confirm_password" 
-                        name="confirm_password" 
-                        class="form-control" 
-                        placeholder="Confirm new password" 
-                        required>
+                    <div class="input-group">
+                        <input 
+                            type="password" 
+                            id="confirm_password" 
+                            name="confirm_password" 
+                            class="form-control" 
+                            placeholder="Confirm new password" 
+                            required>
+                        <span class="input-group-text password-toggle" onclick="togglePasswordVisibility('confirm_password')">👁️</span>
+                    </div>
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100">Reset Password</button>
@@ -132,5 +141,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function togglePasswordVisibility(id) {
+            var passwordField = document.getElementById(id);
+            var type = passwordField.type === "password" ? "text" : "password";
+            passwordField.type = type;
+        }
+    </script>
 </body>
 </html>
