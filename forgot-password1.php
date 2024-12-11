@@ -26,7 +26,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Insert OTP into otp_verification table
         $stmt = $conn->prepare("INSERT INTO otp_verification (email, otp, expiration_time) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE otp = ?, expiration_time = ?");
         $stmt->bind_param("sssss", $email, $otp, $expiration_time, $otp, $expiration_time);
-        $stmt->execute();
+        if (!$stmt->execute()) {
+            error_log("Database Error: " . $stmt->error); // Log database errors
+            echo "<script>alert('Failed to save OTP. Please try again.');</script>";
+            exit;
+        }
 
         // Send OTP to email using PHPMailer
         $mail = new PHPMailer(true);
@@ -52,7 +56,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['email'] = $email;
             echo "<script>alert('OTP sent to your email.'); window.location.href = 'reset_password.php';</script>";
         } catch (Exception $e) {
-            echo "<script>alert('Failed to send OTP. Please try again.');</script>";
+            error_log("Mailer Error: " . $mail->ErrorInfo); // Log email errors
+            echo "<script>alert('Failed to send OTP: " . $mail->ErrorInfo . "');</script>";
         }
     } else {
         echo "<script>alert('Email not found. Please check your email address.');</script>";
