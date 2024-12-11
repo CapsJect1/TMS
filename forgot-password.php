@@ -144,13 +144,13 @@ if (isset($_POST['submit50'])) {
 				</form> -->
 			    <h1>Choose an Action</h1>
 				<div class="row">
-					<div class="col-lg-6">
+					<div class="col-6">
 						 <div class="mt-4">
 					            <!-- Link 1: Send Email Link -->
 					            <a href="forgot-password2.php" class="btn btn-primary"">Send Email Link</a>
 					        </div>
 					</div>
-					<div class="col-lg-6">
+					<div class="col-6">
 						  <div class="mt-4">
 					            <!-- Link 2: Send OTP -->
 					            <a href="forgot-password1.php" class="btn btn-primary"">Send OTP</a>
