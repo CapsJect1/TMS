@@ -37,6 +37,8 @@ if (strlen($_SESSION['alogin']) == 0) {
 
 	require './includes/layout-head.php';
 ?>
+<!-- Print Button (Updated) -->
+<a href="#" class="float-end mt-3 btn btn-primary" id="printButton"><i class="fa fa-print"></i> Print</a>
 
 	<div class="card mt-4 print">
 		<div class="card-body">
@@ -52,6 +54,13 @@ if (strlen($_SESSION['alogin']) == 0) {
 	</div>
 
 	<script>
+		document.getElementById('printButton').addEventListener('click', function() {
+		// If you want to print the current page
+		window.print(); 
+		
+		// Alternatively, you could redirect to the print page and handle printing there
+		// window.location.href = 'print-report.php'; // Uncomment if you want to redirect to print page
+	});
 		var toggle = true;
 
 		$(".sidebar-icon").click(function() {
