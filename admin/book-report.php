@@ -136,9 +136,9 @@ if (strlen($_SESSION['alogin']) == 0) {
                 <td><?= number_format($dec, 2) ?></td>
             </tr>
         </tbody>
-              <h3>Total: <?= number_format($total, 2) ?></h3>
+             
     </table>
-   
+    <h3>Total: <?= number_format($total, 2) ?></h3>
     </center>
 </div>
 
