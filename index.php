@@ -57,7 +57,7 @@ include ('includes/config.php');
 		</div>
 		
 		<div class="container">
-			<div class="row">
+			<div class="row d-flex justify-content-center align-items-center">
 				
 				<div class="col-md-12 text-center">
 					<img src="./images/Santa_Fe_Cebu.png" alt="hero-img-logo">
