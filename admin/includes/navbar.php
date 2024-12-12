@@ -65,7 +65,7 @@
   <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
 
   <!-- <div class="topnav" id="myTopnav">
-    <a href="dashboard.php">Santa Fe Port Tourist Biological Fee Staycation Management System</a>
+    <a href="dashboard.php">Santa Fe Port Tourist Environment Fee Staycation Management System</a>
 
     <div style="display: flex; align-items:center; gap: 20px;">
       <div class="dropdown">
