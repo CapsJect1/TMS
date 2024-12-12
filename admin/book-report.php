@@ -33,32 +33,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 
     require './includes/layout-head.php';
 ?>
-<style>
-    /* Make the logo smaller */
-    .logo {
-        max-width: 150px;  /* Adjust this value as needed */
-        height: auto;      /* Maintain the aspect ratio */
-    }
 
-    /* Center the content in a row */
-    .row {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        width: 100%;
-    }
-
-    /* Optional: Adjust the size of the header */
-    h1 {
-        font-size: 2rem;  /* You can change this size to fit your design */
-        margin-top: 0;
-        margin-bottom: 0;
-    }
-
-    rgin-top: 20px;
-    }
-</style>
 <div class="card mt-4">
     <div class="card-body">
         <div class="d-flex align-items-center justify-content-between">
