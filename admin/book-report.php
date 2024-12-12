@@ -38,7 +38,6 @@ if (strlen($_SESSION['alogin']) == 0) {
 	require './includes/layout-head.php';
 ?>
 <!-- Print Button (Updated) -->
-<a href="#" class="float-end mt-3 btn btn-primary" id="printButton"><i class="fa fa-print"></i> Print</a>
 
 	<div class="card mt-4 print">
 		<div class="card-body">
@@ -48,6 +47,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 
 			</div>
 			<canvas id="barChart" style="width:100%;"></canvas>
+<a href="#" class="float-end mt-3 btn btn-primary" id="printButton"><i class="fa fa-print"></i> Print</a>
 
 			<a href="print-report.php" class="float-end mt-3 btn btn-primary" target="_blank"><i class="fa fa-print"></i> Print</a>
 		</div>
