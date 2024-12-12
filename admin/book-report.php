@@ -57,7 +57,9 @@ if (strlen($_SESSION['alogin']) == 0) {
 
     <!-- Text beside the logo -->
     <div style="font-size: 18px; font-weight: bold; color: #333;">
-        Your Custom Text Here
+      <h1>
+          Sante Fe Port TMS
+      </h1>
     </div>
 </div>
 </center>
