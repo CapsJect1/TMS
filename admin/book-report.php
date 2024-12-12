@@ -124,45 +124,31 @@ if (strlen($_SESSION['alogin']) == 0) {
     </table>
      <h3>Total: <?= number_format($total, 2) ?></h3>
 </div>
+
 <script>
-    
-document.getElementById('printButton').addEventListener('click', function () {
-    // Hide the graph
-    document.getElementById('barChart').style.display = 'none';
-    
-    // Hide the print button
-    document.getElementById('printButton').style.display = 'none';
-
-    // Hide the Booking Report title
-    document.querySelector('h3').style.display = 'none';
-
-    // Hide the entire card (including the border)
-    document.querySelector('.card').style.display = 'none';
-
-    // Show the printable table
-    document.getElementById('printSection').style.display = 'block';
-
-    // Trigger the print dialog
-    window.print();
-
-    // After printing, reset the view to its original state
-    setTimeout(function () {
-        // Show the Booking Report title
-        document.querySelector('h3').style.display = 'block';
-
-        // Show the card (border and all) again
-        document.querySelector('.card').style.display = 'block';
+    // When the Print button is clicked, display the printable table and trigger print
+    document.getElementById('printButton').addEventListener('click', function () {
+        // Hide the graph
+        document.getElementById('barChart').style.display = 'none';
         
-        // Hide the print section and show the graph again
-        document.getElementById('printSection').style.display = 'none';
-        document.getElementById('barChart').style.display = 'block';
-        
-        // Show the print button again
-        document.getElementById('printButton').style.display = 'block';
-    }, 1000);
-});
+        // Hide the print button
+        document.getElementById('printButton').style.display = 'none';
 
+        // Show the printable table
+        document.getElementById('printSection').style.display = 'block';
+
+        // Trigger the print dialog
+        window.print();
+
+        // After printing, hide the print section and show the graph again
+        setTimeout(function () {
+            document.getElementById('printSection').style.display = 'none';
+            document.getElementById('barChart').style.display = 'block';
+            document.getElementById('printButton').style.display = 'block';
+        }, 1000);
+    });
 </script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 <script>
     // Your existing graph code
