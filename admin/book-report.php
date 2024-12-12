@@ -123,7 +123,7 @@ if (strlen($_SESSION['alogin']) == 0) {
             </tr>
         </tbody>
     </table>
-</div>
+</div> 
 
 <script>
     // When the Print button is clicked, display the printable table and trigger print
