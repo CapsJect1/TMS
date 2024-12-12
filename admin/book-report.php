@@ -51,7 +51,8 @@ if (strlen($_SESSION['alogin']) == 0) {
 <!-- Printable Section (Hidden by default) -->
 <div id="printSection" style="display:none;">
 <!--     <h3>Booking Report - Printable Version</h3> -->
-    <table border="1" cellpadding="10">
+    <center>
+        <table border="1" cellpadding="10">
         <thead>
             <tr>
                 <th>Month</th>
@@ -123,6 +124,7 @@ if (strlen($_SESSION['alogin']) == 0) {
         </tbody>
     </table>
      <h3>Total: <?= number_format($total, 2) ?></h3>
+    </center>
 </div>
 
 <script>
