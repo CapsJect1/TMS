@@ -37,7 +37,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 <div class="card mt-4">
     <div class="card-body">
         <div class="d-flex align-items-center justify-content-between">
-            <h3>Booking Report</h3>
+           
            
         </div>
         <!-- This is where the graph is displayed -->
