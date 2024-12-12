@@ -124,7 +124,8 @@ if (strlen($_SESSION['alogin']) == 0) {
     </table>
      <h3>Total: <?= number_format($total, 2) ?></h3>
 </div>
-
+<script>
+    
 document.getElementById('printButton').addEventListener('click', function () {
     // Hide the graph
     document.getElementById('barChart').style.display = 'none';
@@ -161,6 +162,7 @@ document.getElementById('printButton').addEventListener('click', function () {
     }, 1000);
 });
 
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 <script>
     // Your existing graph code
