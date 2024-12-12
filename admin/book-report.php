@@ -49,6 +49,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 </div>
 
 <!-- Printable Section (Hidden by default) -->
+<div id="printSection" style="display:none;">
 <center>
     <div class="header-row" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
     <!-- Logo -->
