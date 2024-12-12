@@ -5,7 +5,7 @@ if (strlen($_SESSION['alogin']) == 0) {
     header('location:index.php');
 } else {
 
-    // Function to fetch the total payments for each month
+    // Function to fetch total payments for each month
     function Sales($month, $conn)
     {
         $year = date('Y');
@@ -34,7 +34,6 @@ if (strlen($_SESSION['alogin']) == 0) {
     require './includes/layout-head.php';
 ?>
 
-<!-- Card and Graph Section (Will not be printed) -->
 <div class="card mt-4">
     <div class="card-body">
         <div class="d-flex align-items-center justify-content-between">
@@ -123,26 +122,29 @@ if (strlen($_SESSION['alogin']) == 0) {
             </tr>
         </tbody>
     </table>
-</div> 
+</div>
 
 <script>
     // When the Print button is clicked, display the printable table and trigger print
     document.getElementById('printButton').addEventListener('click', function () {
-        // Hide the graph and show the printable section
-        document.querySelector('canvas').style.display = 'none';
+        // Hide the graph
+        document.getElementById('barChart').style.display = 'none';
+        
+        // Show the printable table
         document.getElementById('printSection').style.display = 'block';
 
         // Trigger the print dialog
         window.print();
 
-        // Hide the printable section again after printing
+        // After printing, hide the print section and show the graph again
         setTimeout(function () {
             document.getElementById('printSection').style.display = 'none';
-            document.querySelector('canvas').style.display = 'block'; // Show the graph again
+            document.getElementById('barChart').style.display = 'block';
         }, 1000);
     });
 </script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 <script>
     // Your existing graph code
     var xValues = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
