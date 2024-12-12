@@ -93,7 +93,7 @@ if (strlen($_SESSION['alogin']) == 0) {
             <h1>Sante Fe Port TMS</h1>
         </div>
     </div>
-
+    </br>
     <table border="1" cellpadding="10" style="margin: 0 auto; width: 80%; text-align: center;">
         <thead>
             <tr>
