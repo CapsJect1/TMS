@@ -50,8 +50,23 @@ if (strlen($_SESSION['alogin']) == 0) {
 
 <!-- Printable Section (Hidden by default) -->
 <div id="printSection" style="display:none;">
+
+    <center>
+        <div class="row">
+        <div class="col col-6">
+            <img src="../images/Santa_Fe_Cebu.png" alt="hero-img-logo" height= "100px" width: 100px;>
+        </div>
+          <div class="col col-6">
+              <h1>
+                   Sante Fe Port TMS
+              </h1>
+        </div>
+    </div>
+    </center>
+    
 <!--     <h3>Booking Report - Printable Version</h3> -->
-    <table border="1" cellpadding="10">
+   <center>
+        <table border="1" cellpadding="10">
         <thead>
             <tr>
                 <th>Month</th>
@@ -123,6 +138,7 @@ if (strlen($_SESSION['alogin']) == 0) {
         </tbody>
     </table>
      <h3>Total: <?= number_format($total, 2) ?></h3>
+   </center>
 </div>
 
 <script>
