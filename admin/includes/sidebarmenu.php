@@ -61,7 +61,7 @@
 		<li class="nav-item w-100 d-flex align-items-center justify-content-between">
 			<a href="https://santafeport.com/admin/dashboard.php" class="nav-link text-light fs-3 fw-bold">
 			Santa Fe Port 
-				<p class="fw-normal" style="font-size: 14px;">Tourist Biological Fee Staycation Management</p>
+				<p class="fw-normal" style="font-size: 14px;">Tourist Environment Fee Staycation Management</p>
 			</a>
 			<button type="button"
 				class="bg-transparent text-light border-0 p-0 fs-3 fw-bold pe-3 d-lg-none d-block"
