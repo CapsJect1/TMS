@@ -83,7 +83,8 @@ if (strlen($_SESSION['alogin']) == 0) {
 </div>
 
 <!-- Printable Section (Hidden by default) -->
-<div id="printSection" style="display:none;">
+<center>
+    <div id="printSection" style="display:none;">
     <div class="row">
         <div class="col-auto">
             <img src="../images/Santa_Fe_Cebu.png" alt="hero-img-logo" class="logo">
@@ -167,6 +168,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 
     <h3>Total: <?= number_format($total, 2) ?></h3>
 </div>
+</center>
 <script>
  document.getElementById('printButton').addEventListener('click', function () {
     // Hide the graph
