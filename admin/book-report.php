@@ -33,7 +33,33 @@ if (strlen($_SESSION['alogin']) == 0) {
 
     require './includes/layout-head.php';
 ?>
+<style>
+    /* Make the logo smaller */
+.logo {
+    max-width: 150px;  /* Adjust this value as needed */
+    height: auto;      /* Maintain the aspect ratio */
+}
 
+/* Center the content */
+.text-center {
+    text-align: center;
+}
+
+/* Optional: Adjust the size of the header */
+h1 {
+    font-size: 2rem;  /* You can change this size to fit your design */
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/* Optional: Align the row in the center of the page */
+.row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+</style>
 <div class="card mt-4">
     <div class="card-body">
         <div class="d-flex align-items-center justify-content-between">
@@ -52,16 +78,14 @@ if (strlen($_SESSION['alogin']) == 0) {
 <div id="printSection" style="display:none;">
 <!--     <h3>Booking Report - Printable Version</h3> -->
 
-    <div class="row">
-        <div class="col col-6">
-            <img src="../images/Santa_Fe_Cebu.png" alt="hero-img-logo">
-        </div>
-          <div class="col col-6">
-              <h1>
-                   Sante Fe Port TMS
-              </h1>
-        </div>
+  <div class="row align-items-center justify-content-center">
+    <div class="col-auto">
+        <img src="../images/Santa_Fe_Cebu.png" alt="hero-img-logo" class="logo">
     </div>
+    <div class="col-auto">
+        <h1 class="text-center">Sante Fe Port TMS</h1>
+    </div>
+</div>
 
     
     <table border="1" cellpadding="10">
