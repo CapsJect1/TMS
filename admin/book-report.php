@@ -127,14 +127,11 @@ if (strlen($_SESSION['alogin']) == 0) {
 
 <script>
   document.getElementById('printButton').addEventListener('click', function () {
-    // Hide the graph
-    document.getElementById('barChart').style.display = 'none';
+    // Hide the entire card (this includes the Booking Report title, the graph, etc.)
+    document.querySelector('.card').style.display = 'none';
     
     // Hide the print button
     document.getElementById('printButton').style.display = 'none';
-    
-    // Hide the "Booking Report" title (this element contains the title)
-    document.querySelector('h3').style.display = 'none';
 
     // Show the printable table (printSection)
     document.getElementById('printSection').style.display = 'block';
@@ -142,16 +139,16 @@ if (strlen($_SESSION['alogin']) == 0) {
     // Trigger the print dialog
     window.print();
 
-    // After printing, hide the print section and show the graph again
+    // After printing, hide the print section and show the card (and its content) again
     setTimeout(function () {
         document.getElementById('printSection').style.display = 'none';
-        document.getElementById('barChart').style.display = 'block';
+        
+        // Show the entire card again (including the graph, title, and print button)
+        document.querySelector('.card').style.display = 'block';
         document.getElementById('printButton').style.display = 'block';
-
-        // Show the "Booking Report" title again
-        document.querySelector('h3').style.display = 'block';
     }, 1000);
 });
+
 
 </script>
 
