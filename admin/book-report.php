@@ -51,6 +51,19 @@ if (strlen($_SESSION['alogin']) == 0) {
 <!-- Printable Section (Hidden by default) -->
 <div id="printSection" style="display:none;">
 <!--     <h3>Booking Report - Printable Version</h3> -->
+
+    <div class="row">
+        <div class="col col-6">
+            <img src="../images/Santa_Fe_Cebu.png" alt="hero-img-logo">
+        </div>
+          <div class="col col-6">
+              <h1>
+                   Sante Fe Port TMS
+              </h1>
+        </div>
+    </div>
+
+    
     <table border="1" cellpadding="10">
         <thead>
             <tr>
