@@ -33,35 +33,11 @@ if (strlen($_SESSION['alogin']) == 0) {
 
     require './includes/layout-head.php';
 ?>
-<style>
-    .logo {
-    max-width: 150px;  /* Adjust this value as needed */
-    height: auto;      /* Maintain the aspect ratio */
-}
 
-/* Center the content */
-.text-center {
-    text-align: center;
-}
-
-/* Optional: Adjust the size of the header */
-h1 {
-    font-size: 2rem;  /* You can change this size to fit your design */
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-/* Optional: Align the row in the center of the page */
-.row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-</style>
 <div class="card mt-4">
     <div class="card-body">
         <div class="d-flex align-items-center justify-content-between">
-           
+            <h3>Booking Report</h3>
            
         </div>
         <!-- This is where the graph is displayed -->
@@ -74,23 +50,8 @@ h1 {
 
 <!-- Printable Section (Hidden by default) -->
 <div id="printSection" style="display:none;">
-
-    <center>
-        <div class="row">
-        <div class="col col-6">
-            <img src="../images/Santa_Fe_Cebu.png" alt="hero-img-logo" >
-        </div>
-          <div class="col col-6">
-              <h1>
-                   Sante Fe Port TMS
-              </h1>
-        </div>
-    </div>
-    </center>
-    
 <!--     <h3>Booking Report - Printable Version</h3> -->
-   <center>
-        <table border="1" cellpadding="10">
+    <table border="1" cellpadding="10">
         <thead>
             <tr>
                 <th>Month</th>
@@ -160,49 +121,32 @@ h1 {
                 <td><?= number_format($dec, 2) ?></td>
             </tr>
         </tbody>
-             <h3>Total: <?= number_format($total, 2) ?></h3>
     </table>
-    
-   </center>
+     <h3>Total: <?= number_format($total, 2) ?></h3>
 </div>
 
 <script>
-   document.getElementById('printButton').addEventListener('click', function () {
-    // Hide the graph
-    document.getElementById('barChart').style.display = 'none';
-    
-    // Hide the print button
-    document.getElementById('printButton').style.display = 'none';
-
-    // Hide the Booking Report title
-    document.querySelector('h3').style.display = 'none';
-
-    // Hide the entire card (including the border)
-    document.querySelector('.card').style.display = 'none';
-
-    // Show the printable table
-    document.getElementById('printSection').style.display = 'block';
-
-    // Trigger the print dialog
-    window.print();
-
-    // After printing, reset the view to its original state
-    setTimeout(function () {
-        // Show the Booking Report title
-        document.querySelector('h3').style.display = 'block';
-
-        // Show the card (border and all) again
-        document.querySelector('.card').style.display = 'block';
+    // When the Print button is clicked, display the printable table and trigger print
+    document.getElementById('printButton').addEventListener('click', function () {
+        // Hide the graph
+        document.getElementById('barChart').style.display = 'none';
         
-        // Hide the print section and show the graph again
-        document.getElementById('printSection').style.display = 'none';
-        document.getElementById('barChart').style.display = 'block';
-        
-        // Show the print button again
-        document.getElementById('printButton').style.display = 'block';
-    }, 1000);
-});
+        // Hide the print button
+        document.getElementById('printButton').style.display = 'none';
 
+        // Show the printable table
+        document.getElementById('printSection').style.display = 'block';
+
+        // Trigger the print dialog
+        window.print();
+
+        // After printing, hide the print section and show the graph again
+        setTimeout(function () {
+            document.getElementById('printSection').style.display = 'none';
+            document.getElementById('barChart').style.display = 'block';
+            document.getElementById('printButton').style.display = 'block';
+        }, 1000);
+    });
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
