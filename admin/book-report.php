@@ -126,7 +126,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 </div>
 
 <script>
-  document.getElementById('printButton').addEventListener('click', function () {
+ document.getElementById('printButton').addEventListener('click', function () {
     // Hide the graph
     document.getElementById('barChart').style.display = 'none';
     
@@ -135,6 +135,9 @@ if (strlen($_SESSION['alogin']) == 0) {
 
     // Hide the Booking Report title
     document.querySelector('h3').style.display = 'none';
+
+    // Hide the entire card (including the border)
+    document.querySelector('.card').style.display = 'none';
 
     // Show the printable table
     document.getElementById('printSection').style.display = 'block';
@@ -147,6 +150,9 @@ if (strlen($_SESSION['alogin']) == 0) {
         // Show the Booking Report title
         document.querySelector('h3').style.display = 'block';
 
+        // Show the card (border and all) again
+        document.querySelector('.card').style.display = 'block';
+        
         // Hide the print section and show the graph again
         document.getElementById('printSection').style.display = 'none';
         document.getElementById('barChart').style.display = 'block';
@@ -155,6 +161,7 @@ if (strlen($_SESSION['alogin']) == 0) {
         document.getElementById('printButton').style.display = 'block';
     }, 1000);
 });
+
 
 </script>
 
