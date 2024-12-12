@@ -130,6 +130,9 @@ if (strlen($_SESSION['alogin']) == 0) {
         // Hide the graph
         document.getElementById('barChart').style.display = 'none';
         
+        // Hide the print button
+        document.getElementById('printButton').style.display = 'none';
+
         // Show the printable table
         document.getElementById('printSection').style.display = 'block';
 
@@ -140,6 +143,7 @@ if (strlen($_SESSION['alogin']) == 0) {
         setTimeout(function () {
             document.getElementById('printSection').style.display = 'none';
             document.getElementById('barChart').style.display = 'block';
+            document.getElementById('printButton').style.display = 'block';
         }, 1000);
     });
 </script>
