@@ -50,6 +50,18 @@ if (strlen($_SESSION['alogin']) == 0) {
 
 <!-- Printable Section (Hidden by default) -->
 <div id="printSection" style="display:none;">
+    <div class="header-row" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+    <!-- Logo -->
+    <img src="../images/Santa_Fe_Cebu.png" alt="hero-img-logo" style="height: 50px; width: auto;">
+
+    <!-- Text beside the logo -->
+    <div style="font-size: 18px; font-weight: bold; color: #333;">
+       Sante Fe Port TMS
+    </div>
+</div>
+
+
+    
 <!--     <h3>Booking Report - Printable Version</h3> -->
     <center>
         <table border="1" cellpadding="10">
@@ -122,8 +134,9 @@ if (strlen($_SESSION['alogin']) == 0) {
                 <td><?= number_format($dec, 2) ?></td>
             </tr>
         </tbody>
+              <h3>Total: <?= number_format($total, 2) ?></h3>
     </table>
-     <h3>Total: <?= number_format($total, 2) ?></h3>
+   
     </center>
 </div>
 
