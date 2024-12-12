@@ -50,7 +50,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 
 <!-- Printable Section (Hidden by default) -->
 <div id="printSection" style="display:none;">
-    <h3>Booking Report - Printable Version</h3>
+<!--     <h3>Booking Report - Printable Version</h3> -->
     <table border="1" cellpadding="10">
         <thead>
             <tr>
