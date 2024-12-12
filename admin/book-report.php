@@ -35,30 +35,38 @@ if (strlen($_SESSION['alogin']) == 0) {
 ?>
 <style>
     /* Make the logo smaller */
-.logo {
-    max-width: 150px;  /* Adjust this value as needed */
-    height: auto;      /* Maintain the aspect ratio */
-}
+    .logo {
+        max-width: 150px;  /* Adjust this value as needed */
+        height: auto;      /* Maintain the aspect ratio */
+    }
 
-/* Center the content */
-.text-center {
-    text-align: center;
-}
+    /* Center the content in a row */
+    .row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        width: 100%;
+    }
 
-/* Optional: Adjust the size of the header */
-h1 {
-    font-size: 2rem;  /* You can change this size to fit your design */
-    margin-top: 0;
-    margin-bottom: 0;
-}
+    /* Optional: Adjust the size of the header */
+    h1 {
+        font-size: 2rem;  /* You can change this size to fit your design */
+        margin-top: 0;
+        margin-bottom: 0;
+    }
 
-/* Optional: Align the row in the center of the page */
-.row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+    /* Style for the printable table */
+    #printSection {
+        text-align: center;
+        margin: 20px 0;
+    }
 
+    /* Optional: Style the print button */
+    #printButton {
+        display: block;
+        margin-top: 20px;
+    }
 </style>
 <div class="card mt-4">
     <div class="card-body">
@@ -76,19 +84,16 @@ h1 {
 
 <!-- Printable Section (Hidden by default) -->
 <div id="printSection" style="display:none;">
-<!--     <h3>Booking Report - Printable Version</h3> -->
-
-  <div class="row align-items-center justify-content-center">
-    <div class="col-auto">
-        <img src="../images/Santa_Fe_Cebu.png" alt="hero-img-logo" class="logo">
+    <div class="row">
+        <div class="col-auto">
+            <img src="../images/Santa_Fe_Cebu.png" alt="hero-img-logo" class="logo">
+        </div>
+        <div class="col-auto">
+            <h1>Sante Fe Port TMS</h1>
+        </div>
     </div>
-    <div class="col-auto">
-        <h1 class="text-center">Sante Fe Port TMS</h1>
-    </div>
-</div>
 
-    
-    <table border="1" cellpadding="10">
+    <table border="1" cellpadding="10" style="margin: 0 auto; width: 80%; text-align: center;">
         <thead>
             <tr>
                 <th>Month</th>
@@ -159,9 +164,9 @@ h1 {
             </tr>
         </tbody>
     </table>
-     <h3>Total: <?= number_format($total, 2) ?></h3>
-</div>
 
+    <h3>Total: <?= number_format($total, 2) ?></h3>
+</div>
 <script>
  document.getElementById('printButton').addEventListener('click', function () {
     // Hide the graph
