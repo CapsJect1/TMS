@@ -56,16 +56,7 @@ if (strlen($_SESSION['alogin']) == 0) {
         margin-bottom: 0;
     }
 
-    /* Style for the printable table */
-    #printSection {
-        text-align: center;
-        margin: 20px 0;
-    }
-
-    /* Optional: Style the print button */
-    #printButton {
-        display: block;
-        margin-top: 20px;
+    rgin-top: 20px;
     }
 </style>
 <div class="card mt-4">
