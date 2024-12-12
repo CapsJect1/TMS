@@ -78,7 +78,7 @@ h1 {
     <center>
         <div class="row">
         <div class="col col-6">
-            <img src="../images/Santa_Fe_Cebu.png" alt="hero-img-logo" height= "100px" width: 100px;>
+            <img src="../images/Santa_Fe_Cebu.png" alt="hero-img-logo" >
         </div>
           <div class="col col-6">
               <h1>
@@ -160,8 +160,9 @@ h1 {
                 <td><?= number_format($dec, 2) ?></td>
             </tr>
         </tbody>
+             <h3>Total: <?= number_format($total, 2) ?></h3>
     </table>
-     <h3>Total: <?= number_format($total, 2) ?></h3>
+    
    </center>
 </div>
 
