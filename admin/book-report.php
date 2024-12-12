@@ -51,9 +51,9 @@ if (strlen($_SESSION['alogin']) == 0) {
 <!-- Printable Section (Hidden by default) -->
 <div id="printSection" style="display:none;">
 <center>
-    <div class="header-row" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+    <div class="header-row" style="display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
     <!-- Logo -->
-    <img src="./images/Santa_Fe_Cebu.png" alt="hero-img-logo" style="height: 50px; width: auto;">
+    <img src="../images/Santa_Fe_Cebu.png" alt="hero-img-logo" style="height: 50px; width: auto;">
 
     <!-- Text beside the logo -->
     <div style="font-size: 18px; font-weight: bold; color: #333;">
