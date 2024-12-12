@@ -33,7 +33,31 @@ if (strlen($_SESSION['alogin']) == 0) {
 
     require './includes/layout-head.php';
 ?>
+<style>
+    .logo {
+    max-width: 150px;  /* Adjust this value as needed */
+    height: auto;      /* Maintain the aspect ratio */
+}
 
+/* Center the content */
+.text-center {
+    text-align: center;
+}
+
+/* Optional: Adjust the size of the header */
+h1 {
+    font-size: 2rem;  /* You can change this size to fit your design */
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/* Optional: Align the row in the center of the page */
+.row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+</style>
 <div class="card mt-4">
     <div class="card-body">
         <div class="d-flex align-items-center justify-content-between">
