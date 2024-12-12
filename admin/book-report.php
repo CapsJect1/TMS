@@ -1,7 +1,6 @@
 <?php
 session_start();
 include('includes/config.php');
-
 if (strlen($_SESSION['alogin']) == 0) {
     header('location:index.php');
 } else {
@@ -10,9 +9,9 @@ if (strlen($_SESSION['alogin']) == 0) {
     function Sales($month, $conn)
     {
         $year = date('Y');
-        $stmt = $conn->query("SELECT COUNT(*) AS total_booked, SUM(payment) AS total_payment FROM booking WHERE MONTH(date_created) = '$month' AND YEAR(date_created) = '$year' ");
+        $stmt = $conn->query("SELECT SUM(payment) AS TOTAL FROM booking WHERE MONTH(date_created) = '$month' AND YEAR(date_created) = '$year' ");
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $row;
+        return $row['TOTAL'];
     }
 
     // Data for each month
@@ -30,138 +29,145 @@ if (strlen($_SESSION['alogin']) == 0) {
     $dec = Sales('12', $dbh);
 
     // Total Payment Calculation
-    $total = $january['total_payment'] + $february['total_payment'] + $mar['total_payment'] + $june['total_payment'] + $july['total_payment'] + $aug['total_payment'] + $sept['total_payment'] + $oct['total_payment'] + $nov['total_payment'] + $dec['total_payment'];
+    $total = $january + $february + $mar + $june + $july + $aug + $sept + $oct + $nov + $dec;
 
     require './includes/layout-head.php';
 ?>
 
+<!-- Card and Graph Section (Will not be printed) -->
 <div class="card mt-4">
     <div class="card-body">
         <div class="d-flex align-items-center justify-content-between">
             <h3>Booking Report</h3>
             <h3>Total: <?= number_format($total, 2) ?></h3>
         </div>
-
-        <!-- Table for Displaying the Report -->
-        <table class="table" id="reportTable">
-            <thead>
-                <tr>
-                    <th>Month</th>
-                    <th>Total Booked</th>
-                    <th>Total Payment</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>January</td>
-                    <td><?= $january['total_booked'] ?></td>
-                    <td><?= number_format($january['total_payment'], 2) ?></td>
-                </tr>
-                <tr>
-                    <td>February</td>
-                    <td><?= $february['total_booked'] ?></td>
-                    <td><?= number_format($february['total_payment'], 2) ?></td>
-                </tr>
-                <tr>
-                    <td>March</td>
-                    <td><?= $mar['total_booked'] ?></td>
-                    <td><?= number_format($mar['total_payment'], 2) ?></td>
-                </tr>
-                <tr>
-                    <td>April</td>
-                    <td><?= $apr['total_booked'] ?></td>
-                    <td><?= number_format($apr['total_payment'], 2) ?></td>
-                </tr>
-                <tr>
-                    <td>May</td>
-                    <td><?= $may['total_booked'] ?></td>
-                    <td><?= number_format($may['total_payment'], 2) ?></td>
-                </tr>
-                <tr>
-                    <td>June</td>
-                    <td><?= $june['total_booked'] ?></td>
-                    <td><?= number_format($june['total_payment'], 2) ?></td>
-                </tr>
-                <tr>
-                    <td>July</td>
-                    <td><?= $july['total_booked'] ?></td>
-                    <td><?= number_format($july['total_payment'], 2) ?></td>
-                </tr>
-                <tr>
-                    <td>August</td>
-                    <td><?= $aug['total_booked'] ?></td>
-                    <td><?= number_format($aug['total_payment'], 2) ?></td>
-                </tr>
-                <tr>
-                    <td>September</td>
-                    <td><?= $sept['total_booked'] ?></td>
-                    <td><?= number_format($sept['total_payment'], 2) ?></td>
-                </tr>
-                <tr>
-                    <td>October</td>
-                    <td><?= $oct['total_booked'] ?></td>
-                    <td><?= number_format($oct['total_payment'], 2) ?></td>
-                </tr>
-                <tr>
-                    <td>November</td>
-                    <td><?= $nov['total_booked'] ?></td>
-                    <td><?= number_format($nov['total_payment'], 2) ?></td>
-                </tr>
-                <tr>
-                    <td>December</td>
-                    <td><?= $dec['total_booked'] ?></td>
-                    <td><?= number_format($dec['total_payment'], 2) ?></td>
-                </tr>
-            </tbody>
-        </table>
+        <!-- This is where the graph is displayed -->
+        <canvas id="barChart" style="width:100%;"></canvas>
 
         <!-- Print Button -->
-        <button class="float-end mt-3 btn btn-primary" id="printButton"><i class="fa fa-print"></i> Print</button>
+        <a href="javascript:void(0);" class="float-end mt-3 btn btn-primary" id="printButton"><i class="fa fa-print"></i> Print</a>
     </div>
 </div>
 
+<!-- Printable Section (Hidden by default) -->
+<div id="printSection" style="display:none;">
+    <h3>Booking Report - Printable Version</h3>
+    <table border="1" cellpadding="10">
+        <thead>
+            <tr>
+                <th>Month</th>
+                <th>Total Booked</th>
+                <th>Total Payment</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>January</td>
+                <td><?= $january ?></td>
+                <td><?= number_format($january, 2) ?></td>
+            </tr>
+            <tr>
+                <td>February</td>
+                <td><?= $february ?></td>
+                <td><?= number_format($february, 2) ?></td>
+            </tr>
+            <tr>
+                <td>March</td>
+                <td><?= $mar ?></td>
+                <td><?= number_format($mar, 2) ?></td>
+            </tr>
+            <tr>
+                <td>April</td>
+                <td><?= $apr ?></td>
+                <td><?= number_format($apr, 2) ?></td>
+            </tr>
+            <tr>
+                <td>May</td>
+                <td><?= $may ?></td>
+                <td><?= number_format($may, 2) ?></td>
+            </tr>
+            <tr>
+                <td>June</td>
+                <td><?= $june ?></td>
+                <td><?= number_format($june, 2) ?></td>
+            </tr>
+            <tr>
+                <td>July</td>
+                <td><?= $july ?></td>
+                <td><?= number_format($july, 2) ?></td>
+            </tr>
+            <tr>
+                <td>August</td>
+                <td><?= $aug ?></td>
+                <td><?= number_format($aug, 2) ?></td>
+            </tr>
+            <tr>
+                <td>September</td>
+                <td><?= $sept ?></td>
+                <td><?= number_format($sept, 2) ?></td>
+            </tr>
+            <tr>
+                <td>October</td>
+                <td><?= $oct ?></td>
+                <td><?= number_format($oct, 2) ?></td>
+            </tr>
+            <tr>
+                <td>November</td>
+                <td><?= $nov ?></td>
+                <td><?= number_format($nov, 2) ?></td>
+            </tr>
+            <tr>
+                <td>December</td>
+                <td><?= $dec ?></td>
+                <td><?= number_format($dec, 2) ?></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
 <script>
-    // Trigger the print dialog when the print button is clicked
+    // When the Print button is clicked, display the printable table and trigger print
     document.getElementById('printButton').addEventListener('click', function () {
-        window.print();  // This will open the print dialog with the current page
+        // Hide the graph and show the printable section
+        document.querySelector('canvas').style.display = 'none';
+        document.getElementById('printSection').style.display = 'block';
+
+        // Trigger the print dialog
+        window.print();
+
+        // Hide the printable section again after printing
+        setTimeout(function () {
+            document.getElementById('printSection').style.display = 'none';
+            document.querySelector('canvas').style.display = 'block'; // Show the graph again
+        }, 1000);
     });
 </script>
 
-<!-- Print-Friendly Styles -->
-<style>
-    @media print {
-        body {
-            font-family: Arial, sans-serif;
-        }
+<script>
+    // Your existing graph code
+    var xValues = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    var yValues = [<?= $january ?>, <?= $february ?>, <?= $mar ?>, <?= $apr ?>, <?= $may ?>, <?= $june ?>, <?= $july ?>, <?= $aug ?>, <?= $sept ?>, <?= $oct ?>, <?= $nov ?>, <?= $dec ?>];
+    var barColors = ["#fb4c44", "#5386df", "#007b12", "#fb4c44", "#5386df", "#007b12", "#fb4c44", "#5386df", "#007b12", "#fb4c44", "#5386df", "#007b12"];
 
-        /* Hide elements that should not be printed */
-        .float-end, .btn {
-            display: none;
+    new Chart("barChart", {
+        type: "bar",
+        data: {
+            labels: xValues,
+            datasets: [{
+                backgroundColor: barColors,
+                data: yValues
+            }]
+        },
+        options: {
+            legend: {
+                display: false
+            },
+            title: {
+                display: false
+            }
         }
-
-        /* Ensure the table looks nice when printed */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-
-        table, th, td {
-            border: 1px solid black;
-        }
-
-        th, td {
-            padding: 8px;
-            text-align: center;
-        }
-
-        /* Optional: You can add a page break before each section, but this is usually optional */
-        .card {
-            page-break-before: always;
-            page-break-after: always;
-        }
-    }
-</style>
+    });
+</script>
 
 <?php
     require 'includes/footer.php';
