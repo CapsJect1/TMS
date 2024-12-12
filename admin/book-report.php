@@ -38,7 +38,7 @@ if (strlen($_SESSION['alogin']) == 0) {
     <div class="card-body">
         <div class="d-flex align-items-center justify-content-between">
             <h3>Booking Report</h3>
-            <h3>Total: <?= number_format($total, 2) ?></h3>
+           
         </div>
         <!-- This is where the graph is displayed -->
         <canvas id="barChart" style="width:100%;"></canvas>
@@ -122,6 +122,7 @@ if (strlen($_SESSION['alogin']) == 0) {
             </tr>
         </tbody>
     </table>
+     <h3>Total: <?= number_format($total, 2) ?></h3>
 </div>
 
 <script>
