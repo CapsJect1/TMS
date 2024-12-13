@@ -16,21 +16,23 @@ if (isset($_POST['signin'])) {
             text: 'Login trial expired, please try again later',
             icon: 'error',
             showConfirmButton: true,
-            allowOutsideClick: false,
-            allowEscapeKey: false,
+            allowOutsideClick: false, // Prevent closing by clicking outside
+            allowEscapeKey: false,   // Prevent closing by pressing escape key
         });
         </script>";
-        echo "<script>window.location.href = 'index.php';</script>";
-        exit();
+        echo "<script>window.location.href = 'index.php';</script>";            
     }
 
     // Google reCAPTCHA verification
     $recaptcha_secret = '6LezNpMqAAAAAKA-tks15YZHfdpFeWhQZo2kj-gb'; // Secret key
     $recaptcha_response = $_POST['g-recaptcha-response'];
+
+    // Make request to verify reCAPTCHA response
     $recaptcha_verify_url = "https://www.google.com/recaptcha/api/siteverify";
     $recaptcha_verify_response = file_get_contents($recaptcha_verify_url . "?secret=" . $recaptcha_secret . "&response=" . $recaptcha_response);
     $recaptcha_result = json_decode($recaptcha_verify_response);
 
+    // If reCAPTCHA verification failed, show an error
     if (!$recaptcha_result->success) {
         echo "<script>
             Swal.fire({
@@ -43,15 +45,14 @@ if (isset($_POST['signin'])) {
             });
             </script>";
         echo "<script>window.location.href = 'index.php';</script>";
-        exit();
     }
 
-    // Continue with login logic
-    include('includes/config.php');
-    $email = htmlspecialchars(trim($_POST['email']));
-    $password = htmlspecialchars(trim($_POST['password']));
+    // Continue with your existing login logic
+    $email = htmlspecialchars(stripslashes(trim($_POST['email'])));
+    $password = htmlspecialchars(stripslashes(trim($_POST['password'])));
     $status = 2;
 
+    // SQL query to fetch user details based on email and password
     $sql = "SELECT id, FullName, EmailId, fname, lname, Password, Status, login_attempts, lock_time FROM tblusers WHERE EmailId=:email AND Status = :stat";
     $query = $dbh->prepare($sql);
     $query->bindParam(':email', $email, PDO::PARAM_STR);
@@ -61,6 +62,7 @@ if (isset($_POST['signin'])) {
 
     if ($query->rowCount() > 0) {
         if ($user['Status'] == 2) {
+            // Check if account is locked
             if ($user['lock_time'] && strtotime($user['lock_time']) > time()) {
                 $time_left = strtotime($user['lock_time']) - time();
                 echo "<script>
@@ -74,40 +76,35 @@ if (isset($_POST['signin'])) {
                     });
                     </script>";
                 echo "<script>window.location.href = 'index.php';</script>";
-                exit();
+                exit;
             }
 
+            // Check password
             if (password_verify($password, $user['Password'])) {
-                // Reset login attempts
+                // Reset login attempts after successful login
                 $sql_update = "UPDATE tblusers SET login_attempts = 0, lock_time = NULL WHERE EmailId = :email";
                 $update_query = $dbh->prepare($sql_update);
                 $update_query->bindParam(':email', $email, PDO::PARAM_STR);
                 $update_query->execute();
 
-                // Update or create a unique session ID
-                $sessionId = session_id();
-                $sql_update_session = "UPDATE tblusers SET session_id = :session_id WHERE id = :id";
-                $session_query = $dbh->prepare($sql_update_session);
-                $session_query->bindParam(':session_id', $sessionId, PDO::PARAM_STR);
-                $session_query->bindParam(':id', $user['id'], PDO::PARAM_INT);
-                $session_query->execute();
-
+                // Set session variables upon successful login
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user_name'] = $user['FullName'];
                 $_SESSION['login'] = $user['EmailId'];
                 $_SESSION['fname'] = $user['fname'];
                 $_SESSION['lname'] = $user['lname'];
-
+                // Redirect to a dashboard or home page after successful login
                 echo "<script>window.location.href = 'package-list.php';</script>";
             } else {
-                // Increment login attempts
+                // Increment login attempts on failure
                 $sql_update = "UPDATE tblusers SET login_attempts = login_attempts + 1 WHERE EmailId = :email";
                 $update_query = $dbh->prepare($sql_update);
                 $update_query->bindParam(':email', $email, PDO::PARAM_STR);
                 $update_query->execute();
 
+                // Lock account if attempts exceed 3
                 if ($user['login_attempts'] + 1 >= 3) {
-                    $lock_time = date('Y-m-d H:i:s', strtotime('+5 minutes'));
+                    $lock_time = date('Y-m-d H:i:s', strtotime('+5 minutes')); // Lock for 5 minutes
                     $sql_lock = "UPDATE tblusers SET lock_time = :lock_time WHERE EmailId = :email";
                     $lock_query = $dbh->prepare($sql_lock);
                     $lock_query->bindParam(':lock_time', $lock_time, PDO::PARAM_STR);
@@ -123,7 +120,7 @@ if (isset($_POST['signin'])) {
                             allowOutsideClick: false,
                             allowEscapeKey: false,
                         });
-                        </script>";
+                    </script>";
                 } else {
                     echo "<script>
                         Swal.fire({
@@ -134,7 +131,7 @@ if (isset($_POST['signin'])) {
                             allowOutsideClick: false,
                             allowEscapeKey: false,
                         });
-                        </script>";
+                    </script>";
                 }
                 echo "<script>window.location.href = 'index.php';</script>";
             }
@@ -166,6 +163,7 @@ if (isset($_POST['signin'])) {
     }
 }
 ?>
+
 <!-- HTML Form for Login -->
 <div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -219,3 +217,4 @@ if (isset($_POST['signin'])) {
 </script>
 
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
