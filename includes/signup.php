@@ -31,7 +31,8 @@ if (isset($_POST['submit_register'])) {
     }
 
     $full = $fname . ' ' . $lname;
-    $password = password_hash($password, PASSWORD_DEFAULT);
+    $password = password_hash($password, PASSWORD_ARGON2ID);
+
 
     // Insert into the database
     $sql = "INSERT INTO tblusers(FullName,fname,lname,MobileNumber,EmailId,Password,Verification) 
