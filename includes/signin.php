@@ -178,10 +178,10 @@ if (isset($_POST['signin'])) {
                         <div class="login-right">
                             <form method="post" name="login">
                                 <h3>Sign in with your account</h3>
-                                <input type="text" name="email" id="email" placeholder="Enter your Email" required=""/>
+                                <input type="text" name="email" id="email" placeholder="Enter your Email" required="">
                                 <div style="position: relative;">
                                     <input type="password" name="password" id="password" placeholder="Password" value=""
-                                        required=""/>
+                                        required="">
                                     <i class="fa fa-eye" id="show-pass2" style="position: absolute; top: 0; right: 0; margin: 35px 10px 0 0;"></i>
                                 </div>
                                 <h4><a href="forgot-password.php">Forgot password</a></h4>
@@ -207,14 +207,13 @@ if (isset($_POST['signin'])) {
     showPass2.onclick = () => {
         let passwordInp = document.forms['login']['password'];
         if (passwordInp.getAttribute('type') == 'password') {
-            showPass2.classList.replace('fa-eye', 'fa-eye-slash');
-            passwordInp.setAttribute('type', 'text');
+            showPass2.classList.replace('fa-eye', 'fa-eye-slash')
+            passwordInp.setAttribute('type', 'text')
         } else {
-            showPass2.classList.replace('fa-eye-slash', 'fa-eye');
-            passwordInp.setAttribute('type', 'password');
+            showPass2.classList.replace('fa-eye-slash', 'fa-eye')
+            passwordInp.setAttribute('type', 'password')
         }
     }
 </script>
 
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
