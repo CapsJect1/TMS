@@ -2,27 +2,6 @@
 session_start();
 include('includes/config.php');
 
-// If user is logged in, validate the session
-if (isset($_SESSION['user_id'])) {
-    $userId = $_SESSION['user_id'];
-    $sessionId = session_id();
-
-    // Check if the session is active
-    $sql = "SELECT is_active FROM tblsessions WHERE user_id = :user_id AND session_id = :session_id";
-    $query = $dbh->prepare($sql);
-    $query->bindParam(':user_id', $userId, PDO::PARAM_INT);
-    $query->bindParam(':session_id', $sessionId, PDO::PARAM_STR);
-    $query->execute();
-
-    $result = $query->fetch(PDO::FETCH_ASSOC);
-    if (!$result || !$result['is_active']) {
-        // Session is inactive, log out the user
-        $_SESSION = array();
-        session_destroy();
-        header("Location: index.php");
-        exit();
-    }
-}
 
 // Your page content here
 ?>
