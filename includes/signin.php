@@ -1,5 +1,6 @@
 <?php
 session_start();
+include('includes/config.php');
 
 if (isset($_SESSION['ERROR_LOGIN'])) {
     if ($_SESSION['date'] == date('Y-m-d')) {
@@ -16,8 +17,8 @@ if (isset($_POST['signin'])) {
             text: 'Login trial expired, please try again later',
             icon: 'error',
             showConfirmButton: true,
-            allowOutsideClick: false, // Prevent closing by clicking outside
-            allowEscapeKey: false,   // Prevent closing by pressing escape key
+            allowOutsideClick: false,
+            allowEscapeKey: false,
         });
         </script>";
         echo "<script>window.location.href = 'index.php';</script>";            
@@ -26,13 +27,10 @@ if (isset($_POST['signin'])) {
     // Google reCAPTCHA verification
     $recaptcha_secret = '6LezNpMqAAAAAKA-tks15YZHfdpFeWhQZo2kj-gb'; // Secret key
     $recaptcha_response = $_POST['g-recaptcha-response'];
-
-    // Make request to verify reCAPTCHA response
     $recaptcha_verify_url = "https://www.google.com/recaptcha/api/siteverify";
     $recaptcha_verify_response = file_get_contents($recaptcha_verify_url . "?secret=" . $recaptcha_secret . "&response=" . $recaptcha_response);
     $recaptcha_result = json_decode($recaptcha_verify_response);
 
-    // If reCAPTCHA verification failed, show an error
     if (!$recaptcha_result->success) {
         echo "<script>
             Swal.fire({
@@ -47,13 +45,12 @@ if (isset($_POST['signin'])) {
         echo "<script>window.location.href = 'index.php';</script>";
     }
 
-    // Continue with your existing login logic
+    // Continue with login logic
     $email = htmlspecialchars(stripslashes(trim($_POST['email'])));
     $password = htmlspecialchars(stripslashes(trim($_POST['password'])));
     $status = 2;
 
-    // SQL query to fetch user details based on email and password
-    $sql = "SELECT id, FullName, EmailId, fname, lname, Password, Status, login_attempts, lock_time FROM tblusers WHERE EmailId=:email AND Status = :stat";
+    $sql = "SELECT id, FullName, EmailId, fname, lname, Password, Status, login_attempts, lock_time, session_id FROM tblusers WHERE EmailId=:email AND Status=:stat";
     $query = $dbh->prepare($sql);
     $query->bindParam(':email', $email, PDO::PARAM_STR);
     $query->bindParam(':stat', $status, PDO::PARAM_INT);
@@ -81,10 +78,12 @@ if (isset($_POST['signin'])) {
 
             // Check password
             if (password_verify($password, $user['Password'])) {
-                // Reset login attempts after successful login
-                $sql_update = "UPDATE tblusers SET login_attempts = 0, lock_time = NULL WHERE EmailId = :email";
+                // Reset login attempts and update session ID
+                $sessionId = session_id();
+                $sql_update = "UPDATE tblusers SET login_attempts = 0, lock_time = NULL, session_id = :session_id WHERE id = :id";
                 $update_query = $dbh->prepare($sql_update);
-                $update_query->bindParam(':email', $email, PDO::PARAM_STR);
+                $update_query->bindParam(':session_id', $sessionId, PDO::PARAM_STR);
+                $update_query->bindParam(':id', $user['id'], PDO::PARAM_INT);
                 $update_query->execute();
 
                 // Set session variables upon successful login
@@ -93,22 +92,22 @@ if (isset($_POST['signin'])) {
                 $_SESSION['login'] = $user['EmailId'];
                 $_SESSION['fname'] = $user['fname'];
                 $_SESSION['lname'] = $user['lname'];
-                // Redirect to a dashboard or home page after successful login
+
                 echo "<script>window.location.href = 'package-list.php';</script>";
             } else {
-                // Increment login attempts on failure
-                $sql_update = "UPDATE tblusers SET login_attempts = login_attempts + 1 WHERE EmailId = :email";
+                // Increment login attempts
+                $sql_update = "UPDATE tblusers SET login_attempts = login_attempts + 1 WHERE id = :id";
                 $update_query = $dbh->prepare($sql_update);
-                $update_query->bindParam(':email', $email, PDO::PARAM_STR);
+                $update_query->bindParam(':id', $user['id'], PDO::PARAM_INT);
                 $update_query->execute();
 
                 // Lock account if attempts exceed 3
                 if ($user['login_attempts'] + 1 >= 3) {
-                    $lock_time = date('Y-m-d H:i:s', strtotime('+5 minutes')); // Lock for 5 minutes
-                    $sql_lock = "UPDATE tblusers SET lock_time = :lock_time WHERE EmailId = :email";
+                    $lock_time = date('Y-m-d H:i:s', strtotime('+5 minutes'));
+                    $sql_lock = "UPDATE tblusers SET lock_time = :lock_time WHERE id = :id";
                     $lock_query = $dbh->prepare($sql_lock);
                     $lock_query->bindParam(':lock_time', $lock_time, PDO::PARAM_STR);
-                    $lock_query->bindParam(':email', $email, PDO::PARAM_STR);
+                    $lock_query->bindParam(':id', $user['id'], PDO::PARAM_INT);
                     $lock_query->execute();
 
                     echo "<script>
