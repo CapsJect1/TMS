@@ -6,8 +6,8 @@ include('includes/config.php');
 if (isset($_SESSION['user_id'])) {
     $userId = $_SESSION['user_id'];
 
-    // Mark all sessions for this user as inactive
-    $sql = "UPDATE tblsessions SET is_active = 0 WHERE user_id = :user_id";
+    // Clear session_id in the database upon logout
+    $sql = "UPDATE tblusers SET session_id = NULL WHERE id = :user_id";
     $query = $dbh->prepare($sql);
     $query->bindParam(':user_id', $userId, PDO::PARAM_INT);
     $query->execute();
@@ -29,5 +29,3 @@ session_destroy();
 header("Location: index.php");
 exit();
 ?>
-
-
