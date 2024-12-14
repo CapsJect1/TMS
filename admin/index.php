@@ -17,19 +17,23 @@ if (isset($_POST['login'])) {
     if ($query->rowCount() > 0) {
         if (password_verify($password, $results->Password)) {
             // Check if the user is already logged in on another browser/device
-            if (!empty($results->session_id) && $results->session_id != session_id()) {
-                echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
-                echo '<script>
-                    document.addEventListener("DOMContentLoaded", () => {
-                        Swal.fire({
-                            title: "Already Logged In",
-                            text: "You are already logged in from another browser or device.",
-                            icon: "error",
-                            timer: 3000,
-                            showConfirmButton: false
-                        });
-                    });
-                </script>';
+           if (!empty($results->session_id) && $results->session_id != session_id()) {
+    echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
+    echo '<script>
+        document.addEventListener("DOMContentLoaded", () => {
+            Swal.fire({
+                title: "Already Logged In",
+                text: "You are already logged in from another browser or device.",
+                icon: "error",
+                showConfirmButton: true
+            }).then((result) => {
+                if (result.isConfirmed || result.dismiss) {
+                    // Redirect to index.php or refresh the page
+                    window.location.href = "index.php";
+                }
+            });
+        });
+    </script>';
                 exit(); // Stop further execution
             }
 
