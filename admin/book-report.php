@@ -60,6 +60,9 @@ if (strlen($_SESSION['alogin']) == 0) {
       <h1>
           Sante Fe Port TMS
       </h1>
+        <p>Address: Talisay, Santa Fe, Bantayan Island, Cebu</p>
+        <p>Contact: 0917800185</p>
+        <p>Email: santafeport@gmail.com</p>
     </div>
 </div>
 </center>
