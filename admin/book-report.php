@@ -56,7 +56,7 @@ if (strlen($_SESSION['alogin']) == 0) {
     <img src="../images/Santa_Fe_Cebu.png" alt="hero-img-logo" style="height: 100px; width: auto;">
 
     <!-- Text beside the logo -->
-    <div style="font-size: 18px; font-weight: bold; color: #333;">
+    <div>
       <h1>
           Sante Fe Port TMS
       </h1>
