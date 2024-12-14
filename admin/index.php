@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('includes/config.php');
+error_reporting(E_ALL); // Enable error reporting for debugging
 
 if (isset($_POST['login'])) {
     $uname = htmlspecialchars(stripslashes(trim($_POST['username'])));
@@ -17,20 +18,19 @@ if (isset($_POST['login'])) {
         if (password_verify($password, $results->Password)) {
             // Check if the user is already logged in on another browser/device
             if (!empty($results->session_id) && $results->session_id != session_id()) {
-                ?>
-                <script>
+                echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
+                echo '<script>
                     document.addEventListener("DOMContentLoaded", () => {
                         Swal.fire({
-                            title: 'Already Logged In',
-                            text: 'You are already logged in from another browser or device.',
-                            icon: 'error',
+                            title: "Already Logged In",
+                            text: "You are already logged in from another browser or device.",
+                            icon: "error",
                             timer: 3000,
                             showConfirmButton: false
                         });
                     });
-                </script>
-                <?php
-                exit();
+                </script>';
+                exit(); // Stop further execution
             }
 
             // Log in the user and update the session ID in the database
@@ -45,36 +45,34 @@ if (isset($_POST['login'])) {
             $updateQuery->bindParam(':uname', $uname, PDO::PARAM_STR);
             $updateQuery->execute();
 
-            echo "<script type='text/javascript'> document.location = 'https://santafeport.com/admin/dashboard.php'; </script>";
+            echo "<script>document.location = 'https://santafeport.com/admin/dashboard.php';</script>";
         } else {
-            ?>
-            <script>
+            echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
+            echo '<script>
                 document.addEventListener("DOMContentLoaded", () => {
                     Swal.fire({
-                        title: 'Error!',
-                        text: 'Incorrect username or password',
-                        icon: 'error',
+                        title: "Error!",
+                        text: "Incorrect username or password",
+                        icon: "error",
                         timer: 1500,
                         showConfirmButton: false
                     });
                 });
-            </script>
-            <?php
+            </script>';
         }
     } else {
-        ?>
-        <script>
+        echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
+        echo '<script>
             document.addEventListener("DOMContentLoaded", () => {
                 Swal.fire({
-                    title: 'Error!',
-                    text: 'Incorrect username or password',
-                    icon: 'error',
+                    title: "Error!",
+                    text: "Incorrect username or password",
+                    icon: "error",
                     timer: 1500,
                     showConfirmButton: false
                 });
             });
-        </script>
-        <?php
+        </script>';
     }
 }
 ?>
