@@ -3,11 +3,7 @@ session_start();
 include('includes/config.php');
 error_reporting(E_ALL);
 
-// Check if admin is logged in
-if (!isset($_SESSION['alogin'])) {
-    echo "<script>document.location = 'index.php';</script>";
-    exit();
-}
+
 
 // Handle form submission
 if (isset($_POST['create'])) {
