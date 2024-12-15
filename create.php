@@ -143,7 +143,7 @@ if (isset($_POST['submit_register'])) {
                 <div class="mb-3 position-relative">
                     <label for="password" class="form-label">Password</label>
                     <input type="password" class="form-control" id="password" name="password" placeholder="Password" minlength="8" required>
-                    <i class="fa fa-eye position-absolute" id="show-pass" style="top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;"></i>
+                    <i class="fa fa-eye position-absolute" id="show-pass" style=" cursor: pointer;"></i>
                 </div>
 
                 <div class="mb-3" id="html_element"></div>
