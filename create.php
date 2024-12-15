@@ -5,7 +5,7 @@ use PHPMailer\PHPMailer\Exception;
 require "./phpmailer/src/Exception.php";
 require "./phpmailer/src/PHPMailer.php";
 require "./phpmailer/src/SMTP.php";
-require "config.php"; // Include your database configuration
+require "includes/config.php"; // Include your database configuration
 
 if (isset($_POST['submit_register'])) {
     $verification = uniqid() . rand(100, 999999999);
