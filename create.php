@@ -140,11 +140,15 @@ if (isset($_POST['submit_register'])) {
                     <span id="user-availability-status" class="small"></span>
                 </div>
 
-                <div class="mb-3 position-relative">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" minlength="8" required>
-                    <i class="fa fa-eye position-absolute" id="show-pass" style=" cursor: pointer;"></i>
-                </div>
+	            <div class="mb-3 position-relative">
+			    <label for="password" class="form-label">Password</label>
+			    <div class="input-group">
+			        <input type="password" class="form-control" id="password" name="password" placeholder="Password" minlength="8" required>
+			        <span class="input-group-text bg-white border-0 position-absolute" style="right: 0; z-index: 10; cursor: pointer;">
+			            <i class="fa fa-eye" id="show-pass"></i>
+			        </span>
+			    </div>
+			</div>
 
                 <div class="mb-3" id="html_element"></div>
 
