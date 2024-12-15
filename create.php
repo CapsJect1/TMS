@@ -100,46 +100,60 @@ if (isset($_POST['submit_register'])) {
 	}
 </script>
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <section>
-                <div class="modal-body modal-spa">
-                    <div class="login-grids">
-                        <div class="login">
-                            <div class="login-right">
-                                <form method="post" id="register-form">
-                                    <h3>Create your account</h3>
-                                    <input type="text" value="" placeholder="First Name" id="fname" name="fname" autocomplete="off" required="" oninput="validateName()">
-                                    <span id="fname-error" style="color:red;font-size:12px;"></span>
-                                    <input type="text" value="" placeholder="Last Name" id="lname" name="lname" autocomplete="off" required="" oninput="validateName()">
-                                    <span id="lname-error" style="color:red;font-size:12px;"></span>
-                                    <input type="text" value="" placeholder="Mobile number" onkeyup="this.value=this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')" maxlength="11" name="mobilenumber" autocomplete="off" required="">
-                                    <input type="text" value="" placeholder="Email id" name="email" id="email" onBlur="checkAvailability()" autocomplete="off" required="">
-                                    <span id="user-availability-status" style="font-size:12px;"></span>
-                                  <div style="position: relative;">
-				    <input type="password" name="password" id="password" placeholder="Password" value="" minlength="8" required>
-				    <i class="fa fa-eye" id="show-pass" style="position: absolute; top: 0; right: 0; margin: 35px 10px 0 0; cursor: pointer;"></i>
-				</div>
-					</br>
-                                    <div id="html_element"></div>
-                                    <input type="submit" name="submit_register" id="submit" value="CREATE ACCOUNT" disabled>
-                                </form>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-                        <p>By logging in you agree to our <a href="page.php?type=terms">Terms and Conditions</a> and <a href="page.php?type=privacy">Privacy Policy</a></p>
-                    </div>
+
+                              <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
+</head>
+<body class="bg-light">
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card shadow-lg" style="width: 100%; max-width: 500px;">
+        <div class="card-body">
+            <h3 class="card-title text-center mb-4">Create Your Account</h3>
+            <form method="post" id="register-form">
+                <div class="mb-3">
+                    <label for="fname" class="form-label">First Name</label>
+                    <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name" required oninput="validateName()">
+                    <span id="fname-error" class="text-danger small"></span>
                 </div>
-            </section>
+
+                <div class="mb-3">
+                    <label for="lname" class="form-label">Last Name</label>
+                    <input type="text" class="form-control" id="lname" name="lname" placeholder="Last Name" required oninput="validateName()">
+                    <span id="lname-error" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label for="mobilenumber" class="form-label">Mobile Number</label>
+                    <input type="text" class="form-control" id="mobilenumber" name="mobilenumber" placeholder="Mobile Number" maxlength="11" required onkeyup="this.value=this.value.replace(/[^0-9]/g, '')">
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Email Address" required onblur="checkAvailability()">
+                    <span id="user-availability-status" class="small"></span>
+                </div>
+
+                <div class="mb-3 position-relative">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" minlength="8" required>
+                    <i class="fa fa-eye position-absolute" id="show-pass" style="top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;"></i>
+                </div>
+
+                <div class="mb-3" id="html_element"></div>
+
+                <button type="submit" class="btn btn-primary w-100" name="submit_register" id="submit" disabled>CREATE ACCOUNT</button>
+            </form>
         </div>
     </div>
 </div>
+                       
 
 <script>
 function validateName() {
