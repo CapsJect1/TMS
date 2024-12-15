@@ -121,7 +121,6 @@ if (isset($_POST['submit_register'])) {
 		});
 	}
 </script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <!-- Registration Form -->
 <section>
@@ -161,6 +160,7 @@ if (isset($_POST['submit_register'])) {
         </div>
     </div>
 </section>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 <script>
