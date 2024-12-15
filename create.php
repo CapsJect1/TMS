@@ -103,23 +103,21 @@ if (isset($_POST['submit_register'])) {
 }
 ?>
 
-
-<!--Javascript for check email availabilty-->
+<!--Javascript for check email availability-->
 <script>
-	function checkAvailability() {
-
-		$("#loaderIcon").show();
-		jQuery.ajax({
-			url: "check_availability.php",
-			data: 'emailid=' + $("#email").val(),
-			type: "POST",
-			success: function(data) {
-				$("#user-availability-status").html(data);
-				$("#loaderIcon").hide();
-			},
-			error: function() {}
-		});
-	}
+    function checkAvailability() {
+        $("#loaderIcon").show();
+        jQuery.ajax({
+            url: "check_availability.php",
+            data: 'emailid=' + $("#email").val(),
+            type: "POST",
+            success: function(data) {
+                $("#user-availability-status").html(data);
+                $("#loaderIcon").hide();
+            },
+            error: function() {}
+        });
+    }
 </script>
 
 <!-- Registration Form -->
@@ -160,8 +158,8 @@ if (isset($_POST['submit_register'])) {
         </div>
     </div>
 </section>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
 function validatePassword() {
@@ -207,16 +205,14 @@ function validateName() {
 }
 </script>
 
-
 <script type="text/javascript">
-      var onloadCallback = function() {
+    var onloadCallback = function() {
         grecaptcha.render('html_element', {
-          'sitekey' : '6LeBZG0qAAAAAHpE8Nr7ZxDcFQw3dVdkeJ4p3stl'
+            'sitekey' : '6LeBZG0qAAAAAHpE8Nr7ZxDcFQw3dVdkeJ4p3stl'
         });
-      };
+    };
 
-
-	  const showPass = document.getElementById('show-pass');
+    const showPass = document.getElementById('show-pass');
     const passwordField = document.getElementById('password');
 
     showPass.addEventListener('click', () => {
@@ -232,24 +228,6 @@ function validateName() {
             showPass.classList.add('fa-eye-slash');
         }
     });
-    </script>
-
-
-<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
-        async defer>
-    </script>
-
-<script>
-	// let showPass = document.getElementById('show-pass');
-    // showPass.onclick = () => {
-    //     let passwordInp = document.forms['signup']['password'];
-    //     if (passwordInp.getAttribute('type') == 'password') {
-    //         showPass.classList.replace('fa-eye', 'fa-eye-slash')
-            
-    //         passwordInp.setAttribute('type', 'text')
-    //     }else{
-    //         showPass.classList.replace('fa-eye-slash', 'fa-eye')
-    //         passwordInp.setAttribute('type', 'password')
-    //     }
-    // }
 </script>
+
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
