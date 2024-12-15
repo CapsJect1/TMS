@@ -1,14 +1,11 @@
-
 <?php
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\SMTP;
 
 require "./phpmailer/src/Exception.php";
 require "./phpmailer/src/PHPMailer.php";
 require "./phpmailer/src/SMTP.php";
-
-error_reporting(E_ALL);
+require "config.php"; // Include your database configuration
 
 if (isset($_POST['submit_register'])) {
     $verification = uniqid() . rand(100, 999999999);
@@ -19,24 +16,27 @@ if (isset($_POST['submit_register'])) {
     $password = $_POST['password'];
 
     // Server-side validation for names
-    if (preg_match('/\d/', $fname)) {
-        die("First name should not contain numbers.");
+    if (preg_match('/\d/', $fname) || preg_match('/\d/', $lname)) {
+        echo "<script>
+                Swal.fire('Error', 'Names should not contain numbers.', 'error');
+              </script>";
+        exit;
     }
 
-    if (preg_match('/\d/', $lname)) {
-        die("Last name should not contain numbers.");
-    }
-
-    if (strlen($password) < 8) {
-        die("Password must be at least 8 characters long.");
+    // Server-side validation for strong password
+    if (!preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $password)) {
+        echo "<script>
+                Swal.fire('Error', 'Invalid password format.', 'error');
+              </script>";
+        exit;
     }
 
     $full = $fname . ' ' . $lname;
-   $password = password_hash($password, PASSWORD_DEFAULT);
+    $password = password_hash($password, PASSWORD_DEFAULT);
 
-    // Insert into the database
-    $sql = "INSERT INTO tblusers(FullName,fname,lname,MobileNumber,EmailId,Password,Verification) 
-            VALUES(:full, :fname, :lname, :mnumber, :email, :password, :verification)";
+    // Insert into database
+    $sql = "INSERT INTO tblusers (FullName, fname, lname, MobileNumber, EmailId, Password, Verification) 
+            VALUES (:full, :fname, :lname, :mnumber, :email, :password, :verification)";
     $query = $dbh->prepare($sql);
     $query->bindParam(':full', $full, PDO::PARAM_STR);
     $query->bindParam(':fname', $fname, PDO::PARAM_STR);
@@ -49,186 +49,142 @@ if (isset($_POST['submit_register'])) {
 
     $lastInsertId = $dbh->lastInsertId();
     if ($lastInsertId) {
-        $_SESSION['msg'] = "You are successfully registered. Please verify your account first to login.";
-
         // Send verification email
         $mail = new PHPMailer(true);
-        $mail->SMTPDebug = 0;
-        $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com';
-        $mail->SMTPAuth = true;
-        $mail->Username = 'percebuhayan12@gmail.com';
-        $mail->Password = 'jnolufsoqvqbsjim';
-        $mail->Port = 587;
-        $mail->SMTPOptions = [
-            'ssl' => [
-                'verify_peer' => false,
-                'verify_peer_name' => false,
-                'allow_self_signed' => true
-            ]
-        ];
-        $mail->setFrom('santafe@gmail.com', 'TMS Santa Fe');
-        $mail->addAddress($email);
-        $mail->Subject = "Email Account Verification";
-        $mail->Body = "Click this link to verify account: https://santafeport.com/verify-account.php?verification=" . $verification . "&email=" . $email;
-        $mail->send();
+        try {
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = 'your-email@gmail.com';
+            $mail->Password = 'your-email-password';
+            $mail->Port = 587;
 
-        echo "<script>window.location.href = 'thankyou.php';</script>";
+            $mail->setFrom('no-reply@example.com', 'Your App Name');
+            $mail->addAddress($email);
+            $mail->Subject = "Verify Your Email";
+            $mail->Body = "Click this link to verify: https://example.com/verify.php?code=$verification";
+
+            $mail->send();
+
+            echo "<script>
+                    Swal.fire('Success', 'You are registered. Please verify your email.', 'success')
+                        .then(() => { window.location.href = 'login.php'; });
+                  </script>";
+        } catch (Exception $e) {
+            echo "<script>
+                    Swal.fire('Error', 'Unable to send verification email.', 'error');
+                  </script>";
+        }
     } else {
-        $_SESSION['msg'] = "Something went wrong. Please try again.";
-        echo "<script>window.location.href = 'thankyou.php';</script>";
+        echo "<script>
+                Swal.fire('Error', 'Something went wrong. Please try again.', 'error');
+              </script>";
     }
 }
 ?>
-
-
-<!--Javascript for check email availabilty-->
-<script>
-	function checkAvailability() {
-
-		$("#loaderIcon").show();
-		jQuery.ajax({
-			url: "check_availability.php",
-			data: 'emailid=' + $("#email").val(),
-			type: "POST",
-			success: function(data) {
-				$("#user-availability-status").html(data);
-				$("#loaderIcon").hide();
-			},
-			error: function() {}
-		});
-	}
-</script>
-
-
-                              <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
-</head>
-<body class="bg-light">
-<div class="container d-flex justify-content-center align-items-center min-vh-100">
-    <div class="card shadow-lg" style="width: 100%; max-width: 500px;">
-        <div class="card-body">
-            <h3 class="card-title text-center mb-4">Create Your Account</h3>
-            <form method="post" id="register-form">
-                <div class="mb-3">
-                    <label for="fname" class="form-label">First Name</label>
-                    <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name" required oninput="validateName()">
-                    <span id="fname-error" class="text-danger small"></span>
-                </div>
-
-                <div class="mb-3">
-                    <label for="lname" class="form-label">Last Name</label>
-                    <input type="text" class="form-control" id="lname" name="lname" placeholder="Last Name" required oninput="validateName()">
-                    <span id="lname-error" class="text-danger small"></span>
-                </div>
-
-                <div class="mb-3">
-                    <label for="mobilenumber" class="form-label">Mobile Number</label>
-                    <input type="text" class="form-control" id="mobilenumber" name="mobilenumber" placeholder="Mobile Number" maxlength="11" required onkeyup="this.value=this.value.replace(/[^0-9]/g, '')">
-                </div>
-
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email Address</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Email Address" required onblur="checkAvailability()">
-                    <span id="user-availability-status" class="small"></span>
-                </div>
-
-	            <div class="mb-3 position-relative">
-			    <label for="password" class="form-label">Password</label>
-			    <div class="input-group">
-			        <input type="password" class="form-control" id="password" name="password" placeholder="Password" minlength="8" required>
-			        <span class="input-group-text bg-white border-0 position-absolute" style="right: 0; z-index: 10; cursor: pointer;">
-			            <i class="fa fa-eye" id="show-pass"></i>
-			        </span>
-			    </div>
-			</div>
-
-                <div class="mb-3" id="html_element"></div>
-
-                <button type="submit" class="btn btn-primary w-100" name="submit_register" id="submit" disabled>CREATE ACCOUNT</button>
-            </form>
-        </div>
-    </div>
-</div>
-                       
-
-<script>
-function validateName() {
-    const fname = document.getElementById('fname').value;
-    const lname = document.getElementById('lname').value;
-    const fnameError = document.getElementById('fname-error');
-    const lnameError = document.getElementById('lname-error');
-    const submitButton = document.getElementById('submit');
-    let valid = true;
-
-    if (/\d/.test(fname)) {
-        fnameError.textContent = 'First name should not contain numbers.';
-        valid = false;
-    } else {
-        fnameError.textContent = '';
-    }
-
-    if (/\d/.test(lname)) {
-        lnameError.textContent = 'Last name should not contain numbers.';
-        valid = false;
-    } else {
-        lnameError.textContent = '';
-    }
-
-    submitButton.disabled = !valid;
-}
-</script>
-
-
-<script type="text/javascript">
-      var onloadCallback = function() {
-        grecaptcha.render('html_element', {
-          'sitekey' : '6LeBZG0qAAAAAHpE8Nr7ZxDcFQw3dVdkeJ4p3stl'
-        });
-      };
-
-
-	  const showPass = document.getElementById('show-pass');
-    const passwordField = document.getElementById('password');
-
-    showPass.addEventListener('click', () => {
-        const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordField.setAttribute('type', type);
-
-        // Toggle the eye icon
-        if (type === 'password') {
-            showPass.classList.remove('fa-eye-slash');
-            showPass.classList.add('fa-eye');
-        } else {
-            showPass.classList.remove('fa-eye');
-            showPass.classList.add('fa-eye-slash');
+    <title>User Registration</title>
+    <!-- SweetAlert CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        form {
+            width: 400px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
         }
-    });
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .error {
+            font-size: 12px;
+            color: red;
+        }
+        .success {
+            font-size: 12px;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align:center;">User Registration</h1>
+    <form method="POST" action="create.php">
+        <input type="text" name="fname" id="fname" placeholder="First Name" required oninput="validateName()">
+        <span id="fname-error" class="error"></span>
+
+        <input type="text" name="lname" id="lname" placeholder="Last Name" required oninput="validateName()">
+        <span id="lname-error" class="error"></span>
+
+        <input type="text" name="mobilenumber" placeholder="Mobile Number" required>
+        <input type="email" name="email" placeholder="Email" required>
+
+        <input type="password" name="password" id="password" placeholder="Password" required oninput="validatePassword()">
+        <span id="password-criteria" class="error"></span>
+
+        <button type="submit" name="submit_register" id="submit" disabled>Register</button>
+    </form>
+
+    <script>
+        function validatePassword() {
+            const password = document.getElementById('password').value;
+            const submitButton = document.getElementById('submit');
+            const passwordCriteria = document.getElementById('password-criteria');
+            const strongPasswordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+            if (!strongPasswordRegex.test(password)) {
+                passwordCriteria.textContent = "Password must include uppercase, lowercase, number, special character, and be at least 8 characters.";
+                submitButton.disabled = true;
+            } else {
+                passwordCriteria.textContent = "Password is strong.";
+                passwordCriteria.className = "success";
+                submitButton.disabled = false;
+            }
+        }
+
+        function validateName() {
+            const fname = document.getElementById('fname').value;
+            const lname = document.getElementById('lname').value;
+            const fnameError = document.getElementById('fname-error');
+            const lnameError = document.getElementById('lname-error');
+            const submitButton = document.getElementById('submit');
+            let valid = true;
+
+            if (/\d/.test(fname)) {
+                fnameError.textContent = 'First name should not contain numbers.';
+                valid = false;
+            } else {
+                fnameError.textContent = '';
+            }
+
+            if (/\d/.test(lname)) {
+                lnameError.textContent = 'Last name should not contain numbers.';
+                valid = false;
+            } else {
+                lnameError.textContent = '';
+            }
+
+            submitButton.disabled = !valid;
+        }
     </script>
-
-
-<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
-        async defer>
-    </script>
-
-<script>
-	// let showPass = document.getElementById('show-pass');
-    // showPass.onclick = () => {
-    //     let passwordInp = document.forms['signup']['password'];
-    //     if (passwordInp.getAttribute('type') == 'password') {
-    //         showPass.classList.replace('fa-eye', 'fa-eye-slash')
-            
-    //         passwordInp.setAttribute('type', 'text')
-    //     }else{
-    //         showPass.classList.replace('fa-eye-slash', 'fa-eye')
-    //         passwordInp.setAttribute('type', 'password')
-    //     }
-    // }
-</script>
+</body>
+</html>
