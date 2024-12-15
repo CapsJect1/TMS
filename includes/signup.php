@@ -26,12 +26,13 @@ if (isset($_POST['submit_register'])) {
         die("Last name should not contain numbers.");
     }
 
-    if (strlen($password) < 8) {
-        die("Password must be at least 8 characters long.");
+    // Server-side validation for strong password
+    if (!preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $password)) {
+        die("Password must be at least 8 characters long and include one uppercase letter, one lowercase letter, one number, and one special character.");
     }
 
     $full = $fname . ' ' . $lname;
-   $password = password_hash($password, PASSWORD_DEFAULT);
+    $password = password_hash($password, PASSWORD_DEFAULT);
 
     // Insert into the database
     $sql = "INSERT INTO tblusers(FullName,fname,lname,MobileNumber,EmailId,Password,Verification) 
@@ -121,10 +122,28 @@ if (isset($_POST['submit_register'])) {
                                     <input type="text" value="" placeholder="Mobile number" onkeyup="this.value=this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')" maxlength="11" name="mobilenumber" autocomplete="off" required="">
                                     <input type="text" value="" placeholder="Email id" name="email" id="email" onBlur="checkAvailability()" autocomplete="off" required="">
                                     <span id="user-availability-status" style="font-size:12px;"></span>
-                                  <div style="position: relative;">
-				    <input type="password" name="password" id="password" placeholder="Password" value="" minlength="8" required>
-				    <i class="fa fa-eye" id="show-pass" style="position: absolute; top: 0; right: 0; margin: 35px 10px 0 0; cursor: pointer;"></i>
-				</div>
+
+
+					<div style="position: relative;">
+					    <input 
+					        type="password" 
+					        name="password" 
+					        id="password" 
+					        placeholder="Password" 
+					        value="" 
+					        minlength="8" 
+					        required 
+					        oninput="validatePassword()"
+					    >
+					    <i 
+					        class="fa fa-eye" 
+					        id="show-pass" 
+					        style="position: absolute; top: 0; right: 0; margin: 35px 10px 0 0; cursor: pointer;">
+					    </i>
+					</div>
+					<span id="password-criteria" style="font-size: 12px; color: red;"></span>
+
+					
 					</br>
                                     <div id="html_element"></div>
                                     <input type="submit" name="submit_register" id="submit" value="CREATE ACCOUNT" disabled>
@@ -141,6 +160,23 @@ if (isset($_POST['submit_register'])) {
 </div>
 
 <script>
+function validatePassword() {
+    const password = document.getElementById('password').value;
+    const submitButton = document.getElementById('submit');
+    const passwordCriteria = document.getElementById('password-criteria');
+    const strongPasswordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    if (!strongPasswordRegex.test(password)) {
+        passwordCriteria.textContent = "Password must be at least 8 characters long, include one uppercase letter, one lowercase letter, one number, and one special character.";
+        passwordCriteria.style.color = "red";
+        submitButton.disabled = true;
+    } else {
+        passwordCriteria.textContent = "Password is strong.";
+        passwordCriteria.style.color = "green";
+        submitButton.disabled = false;
+    }
+}
+
 function validateName() {
     const fname = document.getElementById('fname').value;
     const lname = document.getElementById('lname').value;
