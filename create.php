@@ -2,12 +2,22 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require "./phpmailer/src/Exception.php";
-require "./phpmailer/src/PHPMailer.php";
-require "./phpmailer/src/SMTP.php";
-require "includes/config.php"; // Include your database configuration
+require './phpmailer/src/Exception.php';
+require './phpmailer/src/PHPMailer.php';
+require './phpmailer/src/SMTP.php';
 
-if (isset($_POST['submit_register'])) {
+session_start();
+error_reporting(E_ALL);
+
+// Database connection
+try {
+    $dbh = new PDO('mysql:host=localhost;dbname=your_database_name', 'your_username', 'your_password');
+    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Database connection failed: " . $e->getMessage());
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_register'])) {
     $verification = uniqid() . rand(100, 999999999);
     $fname = $_POST['fname'];
     $lname = $_POST['lname'];
@@ -15,176 +25,117 @@ if (isset($_POST['submit_register'])) {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // Server-side validation for names
-    if (preg_match('/\d/', $fname) || preg_match('/\d/', $lname)) {
-        echo "<script>
-                Swal.fire('Error', 'Names should not contain numbers.', 'error');
-              </script>";
-        exit;
+    // Validate name
+    if (preg_match('/\d/', $fname)) {
+        $error = "First name should not contain numbers.";
+    } elseif (preg_match('/\d/', $lname)) {
+        $error = "Last name should not contain numbers.";
     }
-
-    // Server-side validation for strong password
-    if (!preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $password)) {
-        echo "<script>
-                Swal.fire('Error', 'Invalid password format.', 'error');
-              </script>";
-        exit;
-    }
-
-    $full = $fname . ' ' . $lname;
-    $password = password_hash($password, PASSWORD_DEFAULT);
-
-    // Insert into database
-    $sql = "INSERT INTO tblusers (FullName, fname, lname, MobileNumber, EmailId, Password, Verification) 
-            VALUES (:full, :fname, :lname, :mnumber, :email, :password, :verification)";
-    $query = $dbh->prepare($sql);
-    $query->bindParam(':full', $full, PDO::PARAM_STR);
-    $query->bindParam(':fname', $fname, PDO::PARAM_STR);
-    $query->bindParam(':lname', $lname, PDO::PARAM_STR);
-    $query->bindParam(':mnumber', $mnumber, PDO::PARAM_STR);
-    $query->bindParam(':email', $email, PDO::PARAM_STR);
-    $query->bindParam(':password', $password, PDO::PARAM_STR);
-    $query->bindParam(':verification', $verification, PDO::PARAM_STR);
-    $query->execute();
-
-    $lastInsertId = $dbh->lastInsertId();
-    if ($lastInsertId) {
-        // Send verification email
-        $mail = new PHPMailer(true);
-        try {
-            $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
-            $mail->SMTPAuth = true;
-            $mail->Username = 'your-email@gmail.com';
-            $mail->Password = 'your-email-password';
-            $mail->Port = 587;
-
-            $mail->setFrom('no-reply@example.com', 'Your App Name');
-            $mail->addAddress($email);
-            $mail->Subject = "Verify Your Email";
-            $mail->Body = "Click this link to verify: https://example.com/verify.php?code=$verification";
-
-            $mail->send();
-
-            echo "<script>
-                    Swal.fire('Success', 'You are registered. Please verify your email.', 'success')
-                        .then(() => { window.location.href = 'login.php'; });
-                  </script>";
-        } catch (Exception $e) {
-            echo "<script>
-                    Swal.fire('Error', 'Unable to send verification email.', 'error');
-                  </script>";
-        }
+    // Validate password strength
+    elseif (!preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $password)) {
+        $error = "Password must be at least 8 characters long, include one uppercase letter, one lowercase letter, one number, and one special character.";
     } else {
-        echo "<script>
-                Swal.fire('Error', 'Something went wrong. Please try again.', 'error');
-              </script>";
+        // Prepare user data for database
+        $full = $fname . ' ' . $lname;
+        $password = password_hash($password, PASSWORD_DEFAULT);
+
+        try {
+            // Insert into database
+            $sql = "INSERT INTO tblusers (FullName, fname, lname, MobileNumber, EmailId, Password, Verification) 
+                    VALUES (:full, :fname, :lname, :mnumber, :email, :password, :verification)";
+            $query = $dbh->prepare($sql);
+            $query->bindParam(':full', $full, PDO::PARAM_STR);
+            $query->bindParam(':fname', $fname, PDO::PARAM_STR);
+            $query->bindParam(':lname', $lname, PDO::PARAM_STR);
+            $query->bindParam(':mnumber', $mnumber, PDO::PARAM_STR);
+            $query->bindParam(':email', $email, PDO::PARAM_STR);
+            $query->bindParam(':password', $password, PDO::PARAM_STR);
+            $query->bindParam(':verification', $verification, PDO::PARAM_STR);
+            $query->execute();
+
+            $lastInsertId = $dbh->lastInsertId();
+            if ($lastInsertId) {
+                // Send verification email
+                $mail = new PHPMailer(true);
+                $mail->isSMTP();
+                $mail->Host = 'smtp.gmail.com';
+                $mail->SMTPAuth = true;
+                $mail->Username = 'your_email@gmail.com';
+                $mail->Password = 'your_email_password';
+                $mail->Port = 587;
+                $mail->SMTPOptions = [
+                    'ssl' => [
+                        'verify_peer' => false,
+                        'verify_peer_name' => false,
+                        'allow_self_signed' => true
+                    ]
+                ];
+                $mail->setFrom('your_email@gmail.com', 'Your App Name');
+                $mail->addAddress($email);
+                $mail->Subject = "Email Account Verification";
+                $mail->Body = "Click this link to verify your account: https://yourdomain.com/verify-account.php?verification=" . $verification . "&email=" . $email;
+                $mail->send();
+
+                $success = true; // Trigger SweetAlert
+            }
+        } catch (Exception $e) {
+            $error = "Error: " . $e->getMessage();
+        }
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Registration</title>
-    <!-- SweetAlert CSS -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <style>
-        form {
-            width: 400px;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-        }
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-        .error {
-            font-size: 12px;
-            color: red;
-        }
-        .success {
-            font-size: 12px;
-            color: green;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.all.min.js"></script>
 </head>
 <body>
-    <h1 style="text-align:center;">User Registration</h1>
+    <h2>User Registration</h2>
+    <?php if (isset($error)): ?>
+        <div style="color: red;"><?= htmlspecialchars($error) ?></div>
+    <?php endif; ?>
+
     <form method="POST" action="create.php">
-        <input type="text" name="fname" id="fname" placeholder="First Name" required oninput="validateName()">
-        <span id="fname-error" class="error"></span>
+        <label for="fname">First Name:</label>
+        <input type="text" id="fname" name="fname" required oninput="validateName()">
+        <br><br>
 
-        <input type="text" name="lname" id="lname" placeholder="Last Name" required oninput="validateName()">
-        <span id="lname-error" class="error"></span>
+        <label for="lname">Last Name:</label>
+        <input type="text" id="lname" name="lname" required oninput="validateName()">
+        <br><br>
 
-        <input type="text" name="mobilenumber" placeholder="Mobile Number" required>
-        <input type="email" name="email" placeholder="Email" required>
+        <label for="mobilenumber">Mobile Number:</label>
+        <input type="text" id="mobilenumber" name="mobilenumber" required>
+        <br><br>
 
-        <input type="password" name="password" id="password" placeholder="Password" required oninput="validatePassword()">
-        <span id="password-criteria" class="error"></span>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <br><br>
 
-        <button type="submit" name="submit_register" id="submit" disabled>Register</button>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required oninput="validatePassword()">
+        <small>Password must include at least 8 characters, one uppercase, one lowercase, one number, and one special character.</small>
+        <br><br>
+
+        <button type="submit" name="submit_register">Register</button>
     </form>
 
+    <?php if (isset($success)): ?>
     <script>
-        function validatePassword() {
-            const password = document.getElementById('password').value;
-            const submitButton = document.getElementById('submit');
-            const passwordCriteria = document.getElementById('password-criteria');
-            const strongPasswordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
-            if (!strongPasswordRegex.test(password)) {
-                passwordCriteria.textContent = "Password must include uppercase, lowercase, number, special character, and be at least 8 characters.";
-                submitButton.disabled = true;
-            } else {
-                passwordCriteria.textContent = "Password is strong.";
-                passwordCriteria.className = "success";
-                submitButton.disabled = false;
-            }
-        }
-
-        function validateName() {
-            const fname = document.getElementById('fname').value;
-            const lname = document.getElementById('lname').value;
-            const fnameError = document.getElementById('fname-error');
-            const lnameError = document.getElementById('lname-error');
-            const submitButton = document.getElementById('submit');
-            let valid = true;
-
-            if (/\d/.test(fname)) {
-                fnameError.textContent = 'First name should not contain numbers.';
-                valid = false;
-            } else {
-                fnameError.textContent = '';
-            }
-
-            if (/\d/.test(lname)) {
-                lnameError.textContent = 'Last name should not contain numbers.';
-                valid = false;
-            } else {
-                lnameError.textContent = '';
-            }
-
-            submitButton.disabled = !valid;
-        }
+        Swal.fire({
+            icon: 'success',
+            title: 'Registration Successful!',
+            text: 'A verification email has been sent. Please check your email.',
+            confirmButtonText: 'OK'
+        }).then(() => {
+            window.location.href = 'thankyou.php';
+        });
     </script>
+    <?php endif; ?>
 </body>
 </html>
