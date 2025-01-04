@@ -143,7 +143,7 @@ if (isset($_POST['login'])) {
                 <div class="row">
                     <div class="col-12">
                         
-                      <a type="button" class="btn btn-secondary mt-5" data-bs-toggle="modal"
+                      <a type="button" class="btn  mt-2" data-bs-toggle="modal"
                             data-bs-target="#emailOtpModal">Send Email or OTP</a>
                     </div>
 
