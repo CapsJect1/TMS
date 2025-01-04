@@ -157,27 +157,37 @@ document.getElementById('printButton').addEventListener('click', function () {
 });
 </script>
 
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 <script>
+    // Pie chart data and colors
     var xValues = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     var yValues = [<?= $january ?>, <?= $february ?>, <?= $march ?>, <?= $april ?>, <?= $may ?>, <?= $june ?>, <?= $july ?>, <?= $august ?>, <?= $september ?>, <?= $october ?>, <?= $november ?>, <?= $december ?>];
-    var barColors = ["#fb4c44", "#5386df", "#007b12", "#fb4c44", "#5386df", "#007b12", "#fb4c44", "#5386df", "#007b12", "#fb4c44", "#5386df", "#007b12"];
+    var pieColors = [
+        "#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF", "#FF9F40", 
+        "#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF", "#FF9F40"
+    ];
 
+    // Create pie chart
     new Chart("barChart", {
-        type: "bar",
+        type: "pie",
         data: {
             labels: xValues,
             datasets: [{
-                backgroundColor: barColors,
+                backgroundColor: pieColors,
                 data: yValues
             }]
         },
         options: {
-            legend: { display: false },
-            title: { display: true, text: "Booking Report for <?= $selectedYear ?>" }
+            title: {
+                display: true,
+                text: "Booking Report for <?= $selectedYear ?>"
+            }
         }
     });
 </script>
+
 
 <?php
     require 'includes/footer.php';
