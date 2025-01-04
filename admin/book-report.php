@@ -82,8 +82,8 @@ if (strlen($_SESSION['alogin']) == 0) {
             <button type="submit" class="btn btn-primary">Filter</button>
         </form>
 
-        <!-- Chart -->
-        <canvas id="barChart" style="width:100%;"></canvas>
+        <!-- Pie Chart -->
+        <canvas id="pieChart" style="width:100%;"></canvas>
 
         <!-- Print Button -->
         <a href="javascript:void(0);" class="float-end mt-3 btn btn-primary" id="printButton"><i class="fa fa-print"></i> Print</a>
@@ -159,22 +159,35 @@ document.getElementById('printButton').addEventListener('click', function () {
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 <script>
-    var xValues = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    var yValues = [<?= $january ?>, <?= $february ?>, <?= $march ?>, <?= $april ?>, <?= $may ?>, <?= $june ?>, <?= $july ?>, <?= $august ?>, <?= $september ?>, <?= $october ?>, <?= $november ?>, <?= $december ?>];
-    var barColors = ["#fb4c44", "#5386df", "#007b12", "#fb4c44", "#5386df", "#007b12", "#fb4c44", "#5386df", "#007b12", "#fb4c44", "#5386df", "#007b12"];
+    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    var dataValues = [<?= $january ?>, <?= $february ?>, <?= $march ?>, <?= $april ?>, <?= $may ?>, <?= $june ?>, <?= $july ?>, <?= $august ?>, <?= $september ?>, <?= $october ?>, <?= $november ?>, <?= $december ?>];
+    var colors = [
+        "#FB4C44", "#5386DF", "#007B12", "#FB9C44", "#5386A3", "#0097B6",
+        "#FB4C00", "#538600", "#005C87", "#FB44B4", "#538D6D", "#007B92"
+    ];
 
-    new Chart("barChart", {
-        type: "bar",
-        data: {
-            labels: xValues,
-            datasets: [{
-                backgroundColor: barColors,
-                data: yValues
-            }]
-        },
+    var chartData = (<?= $selectedMonth ? $filteredMonth : "true" ?>) ? {
+        labels: months,
+        datasets: [{
+            backgroundColor: colors,
+            data: dataValues
+        }]
+    } : {
+        labels: [months[<?= $selectedMonth - 1 ?>]],
+        datasets: [{
+            backgroundColor: colors[<?= $selectedMonth - 1 ?>],
+            data: [dataValues[<?= $selectedMonth - 1 ?>]]
+        }]
+    };
+
+    new Chart("pieChart", {
+        type: "pie",
+        data: chartData,
         options: {
-            legend: { display: false },
-            title: { display: true, text: "Booking Report for <?= $selectedYear ?>" }
+            title: {
+                display: true,
+                text: "Booking Report for <?= $selectedYear ?>"
+            }
         }
     });
 </script>
