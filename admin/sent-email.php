@@ -48,13 +48,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $mail->send();
 
             $_SESSION['email'] = $email;
-            header("Location: reset_password2.php");
-            exit();
+            echo "<script>
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'A password reset link has been sent to your email.',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        window.location.href = 'reset_password2.php';
+                    });
+                  </script>";
         } catch (Exception $e) {
             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
     } else {
-        echo "Email not found in our records.";
+        echo "<script>
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Email not found in our records.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+              </script>";
     }
 }
 ?>
@@ -67,6 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Forgot Password</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body, html {
             height: 100%;
@@ -90,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <div class="card p-4">
-        <a  href="forgot-password.php" class="bg">
+        <a href="forgot-password.php" class="bg">
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#38AF05" class="bi bi-arrow-left" viewBox="0 0 16 16">
                 <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
             </svg>
