@@ -41,7 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $update->bindParam(':token', $token, PDO::PARAM_STR);
             $update->execute();
 
-            echo "Password has been successfully reset. You can now <a href='login.php'>login</a> with your new password.";
+            // Set session to trigger SweetAlert
+            $_SESSION['password_reset'] = true;
+            header("Location: reset_password2.php?success=1"); // Redirect to avoid form resubmission
             exit();
         } else {
             echo "Passwords do not match.";
@@ -62,6 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Reset Password</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body, html {
             height: 100%;
@@ -115,6 +118,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button type="submit" class="btn btn-primary w-100">Reset Password</button>
         </form>
     </div>
+
+    <!-- Display SweetAlert if password reset is successful -->
+    <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
+        <script>
+            Swal.fire({
+                title: 'Success!',
+                text: 'Your password has been successfully reset.',
+                icon: 'success',
+                confirmButtonText: 'OK',
+                willClose: () => {
+                    window.location.href = 'index.php'; // Redirect to login page
+                }
+            });
+        </script>
+    <?php endif; ?>
+
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
