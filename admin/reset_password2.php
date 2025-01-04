@@ -1,45 +1,56 @@
 <?php
 session_start();
 include('includes/config.php');
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
 
-if (!isset($_GET['token'])) {
-    header("Location: forgot-password2.php");
-    exit();
-}
+require "../phpmailer/src/Exception.php";
+require "../phpmailer/src/PHPMailer.php";
+require "../phpmailer/src/SMTP.php";
 
-$token = $_GET['token'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $new_password = $_POST['new_password'];
+    $confirm_password = $_POST['confirm_password'];
+    $token = $_GET['token'];
 
-// Check if the token exists and is valid
-$query = $dbh->prepare("SELECT EmailId, token_expiration FROM tbladmin WHERE reset_token = :token");
-$query->bindParam(':token', $token, PDO::PARAM_STR);
-$query->execute();
-$result = $query->fetch(PDO::FETCH_ASSOC);
+    // Validate token and check its expiration
+    $query = $dbh->prepare("SELECT reset_token, token_expiration FROM admin WHERE reset_token = :token");
+    $query->bindParam(':token', $token, PDO::PARAM_STR);
+    $query->execute();
+    $result = $query->fetch(PDO::FETCH_ASSOC);
 
-if ($result && strtotime($result['token_expiration']) > time()) {
-    // Valid token and not expired
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $email = $result['EmailId'];
-        $newPassword = $_POST['password'];
-        $confirmPassword = $_POST['confirm_password'];
+    if ($result) {
+        $token_expiration = new DateTime($result['token_expiration']);
+        $now = new DateTime();
+
+        // Check if the token has expired
+        if ($now > $token_expiration) {
+            echo "The reset link has expired.";
+            exit();
+        }
 
         // Check if passwords match
-        if ($newPassword !== $confirmPassword) {
-            $error = "Passwords do not match!";
-        } else {
+        if ($new_password === $confirm_password) {
             // Hash the new password
-            $hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
+            $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
 
-            // Update the password and clear reset token
-            $update = $dbh->prepare("UPDATE tbladmin SET Password = :password, reset_token = NULL, token_expiration = NULL WHERE EmailId = :email");
-            $update->bindParam(':password', $hashedPassword, PDO::PARAM_STR);
-            $update->bindParam(':email', $email, PDO::PARAM_STR);
+            // Update the password in the database
+            $update = $dbh->prepare("UPDATE admin SET Password = :password, reset_token = NULL, token_expiration = NULL WHERE reset_token = :token");
+            $update->bindParam(':password', $hashed_password, PDO::PARAM_STR);
+            $update->bindParam(':token', $token, PDO::PARAM_STR);
             $update->execute();
 
-            $success = "Password has been reset successfully!";
+            echo "Password has been successfully reset. You can now <a href='login.php'>login</a> with your new password.";
+            exit();
+        } else {
+            echo "Passwords do not match.";
+            exit();
         }
+    } else {
+        echo "Invalid or expired reset token.";
+        exit();
     }
-} else {
-    $error = "Invalid or expired token.";
 }
 ?>
 
@@ -48,7 +59,7 @@ if ($result && strtotime($result['token_expiration']) > time()) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Reset Password</title>
+    <title>Reset Password</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -70,73 +81,41 @@ if ($result && strtotime($result['token_expiration']) > time()) {
             background-color: #3AAF08 !important;
             border: none !important;
         }
-        .alert {
-            font-size: 0.9rem;
-        }
-        .password-toggle {
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
     <div class="card p-4">
-        <h2 class="text-center mb-4">Admin Reset Password</h2>
-
-        <?php if (isset($error)): ?>
-            <div class="alert alert-danger text-center">
-                <?php echo $error; ?>
+        <a href="forgot-password.php" class="bg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#38AF05" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+            </svg>
+        </a>
+        <h2 class="text-center mb-4">Reset Password</h2>
+        <form method="POST" action="">
+            <div class="mb-3">
+                <label for="new_password" class="form-label">New Password</label>
+                <input 
+                    type="password" 
+                    id="new_password" 
+                    name="new_password" 
+                    class="form-control" 
+                    placeholder="Enter your new password" 
+                    required>
             </div>
-        <?php endif; ?>
-
-        <?php if (isset($success)): ?>
-            <div class="alert alert-success text-center">
-                <?php echo $success; ?>
+            <div class="mb-3">
+                <label for="confirm_password" class="form-label">Confirm Password</label>
+                <input 
+                    type="password" 
+                    id="confirm_password" 
+                    name="confirm_password" 
+                    class="form-control" 
+                    placeholder="Confirm your new password" 
+                    required>
             </div>
-            <div class="text-center">
-                <a href="admin-login.php" class="btn btn-primary w-100 mt-2">Go to Login</a>
-            </div>
-        <?php else: ?>
-            <form method="POST" action="">
-                <div class="mb-3">
-                    <label for="password" class="form-label">New Password</label>
-                    <div class="input-group">
-                        <input 
-                            type="password" 
-                            id="password" 
-                            name="password" 
-                            class="form-control" 
-                            placeholder="Enter new password" 
-                            required>
-                        <span class="input-group-text password-toggle" onclick="togglePasswordVisibility('password')">👁️</span>
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label for="confirm_password" class="form-label">Confirm New Password</label>
-                    <div class="input-group">
-                        <input 
-                            type="password" 
-                            id="confirm_password" 
-                            name="confirm_password" 
-                            class="form-control" 
-                            placeholder="Confirm new password" 
-                            required>
-                        <span class="input-group-text password-toggle" onclick="togglePasswordVisibility('confirm_password')">👁️</span>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn btn-primary w-100">Reset Password</button>
-            </form>
-        <?php endif; ?>
+            <button type="submit" class="btn btn-primary w-100">Reset Password</button>
+        </form>
     </div>
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function togglePasswordVisibility(id) {
-            var passwordField = document.getElementById(id);
-            var type = passwordField.type === "password" ? "text" : "password";
-            passwordField.type = type;
-        }
-    </script>
 </body>
 </html>
