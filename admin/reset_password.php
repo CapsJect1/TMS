@@ -15,71 +15,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $new_password = $_POST['new_password'];
     $confirm_password = $_POST['confirm_password'];
 
-    // Validate OTP
-    $query = $dbh->prepare("SELECT otp, otp_expiration FROM admin WHERE EmailId = :email");
+    // Check if the OTP is valid
+    $query = $dbh->prepare("SELECT otp, otp_expiration FROM tblusers WHERE EmailId = :email");
     $query->bindParam(':email', $email, PDO::PARAM_STR);
     $query->execute();
     $result = $query->fetch(PDO::FETCH_ASSOC);
 
     if ($result) {
-        $stored_otp = $result['otp'];
         $otp_expiration = new DateTime($result['otp_expiration']);
         $now = new DateTime();
 
-        // Check if OTP matches and is not expired
-        if ($otp === $stored_otp && $now <= $otp_expiration) {
+        // Check if the OTP has expired
+        if ($now > $otp_expiration) {
+            echo "<script>swal('Error', 'The OTP has expired.', 'error');</script>";
+            exit();
+        }
+
+        // Check if OTP matches
+        if ($otp == $result['otp']) {
             // Check if passwords match
             if ($new_password === $confirm_password) {
                 // Hash the new password
                 $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
 
-                // Update password in the database
-                $update = $dbh->prepare("UPDATE admin SET Password = :password, otp = NULL, otp_expiration = NULL WHERE EmailId = :email");
+                // Update password in database
+                $update = $dbh->prepare("UPDATE tblusers SET Password = :password, otp = NULL, otp_expiration = NULL WHERE EmailId = :email");
                 $update->bindParam(':password', $hashed_password, PDO::PARAM_STR);
                 $update->bindParam(':email', $email, PDO::PARAM_STR);
                 $update->execute();
 
-                // Display success message
-                echo "<script>
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Password Reset Successful',
-                            text: 'Your password has been successfully reset. You can now login with your new password.',
-                            confirmButtonText: 'Okay'
-                        }).then(function() {
-                            window.location.href = 'login.php';
-                        });
-                      </script>";
+                // Show SweetAlert success notification
+                echo "<script>swal('Success', 'Your password has been successfully reset.', 'success').then(function() { window.location = 'index.php'; });</script>";
                 exit();
             } else {
-                echo "<script>
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Passwords do not match',
-                            text: 'Please make sure both passwords are the same.',
-                            confirmButtonText: 'Try Again'
-                        });
-                      </script>";
+                echo "<script>swal('Error', 'Passwords do not match.', 'error');</script>";
+                exit();
             }
         } else {
-            echo "<script>
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Invalid or Expired OTP',
-                        text: 'The OTP is either invalid or has expired. Please request a new one.',
-                        confirmButtonText: 'Okay'
-                    });
-                  </script>";
+            echo "<script>swal('Error', 'Invalid OTP.', 'error');</script>";
+            exit();
         }
     } else {
-        echo "<script>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'No account found with this email.',
-                    confirmButtonText: 'Okay'
-                });
-              </script>";
+        echo "<script>swal('Error', 'Email not found or OTP expired.', 'error');</script>";
+        exit();
     }
 }
 ?>
@@ -92,8 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Reset Password</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- SweetAlert2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.3.4/dist/sweetalert2.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body, html {
             height: 100%;
@@ -126,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     id="otp" 
                     name="otp" 
                     class="form-control" 
-                    placeholder="Enter OTP" 
+                    placeholder="Enter your OTP" 
                     required>
             </div>
             <div class="mb-3">
@@ -152,10 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button type="submit" class="btn btn-primary w-100">Reset Password</button>
         </form>
     </div>
-
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- SweetAlert2 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.3.4/dist/sweetalert2.min.js"></script>
 </body>
 </html>
