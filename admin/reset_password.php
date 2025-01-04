@@ -11,53 +11,45 @@ require "../phpmailer/src/SMTP.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_SESSION['email'];
-    $otp = $_POST['otp'];
+    $otp_entered = $_POST['otp'];
     $new_password = $_POST['new_password'];
     $confirm_password = $_POST['confirm_password'];
 
-    // Check if the OTP is valid
-    $query = $dbh->prepare("SELECT otp, otp_expiration FROM tblusers WHERE EmailId = :email");
+    // Fetch OTP and expiration from the database for the given email
+    $query = $dbh->prepare("SELECT otp, otp_expiration FROM admin WHERE EmailId = :email");
     $query->bindParam(':email', $email, PDO::PARAM_STR);
     $query->execute();
     $result = $query->fetch(PDO::FETCH_ASSOC);
 
     if ($result) {
+        $otp = $result['otp'];
         $otp_expiration = new DateTime($result['otp_expiration']);
         $now = new DateTime();
 
-        // Check if the OTP has expired
-        if ($now > $otp_expiration) {
-            echo "<script>swal('Error', 'The OTP has expired.', 'error');</script>";
-            exit();
-        }
-
-        // Check if OTP matches
-        if ($otp == $result['otp']) {
-            // Check if passwords match
+        // Check if OTP is valid and not expired
+        if ($otp === $otp_entered && $now <= $otp_expiration) {
+            // Check if new password and confirm password match
             if ($new_password === $confirm_password) {
                 // Hash the new password
                 $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
 
-                // Update password in database
-                $update = $dbh->prepare("UPDATE tblusers SET Password = :password, otp = NULL, otp_expiration = NULL WHERE EmailId = :email");
+                // Update the password in the database
+                $update = $dbh->prepare("UPDATE admin SET Password = :password, otp = NULL, otp_expiration = NULL WHERE EmailId = :email");
                 $update->bindParam(':password', $hashed_password, PDO::PARAM_STR);
                 $update->bindParam(':email', $email, PDO::PARAM_STR);
                 $update->execute();
 
-                // Show SweetAlert success notification
-                echo "<script>swal('Success', 'Your password has been successfully reset.', 'success').then(function() { window.location = 'index.php'; });</script>";
+                // Success message
+                echo "<script>alert('Password has been successfully reset.'); window.location.href='login.php';</script>";
                 exit();
             } else {
-                echo "<script>swal('Error', 'Passwords do not match.', 'error');</script>";
-                exit();
+                echo "<script>alert('Passwords do not match.');</script>";
             }
         } else {
-            echo "<script>swal('Error', 'Invalid OTP.', 'error');</script>";
-            exit();
+            echo "<script>alert('Invalid or expired OTP.');</script>";
         }
     } else {
-        echo "<script>swal('Error', 'Email not found or OTP expired.', 'error');</script>";
-        exit();
+        echo "<script>alert('No OTP found for the given email.');</script>";
     }
 }
 ?>
@@ -70,7 +62,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Reset Password</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body, html {
             height: 100%;
@@ -94,6 +85,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <div class="card p-4">
+        <a href="forgot-password.php" class="bg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#38AF05" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+            </svg>
+        </a>
         <h2 class="text-center mb-4">Reset Password</h2>
         <form method="POST" action="">
             <div class="mb-3">
@@ -103,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     id="otp" 
                     name="otp" 
                     class="form-control" 
-                    placeholder="Enter your OTP" 
+                    placeholder="Enter OTP" 
                     required>
             </div>
             <div class="mb-3">
