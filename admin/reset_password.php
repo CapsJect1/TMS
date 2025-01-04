@@ -1,7 +1,7 @@
 <?php
 session_start();
 include('includes/config.php');
-use PHPMailer\PHMailer\PHPMailer;
+use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\SMTP;
 
@@ -39,47 +39,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $update->bindParam(':email', $email, PDO::PARAM_STR);
                 $update->execute();
 
-                // Success message using SweetAlert
-                echo "<script>
-                        Swal.fire({
-                            title: 'Success!',
-                            text: 'Your password has been successfully reset.',
-                            icon: 'success',
-                            confirmButtonText: 'OK'
-                        }).then(() => {
-                            window.location.href = 'login.php';
-                        });
-                    </script>";
+                // Success message
+                echo "<script>alert('Password has been successfully reset.'); window.location.href='index.php';</script>";
                 exit();
             } else {
-                echo "<script>
-                        Swal.fire({
-                            title: 'Error!',
-                            text: 'Passwords do not match.',
-                            icon: 'error',
-                            confirmButtonText: 'Try Again'
-                        });
-                    </script>";
+                echo "<script>alert('Passwords do not match.');</script>";
             }
         } else {
-            echo "<script>
-                    Swal.fire({
-                        title: 'Error!',
-                        text: 'Invalid or expired OTP.',
-                        icon: 'error',
-                        confirmButtonText: 'Try Again'
-                    });
-                </script>";
+            echo "<script>alert('Invalid or expired OTP.');</script>";
         }
     } else {
-        echo "<script>
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'No OTP found for the given email.',
-                    icon: 'error',
-                    confirmButtonText: 'Try Again'
-                });
-            </script>";
+        echo "<script>alert('No OTP found for the given email.');</script>";
     }
 }
 ?>
@@ -92,8 +62,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Reset Password</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body, html {
             height: 100%;
