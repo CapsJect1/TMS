@@ -165,8 +165,8 @@ document.getElementById('printButton').addEventListener('click', function () {
     var xValues = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     var yValues = [<?= $january ?>, <?= $february ?>, <?= $march ?>, <?= $april ?>, <?= $may ?>, <?= $june ?>, <?= $july ?>, <?= $august ?>, <?= $september ?>, <?= $october ?>, <?= $november ?>, <?= $december ?>];
     var pieColors = [
-        "#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF", "#FF9F40", 
-        "#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF", "#FF9F40"
+        "#FF5733", "#33FF57", "#3357FF", "#FF33A8", "#FFC300", "#DAF7A6", 
+        "#581845", "#C70039", "#900C3F", "#FF5733", "#33FFCE", "#D6FF33"
     ];
 
     // Create pie chart
@@ -187,6 +187,7 @@ document.getElementById('printButton').addEventListener('click', function () {
         }
     });
 </script>
+
 
 
 <?php
