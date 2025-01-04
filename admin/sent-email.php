@@ -49,14 +49,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $_SESSION['email'] = $email;
             $message = "A password reset link has been sent to your email.";
-            $redirect_url = "reset_password2.php";
         } catch (Exception $e) {
             $message = "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-            $redirect_url = "";
         }
     } else {
         $message = "Email not found in our records.";
-        $redirect_url = "";
     }
 }
 ?>
@@ -121,14 +118,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php if (isset($message)): ?>
         <script>
             Swal.fire({
-                title: '<?php echo isset($redirect_url) && $redirect_url ? "Success!" : "Error!"; ?>',
+                title: 'Success!',
                 text: '<?php echo $message; ?>',
-                icon: '<?php echo isset($redirect_url) && $redirect_url ? "success" : "error"; ?>',
+                icon: 'success',
                 confirmButtonText: 'OK'
-            }).then(() => {
-                <?php if (isset($redirect_url) && $redirect_url): ?>
-                    window.location.href = '<?php echo $redirect_url; ?>';
-                <?php endif; ?>
             });
         </script>
     <?php endif; ?>
@@ -137,3 +130,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
