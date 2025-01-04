@@ -159,8 +159,9 @@ document.getElementById('printButton').addEventListener('click', function () {
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 <script>
-    var xValues = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    var yValues = [<?= $january ?>, <?= $february ?>, <?= $march ?>, <?= $april ?>, <?= $may ?>, <?= $june ?>, <?= $july ?>, <?= $august ?>, <?= $september ?>, <?= $october ?>, <?= $november ?>, <?= $december ?>];
+    // If a month is selected, only show data for that month
+    var xValues = <?= json_encode($selectedMonth ? [date('F', mktime(0, 0, 0, $selectedMonth, 10))] : ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]) ?>;
+    var yValues = <?= json_encode($selectedMonth ? [$filteredMonth] : [$january, $february, $march, $april, $may, $june, $july, $august, $september, $october, $november, $december]) ?>;
     var pieColors = [
         "#fb4c44", "#5386df", "#007b12", "#ffcc00", "#ff6347", "#32cd32", 
         "#20b2aa", "#b0e0e6", "#f0e68c", "#d2691e", "#c71585", "#bdb76b"
