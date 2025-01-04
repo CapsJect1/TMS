@@ -168,7 +168,7 @@ if (isset($_POST['login'])) {
             <div class="modal-body">
                 <p>Please select an action:</p>
                 <div class="d-grid gap-2">
-                    <a href="send-email.php" class="btn btn-primary1">Send Email Link</a>
+                    <a href="sent-email.php" class="btn btn-primary1">Send Email Link</a>
                     <a href="send-otp.php" class="btn btn-primary1">Send OTP</a>
                 </div>
             </div>
