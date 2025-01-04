@@ -5,15 +5,15 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\SMTP;
 
-require "phpmailer/src/Exception.php";
-require "phpmailer/src/PHPMailer.php";
-require "phpmailer/src/SMTP.php";
+require "../phpmailer/src/Exception.php";
+require "../phpmailer/src/PHPMailer.php";
+require "../phpmailer/src/SMTP.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['EmailId'];
 
-    // Check if email exists in the database
-    $query = $dbh->prepare("SELECT id FROM tblusers WHERE EmailId = :email");
+    // Check if email exists in the admin table
+    $query = $dbh->prepare("SELECT id FROM admin WHERE EmailId = :email");
     $query->bindParam(':email', $email, PDO::PARAM_STR);
     $query->execute();
 
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $token_expiration = date("Y-m-d H:i:s", strtotime('+1 hour')); // Token expiration in 1 hour
 
         // Update database with reset token and expiration
-        $update = $dbh->prepare("UPDATE tblusers SET reset_token = :reset_token, token_expiration = :token_expiration WHERE EmailId = :email");
+        $update = $dbh->prepare("UPDATE admin SET reset_token = :reset_token, token_expiration = :token_expiration WHERE EmailId = :email");
         $update->bindParam(':reset_token', $reset_token, PDO::PARAM_STR);
         $update->bindParam(':token_expiration', $token_expiration, PDO::PARAM_STR);
         $update->bindParam(':email', $email, PDO::PARAM_STR);
@@ -91,10 +91,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="card p-4">
         <a  href="forgot-password.php" class="bg">
-			<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#38AF05" class="bi bi-arrow-left" viewBox="0 0 16 16">
-				<path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
-			</svg>
-		</a>
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#38AF05" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+            </svg>
+        </a>
         <h2 class="text-center mb-4">Forgot Password</h2>
         <form method="POST" action="">
             <div class="mb-3">
