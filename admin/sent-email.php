@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $mail->addAddress($email);
             $mail->isHTML(true);
             $mail->Subject = 'Password Reset Request';
-            $reset_link = "https://santafeport.com/reset_password2.php?token=$reset_token";
+            $reset_link = "https://santafeport.com/admin/reset_password2.php?token=$reset_token";
             $mail->Body = "Click on the following link to reset your password: <a href='$reset_link'>$reset_link</a><br>This link will expire in 1 hour.";
 
             $mail->send();
