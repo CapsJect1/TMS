@@ -82,8 +82,8 @@ if (strlen($_SESSION['alogin']) == 0) {
             <button type="submit" class="btn btn-primary">Filter</button>
         </form>
 
-        <!-- Chart -->
-        <canvas id="barChart" style="width:100%;"></canvas>
+        <!-- Pie Chart -->
+        <canvas id="pieChart" style="width:100%; height: 400px;"></canvas>
 
         <!-- Print Button -->
         <a href="javascript:void(0);" class="float-end mt-3 btn btn-primary" id="printButton"><i class="fa fa-print"></i> Print</a>
@@ -161,20 +161,26 @@ document.getElementById('printButton').addEventListener('click', function () {
 <script>
     var xValues = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     var yValues = [<?= $january ?>, <?= $february ?>, <?= $march ?>, <?= $april ?>, <?= $may ?>, <?= $june ?>, <?= $july ?>, <?= $august ?>, <?= $september ?>, <?= $october ?>, <?= $november ?>, <?= $december ?>];
-    var barColors = ["#fb4c44", "#5386df", "#007b12", "#fb4c44", "#5386df", "#007b12", "#fb4c44", "#5386df", "#007b12", "#fb4c44", "#5386df", "#007b12"];
+    var pieColors = [
+        "#fb4c44", "#5386df", "#007b12", "#ffcc00", "#ff6347", "#32cd32", 
+        "#20b2aa", "#b0e0e6", "#f0e68c", "#d2691e", "#c71585", "#bdb76b"
+    ];
 
-    new Chart("barChart", {
-        type: "bar",
+    new Chart("pieChart", {
+        type: "pie",
         data: {
             labels: xValues,
             datasets: [{
-                backgroundColor: barColors,
+                backgroundColor: pieColors,
                 data: yValues
             }]
         },
         options: {
-            legend: { display: false },
-            title: { display: true, text: "Booking Report for <?= $selectedYear ?>" }
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: { enabled: true }
+            }
         }
     });
 </script>
