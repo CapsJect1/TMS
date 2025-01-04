@@ -48,7 +48,7 @@ require 'includes/layout-head.php';
 									<div class="card-body text-center">
 										<h1 class="text-light"><i class="fa fa-repeat" aria-hidden="true"></i></h1>
 										<div class="four-text">
-											<h3 class="text-light">Booking Request</h3>
+											<h3 class="text-light">Message</h3>
 
 											<h4 class="text-light"> <?= $get_books->rowCount(); ?> </h4>
 										</div>
