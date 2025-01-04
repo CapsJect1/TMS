@@ -48,28 +48,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $mail->send();
 
             $_SESSION['email'] = $email;
-            echo "<script>
-                    Swal.fire({
-                        title: 'Success!',
-                        text: 'A password reset link has been sent to your email.',
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    }).then(() => {
-                        window.location.href = 'reset_password2.php';
-                    });
-                  </script>";
+            $message = "A password reset link has been sent to your email.";
+            $redirect_url = "reset_password2.php";
         } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            $message = "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            $redirect_url = "";
         }
     } else {
-        echo "<script>
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Email not found in our records.',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
-              </script>";
+        $message = "Email not found in our records.";
+        $redirect_url = "";
     }
 }
 ?>
@@ -129,6 +116,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <small class="text-muted">We will send a reset link to your registered email.</small>
         </div>
     </div>
+    
+    <!-- SweetAlert for success/error message -->
+    <?php if (isset($message)): ?>
+        <script>
+            Swal.fire({
+                title: '<?php echo isset($redirect_url) && $redirect_url ? "Success!" : "Error!"; ?>',
+                text: '<?php echo $message; ?>',
+                icon: '<?php echo isset($redirect_url) && $redirect_url ? "success" : "error"; ?>',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                <?php if (isset($redirect_url) && $redirect_url): ?>
+                    window.location.href = '<?php echo $redirect_url; ?>';
+                <?php endif; ?>
+            });
+        </script>
+    <?php endif; ?>
+
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
