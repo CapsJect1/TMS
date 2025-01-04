@@ -142,7 +142,8 @@ if (isset($_POST['login'])) {
 
                 <div class="row">
                     <div class="col-12">
-                        <a href="forgot-password.php" class="btn">Forgot Password</a>
+                      <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
+                            data-bs-target="#emailOtpModal">Send Email or OTP</button>
                     </div>
 
                     <div class="col-12">
@@ -155,7 +156,28 @@ if (isset($_POST['login'])) {
     </div>
 
 </div>
+<!-- Modal -->
+<div class="modal fade" id="emailOtpModal" tabindex="-1" aria-labelledby="emailOtpModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="emailOtpModalLabel">Send Email or OTP</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Please select an action:</p>
+                <div class="d-grid gap-2">
+                    <a href="send-email.php" class="btn btn-primary1">Send Email Link</a>
+                    <a href="send-otp.php" class="btn btn-primary1">Send OTP</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"></script>
+<script>
 <script>
     let showPass = document.getElementById('show-pass');
     showPass.onclick = () => {
