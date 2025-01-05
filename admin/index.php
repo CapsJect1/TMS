@@ -118,41 +118,69 @@ if (isset($_POST['login'])) {
 <div class="container justify-content-center align-items-center d-flex">
     <div class="">
         <div class="card p-4">
-            <form method="post" name="login" style="max-width: 600px; width: 100%;">
-                <a href="../index.php" class="bg">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#38AF05"
-                         class="bi bi-arrow-left" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd"
-                              d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
-                    </svg>
-                </a>
-                <h1 class="mb-4 text-primary text-center">
-                    Sign in
-                </h1>
-                <input type="text" class="form-control mb-3" name="username" placeholder="Enter username">
-                <div class="password-agileits">
-                    <div style="position: relative;">
-                        <input type="password" name="password" id="password" class="form-control"
-           placeholder="Password" value="" required>
-    <i class="fa fa-eye" id="show-pass"
-       style="position: absolute; top: 0; right: 0; margin: 10px 10px 0 0; cursor: pointer;"></i>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
+           <form method="post" name="login" style="max-width: 600px; width: 100%;">
+    <a href="../index.php" class="bg">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#38AF05" class="bi bi-arrow-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                  d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+        </svg>
+    </a>
+    <h1 class="mb-4 text-primary text-center">Sign in</h1>
+    
+    <!-- Username input -->
+    <input type="text" class="form-control mb-3" name="username" placeholder="Enter username">
+    
+    <!-- Password input with toggle -->
+    <div class="password-agileits">
+        <div style="position: relative;">
+            <input type="password" name="password" id="password" class="form-control"
+                   placeholder="Password" value="" required>
+            <i class="fa fa-eye" id="togglePassword" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;"></i>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-12">
+            <a type="button" class="btn mt-2" data-bs-toggle="modal" data-bs-target="#emailOtpModal">Send Email or OTP</a>
+        </div>
+        <div class="col-12">
+            <input type="submit" class="btn btn-primary1 mt-2 form-control" name="login" value="Sign In">
+        </div>
+    </div>
+</form>
 
-                <div class="row">
-                    <div class="col-12">
-                        
-                      <a type="button" class="btn  mt-2" data-bs-toggle="modal"
-                            data-bs-target="#emailOtpModal">Send Email or OTP</a>
-                    </div>
-
-                    <div class="col-12">
-                        <input type="submit" class="btn btn-primary1 mt-2 form-control" name="login"
-                               value="Sign In">
-                    </div>
+<!-- Modal -->
+<div class="modal fade" id="emailOtpModal" tabindex="-1" aria-labelledby="emailOtpModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="emailOtpModalLabel">Send Email or OTP</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Please select an action:</p>
+                <div class="d-grid gap-2">
+                    <a href="sent-email.php" class="btn btn-primary1">Send Email Link</a>
+                    <a href="send-otp.php" class="btn btn-primary1">Send OTP</a>
                 </div>
-            </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+    // Show/Hide password functionality
+    document.getElementById('togglePassword').addEventListener('click', function () {
+        const passwordField = document.getElementById('password');
+        const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordField.setAttribute('type', type);
+        
+        // Toggle the icon class
+        this.classList.toggle('fa-eye-slash');
+    });
+</script>
+
         </div>
     </div>
 
@@ -179,18 +207,6 @@ if (isset($_POST['login'])) {
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"></script>
 <script>
-<script>
-  document.getElementById('show-pass').onclick = function () {
-        const passwordField = document.getElementById('password');
-        if (passwordField.type === 'password') {
-            passwordField.type = 'text';
-            this.classList.replace('fa-eye', 'fa-eye-slash');
-        } else {
-            passwordField.type = 'password';
-            this.classList.replace('fa-eye-slash', 'fa-eye');
-        }
-    };
-</script>
 
 </body>
 
