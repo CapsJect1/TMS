@@ -43,19 +43,19 @@ require 'includes/layout-head.php';
 						</div>
 
 						<div class="col-lg-4">
-							<a href="manage-bookings.php" target="_blank" class="text-decoration-none ">
-								<div class="card" style="background: #3f8de0;">
-									<div class="card-body text-center">
-										<h1 class="text-light"><i class="fa fa-message" aria-hidden="true"></i></h1>
-										<div class="four-text">
-											<h3 class="text-light">Booking Request</h3>
-
-											<h4 class="text-light"> <?= $get_books->rowCount(); ?> </h4>
-										</div>
-
-									</div>
-								</div>
+							<a href="manage-bookings.php" target="_blank" class="text-decoration-none">
+							    <div class="card" style="background: #3f8de0;">
+							        <div class="card-body text-center">
+							            <!-- Updated icon -->
+							            <h1 class="text-light"><i class="fa-solid fa-envelope" aria-hidden="true"></i></h1>
+							            <div class="four-text">
+							                <h3 class="text-light">Booking Request</h3>
+							                <h4 class="text-light"><?= $get_books->rowCount(); ?></h4>
+							            </div>
+							        </div>
+							    </div>
 							</a>
+
 						</div>
 
 						<div class="col-lg-4">
