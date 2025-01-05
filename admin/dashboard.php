@@ -235,29 +235,34 @@ require 'includes/layout-head.php';
 			});
 		</script>
 		<script>
-			var xValues = ["Tourist", "Book Request", "Booked"];
-			var yValues = [<?php echo htmlentities($cnt); ?>, <?php echo $get_books->rowCount(); ?>, <?= $result_booked['total_booked'] ?>, 1];
-			var barColors = ["#fb4c44", "#5386df", "#007b12"];
+    var xValues = ["Tourist", "Book Request", "Booked"];
+    var yValues = [<?php echo htmlentities($cnt); ?>, <?php echo $get_books->rowCount(); ?>, <?= $result_booked['total_booked'] ?>];
+    var pieColors = ["#fb4c44", "#5386df", "#007b12"];
 
-			new Chart("barChart", {
-				type: "bar",
-				data: {
-					labels: xValues,
-					datasets: [{
-						backgroundColor: barColors,
-						data: yValues
-					}]
-				},
-				options: {
-					legend: {
-						display: false
-					},
-					title: {
-						display: false
-					}
-				}
-			});
-		</script>
+    new Chart("barChart", {
+        type: "pie", // Changed from "bar" to "pie"
+        data: {
+            labels: xValues,
+            datasets: [{
+                backgroundColor: pieColors,
+                data: yValues
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: true, // Optional: show legend
+                    position: "top" // Optional: position of the legend
+                },
+                title: {
+                    display: true, // Optional: enable title
+                    text: "Booking Statistics" // Chart title
+                }
+            }
+        }
+    });
+</script>
 
 <?php 
 require 'includes/layout-foot.php';
