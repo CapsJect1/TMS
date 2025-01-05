@@ -46,9 +46,9 @@ require 'includes/layout-head.php';
 							<a href="manage-bookings.php" target="_blank" class="text-decoration-none ">
 								<div class="card" style="background: #3f8de0;">
 									<div class="card-body text-center">
-										<h1 class="text-light"><i class="fa fa-repeat" aria-hidden="true"></i></h1>
+										<h1 class="text-light"><i class="fa fa-message" aria-hidden="true"></i></h1>
 										<div class="four-text">
-											<h3 class="text-light">Message</h3>
+											<h3 class="text-light">Booking Request</h3>
 
 											<h4 class="text-light"> <?= $get_books->rowCount(); ?> </h4>
 										</div>
