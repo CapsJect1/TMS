@@ -133,9 +133,9 @@ if (isset($_POST['login'])) {
                 <div class="password-agileits">
                     <div style="position: relative;">
                         <input type="password" name="password" id="password" class="form-control"
-                               placeholder="Password" value="" required>
-                        <i class="fa fa-eye" id="show-pass"
-                           style="position: absolute; top: 0; right: 0; margin: 10px 10px 0 0;"></i>
+           placeholder="Password" value="" required>
+    <i class="fa fa-eye" id="show-pass"
+       style="position: absolute; top: 0; right: 0; margin: 10px 10px 0 0; cursor: pointer;"></i>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -180,15 +180,14 @@ if (isset($_POST['login'])) {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"></script>
 <script>
 <script>
-    let showPass = document.getElementById('show-pass');
-    showPass.onclick = () => {
-        let passwordInp = document.forms['login']['password'];
-        if (passwordInp.getAttribute('type') === 'password') {
-            showPass.classList.replace('fa-eye', 'fa-eye-slash');
-            passwordInp.setAttribute('type', 'text');
+  document.getElementById('show-pass').onclick = function () {
+        const passwordField = document.getElementById('password');
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            this.classList.replace('fa-eye', 'fa-eye-slash');
         } else {
-            showPass.classList.replace('fa-eye-slash', 'fa-eye');
-            passwordInp.setAttribute('type', 'password');
+            passwordField.type = 'password';
+            this.classList.replace('fa-eye-slash', 'fa-eye');
         }
     };
 </script>
